@@ -1,0 +1,42 @@
+{
+  "name": "@schenkerjon/ng-govbr-tw",
+  "version": "0.0.3",
+  "description": "Angular components following Gov.br Design System, styled with Tailwind CSS 3",
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "govbr",
+    "gov.br",
+    "design-system",
+    "tailwindcss",
+    "components",
+    "brazil",
+    "governo"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jordaobass/ng-govbr-tw.git"
+  },
+  "schematics": "./schematics/collection.json",
+  "ng-add": {
+    "save": "dependencies"
+  },
+  "peerDependencies": {
+    "@angular/common": "^17.0.0 || ^18.0.0 || ^19.0.0",
+    "@angular/core": "^17.0.0 || ^18.0.0 || ^19.0.0",
+    "@angular/forms": "^17.0.0 || ^18.0.0 || ^19.0.0",
+    "@angular/router": "^17.0.0 || ^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "exports": {
+    "./styles/govbr-contrast.css": {
+      "default": "./src/lib/styles/govbr-contrast.css"
+    },
+    "./styles/govbr-components.css": {
+      "default": "./src/lib/styles/govbr-components.css"
+    }
+  }
+}

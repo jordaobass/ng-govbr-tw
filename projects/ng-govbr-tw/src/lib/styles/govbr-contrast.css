@@ -1,0 +1,79 @@
+/* ═══ Alto Contraste (GovBR DS) ═══ */
+html.govbr-contrast {
+  --govbr-primary: #fff;
+  --govbr-primary-dark: #fff;
+  --govbr-primary-darkest: #fff;
+  --govbr-primary-light: #333;
+  --govbr-primary-lightest: #222;
+  --govbr-success: #00ff5f;
+  --govbr-danger: #ff5f5f;
+  --govbr-warning: #ffff00;
+  --govbr-info: #5fc8ff;
+  --govbr-focus-color: #ffff00;
+  --govbr-gray-2: #111;
+  --govbr-gray-5: #1a1a1a;
+  --govbr-gray-10: #444;
+  --govbr-gray-20: #666;
+  --govbr-gray-40: #aaa;
+  --govbr-gray-60: #ccc;
+  --govbr-gray-80: #fff;
+  --govbr-bg: #000;
+  --govbr-bg-alternative: #111;
+  --govbr-border-color: #666;
+}
+
+html.govbr-contrast body {
+  background-color: #000;
+  color: #fff;
+}
+
+html.govbr-contrast a {
+  color: #ffff00;
+}
+
+html.govbr-contrast img {
+  filter: contrast(1.2) brightness(1.1);
+}
+
+html.govbr-contrast [role="banner"],
+html.govbr-contrast br-header header {
+  background-color: #000 !important;
+  border-color: #666 !important;
+}
+
+html.govbr-contrast .bg-white,
+html.govbr-contrast .bg-govbr-gray-2 {
+  background-color: #111 !important;
+}
+
+html.govbr-contrast .bg-govbr-primary {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast .text-govbr-primary {
+  color: #fff !important;
+}
+
+html.govbr-contrast .text-white {
+  color: #fff !important;
+}
+
+html.govbr-contrast .text-govbr-gray-80 {
+  color: #fff !important;
+}
+
+html.govbr-contrast .text-govbr-gray-60 {
+  color: #ccc !important;
+}
+
+html.govbr-contrast .border-govbr-gray-10,
+html.govbr-contrast .border-govbr-gray-5 {
+  border-color: #444 !important;
+}
+
+html.govbr-contrast .shadow-sm,
+html.govbr-contrast .shadow-md,
+html.govbr-contrast .shadow-lg {
+  box-shadow: 0 0 0 1px #444 !important;
+}

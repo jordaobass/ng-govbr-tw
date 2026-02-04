@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "id": "ng-govbr-tw-ng-add",
+  "title": "ng-govbr-tw ng-add schematic",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "Nome do projeto Angular onde configurar.",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
+    "skipFonts": {
+      "type": "boolean",
+      "default": false,
+      "description": "Pular adição das fontes Rawline e Font Awesome no index.html."
+    }
+  },
+  "required": []
+}

@@ -1,0 +1,149 @@
+/* Gov.br Design System — Component Styles (pure CSS, no Tailwind directives) */
+/* Import this file in your app's styles.css to get all Gov.br component styles */
+
+:root {
+  /* === Gov.br DS Tokens — Cores === */
+  --govbr-primary: #1351b4;
+  --govbr-primary-dark: #0c326f;
+  --govbr-primary-darkest: #071d41;
+  --govbr-primary-light: #c5d4eb;
+  --govbr-primary-lightest: #dbe8fb;
+  --govbr-success: #168821;
+  --govbr-danger: #e52207;
+  --govbr-warning: #ffcd07;
+  --govbr-info: #155bcb;
+
+  /* === Gov.br DS Tokens — Escala de cinza === */
+  --govbr-gray-2: #f8f8f8;
+  --govbr-gray-5: #ededed;
+  --govbr-gray-10: #cccccc;
+  --govbr-gray-20: #a8a8a8;
+  --govbr-gray-40: #888888;
+  --govbr-gray-60: #555555;
+  --govbr-gray-80: #333333;
+
+  /* === Gov.br DS Tokens — Superficies === */
+  --govbr-bg: #ffffff;
+  --govbr-bg-alternative: #f0f0f0;
+
+  /* === Gov.br DS Tokens — Tipografia === */
+  --govbr-font-family: 'Rawline', 'Raleway', sans-serif;
+  --govbr-font-weight-semi-bold: 600;
+  --govbr-font-size-sm: 14px;
+  --govbr-line-height-medium: 1.45;
+
+  /* === Gov.br DS Tokens — Espacamento === */
+  --govbr-spacing-4: 16px;
+  --govbr-spacing-3: 12px;
+
+  /* === Gov.br DS Tokens — Focus (acessibilidade) === */
+  --govbr-focus-color: #ffbe2e;
+  --govbr-focus-width: 3px;
+  --govbr-focus-offset: 2px;
+  --govbr-focus-style: solid;
+
+  /* === Gov.br DS Tokens — Bordas === */
+  --govbr-border-color: #888888;
+  --govbr-border-radius-sm: 4px;
+
+  /* === Gov.br DS Tokens — Input === */
+  --govbr-input-small: 32px;
+  --govbr-input-medium: 40px;
+  --govbr-input-large: 48px;
+  --govbr-input-highlight: 56px;
+
+  /* === Table — Header Blue (padrao) === */
+  --govbr-table-header-bg: var(--govbr-primary);
+  --govbr-table-header-color: var(--govbr-bg);
+  --govbr-table-header-border: none;
+  --govbr-table-header-radius: var(--govbr-border-radius-sm);
+
+  /* === Table — Body === */
+  --govbr-table-row-bg: var(--govbr-bg);
+  --govbr-table-row-alt-bg: var(--govbr-bg-alternative);
+  --govbr-table-row-hover-bg: rgba(0, 0, 0, 0.04);
+  --govbr-table-cell-color: var(--govbr-gray-80);
+  --govbr-table-cell-border: 1px solid var(--govbr-border-color);
+}
+
+/* === Gov.br DS — Focus ring para botoes e elementos interativos === */
+.govbr-focus-ring:focus,
+.govbr-focus-ring:focus-visible {
+  outline: var(--govbr-focus-width) var(--govbr-focus-style) var(--govbr-focus-color);
+  outline-offset: var(--govbr-focus-offset);
+}
+
+/* === Gov.br DS — Input base styles === */
+.govbr-input {
+  background-color: var(--govbr-bg);
+  border: 1px solid var(--govbr-border-color);
+  border-radius: var(--govbr-border-radius-sm);
+  color: var(--govbr-gray-80);
+  font-weight: 500;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.govbr-input:hover:not(:disabled):not(:read-only) {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04));
+}
+
+.govbr-input:focus,
+.govbr-input:focus-visible {
+  border-color: var(--govbr-focus-color);
+  box-shadow: 0 0 0 var(--govbr-focus-width) rgba(255, 190, 46, 0.45);
+  outline: none;
+}
+
+.govbr-input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background-color: var(--govbr-gray-2);
+}
+
+/* === Estados de validacao === */
+.govbr-input--danger {
+  border-color: var(--govbr-danger);
+  border-width: 2px;
+}
+.govbr-input--danger:focus,
+.govbr-input--danger:focus-visible {
+  border-color: var(--govbr-danger);
+  box-shadow: 0 0 0 var(--govbr-focus-width) rgba(229, 34, 7, 0.3);
+}
+
+.govbr-input--success {
+  border-color: var(--govbr-success);
+  border-width: 2px;
+}
+.govbr-input--success:focus,
+.govbr-input--success:focus-visible {
+  border-color: var(--govbr-success);
+  box-shadow: 0 0 0 var(--govbr-focus-width) rgba(22, 136, 33, 0.3);
+}
+
+.govbr-input--warning {
+  border-color: var(--govbr-warning);
+  border-width: 2px;
+}
+.govbr-input--warning:focus,
+.govbr-input--warning:focus-visible {
+  border-color: var(--govbr-warning);
+  box-shadow: 0 0 0 var(--govbr-focus-width) rgba(255, 205, 7, 0.3);
+}
+
+.govbr-input--info {
+  border-color: var(--govbr-info);
+  border-width: 2px;
+}
+.govbr-input--info:focus,
+.govbr-input--info:focus-visible {
+  border-color: var(--govbr-info);
+  box-shadow: 0 0 0 var(--govbr-focus-width) rgba(21, 91, 203, 0.3);
+}
+
+/* === Gov.br DS — Focus para checkbox/radio === */
+.govbr-focus-checkbox:focus + span,
+.govbr-focus-checkbox:focus-visible + span {
+  outline: var(--govbr-focus-width) var(--govbr-focus-style) var(--govbr-focus-color);
+  outline-offset: var(--govbr-focus-offset);
+}
