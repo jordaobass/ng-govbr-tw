@@ -1,6 +1,6 @@
 {
   "name": "@schenkerjon/ng-govbr-tw",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Angular components following Gov.br Design System, styled with Tailwind CSS 3",
   "license": "MIT",
   "keywords": [
@@ -37,6 +37,12 @@
     },
     "./styles/govbr-components.css": {
       "default": "./src/lib/styles/govbr-components.css"
+    },
+    "./tailwind.preset": {
+      "default": "./tailwind.preset.js"
+    },
+    "./styles/govbr-tw.css": {
+      "default": "./src/lib/styles/govbr-tw.css"
     }
   }
 }

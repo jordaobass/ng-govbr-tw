@@ -102,16 +102,16 @@ export class BrRadioGroupComponent implements ControlValueAccessor {
   }
 
   getRadioClasses(option: BrRadioOption): string {
-    const sizeMap: Record<string, string> = {
+    const sizeMap = {
       default: 'w-6 h-6',
       small: 'w-5 h-5',
-    };
+    } as const;
 
-    const borderColorMap: Record<string, string> = {
+    const borderColorMap = {
       default: 'border-govbr-gray-40',
       valid: 'border-govbr-success',
       invalid: 'border-govbr-danger',
-    };
+    } as const;
 
     const activeBorder = this.error ? 'border-govbr-danger' : borderColorMap[this.state];
     const isSelected = this.value === option.value;
@@ -129,18 +129,18 @@ export class BrRadioGroupComponent implements ControlValueAccessor {
   }
 
   get bulletClasses(): string {
-    const sizeMap: Record<string, string> = {
+    const sizeMap = {
       default: 'w-4 h-4',
       small: 'w-2.5 h-2.5',
-    };
+    } as const;
     return `block rounded-full bg-govbr-primary ${sizeMap[this.size]}`;
   }
 
   get labelClasses(): string {
-    const sizeMap: Record<string, string> = {
+    const sizeMap = {
       default: 'ml-3 text-govbr-base',
       small: 'ml-2 text-govbr-sm',
-    };
+    } as const;
     return `font-medium text-govbr-gray-80 ${sizeMap[this.size]}`;
   }
 

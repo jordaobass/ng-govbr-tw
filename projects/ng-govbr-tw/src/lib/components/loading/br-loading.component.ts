@@ -83,11 +83,11 @@ export class BrLoadingComponent {
   @Input() label?: string;
 
   get spinnerClasses(): string {
-    const sizes: Record<string, string> = {
+    const sizes = {
       small: 'w-6 h-6 border-2',
       medium: 'w-11 h-11 border-[3px]',
       large: 'w-[84px] h-[84px] border-4',
-    };
+    } as const;
 
     return [
       'br-loading-spin rounded-full',
@@ -101,12 +101,12 @@ export class BrLoadingComponent {
   }
 
   get progressDiameter(): number {
-    const diameters: Record<string, number> = { small: 44, medium: 64, large: 84 };
+    const diameters = { small: 44, medium: 64, large: 84 } as const;
     return diameters[this.size];
   }
 
   get strokeWidth(): number {
-    const widths: Record<string, number> = { small: 3, medium: 4, large: 5 };
+    const widths = { small: 3, medium: 4, large: 5 } as const;
     return widths[this.size];
   }
 

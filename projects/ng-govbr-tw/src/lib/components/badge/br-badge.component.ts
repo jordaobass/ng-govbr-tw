@@ -18,13 +18,13 @@ export class BrBadgeComponent {
   get badgeClasses(): string {
     const base = 'inline-flex items-center px-2.5 py-0.5 rounded-govbr-pill text-xs font-semibold font-rawline';
 
-    const variants: Record<string, string> = {
+    const variants = {
       primary: 'bg-govbr-primary text-white',
       success: 'bg-govbr-success text-white',
       danger: 'bg-govbr-danger text-white',
       warning: 'bg-govbr-warning-bg text-govbr-gray-80',
       neutral: 'bg-govbr-gray-5 text-govbr-gray-80',
-    };
+    } as const;
 
     return `${base} ${variants[this.variant]}`;
   }

@@ -120,25 +120,25 @@ export class BrMagicButtonComponent {
 
   get positionClasses(): string {
     const base = 'fixed z-40 flex flex-col items-end';
-    const posMap: Record<string, string> = {
+    const posMap = {
       'bottom-right': 'bottom-6 right-6',
       'bottom-left': 'bottom-6 left-6 items-start',
       'bottom-center': 'bottom-6 left-1/2 -translate-x-1/2 items-center',
-    };
+    } as const;
     return `${base} ${posMap[this.position]}`;
   }
 
   get fabClasses(): string {
-    const sizeMap: Record<string, string> = {
+    const sizeMap = {
       medium: 'w-12 h-12',
       large: 'w-14 h-14',
-    };
+    } as const;
 
-    const variantMap: Record<string, string> = {
+    const variantMap = {
       primary: 'bg-govbr-primary text-white hover:bg-govbr-primary-dark shadow-lg hover:shadow-xl',
       secondary: 'bg-white text-govbr-primary border-2 border-govbr-primary hover:bg-govbr-primary-lightest shadow-lg',
       danger: 'bg-govbr-danger text-white hover:bg-red-700 shadow-lg hover:shadow-xl',
-    };
+    } as const;
 
     return [
       'inline-flex items-center justify-center rounded-full transition-all duration-200',

@@ -112,11 +112,11 @@ export class BrPaginationComponent {
   @Output() pageChange = new EventEmitter<number>();
 
   get sizeClasses(): string {
-    const sizes: Record<string, string> = {
+    const sizes = {
       small: 'min-w-[24px] min-h-[24px] text-govbr-xs',
       medium: 'min-w-[32px] min-h-[32px] text-govbr-sm',
       large: 'min-w-[40px] min-h-[40px] text-govbr-base',
-    };
+    } as const;
     return sizes[this.density];
   }
 

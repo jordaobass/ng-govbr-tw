@@ -112,11 +112,11 @@ export class BrCardComponent {
     if (this.layout === 'horizontal') {
       return 'w-40 sm:w-48 flex-shrink-0';
     }
-    const ratioMap: Record<string, string> = {
+    const ratioMap = {
       '16:9': 'aspect-video',
       '4:3': 'aspect-[4/3]',
       '1:1': 'aspect-square',
-    };
+    } as const;
     return `w-full ${ratioMap[this.imageRatio]}`;
   }
 

@@ -119,17 +119,17 @@ export class BrTextareaComponent implements ControlValueAccessor {
   }
 
   get textareaClasses(): string {
-    const densityPadding: Record<string, string> = {
+    const densityPadding = {
       small: 'px-3 py-1.5',
       medium: 'px-4 py-2',
       large: 'px-5 py-3',
-    };
+    } as const;
 
-    const resizeMap: Record<string, string> = {
+    const resizeMap = {
       none: 'resize-none',
       vertical: 'resize-y',
       both: 'resize',
-    };
+    } as const;
 
     const base = [
       'w-full font-rawline text-govbr-base govbr-input',

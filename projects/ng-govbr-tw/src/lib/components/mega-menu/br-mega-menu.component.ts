@@ -80,11 +80,11 @@ export class BrMegaMenuComponent {
   }
 
   get barClasses(): string {
-    const variants: Record<string, string> = {
+    const variants = {
       primary: 'bg-govbr-primary text-white',
       dark: 'bg-govbr-primary-darkest text-white',
       white: 'bg-white text-govbr-gray-80 border-b border-govbr-gray-10',
-    };
+    } as const;
     return variants[this.variant];
   }
 }
@@ -137,11 +137,11 @@ export class BrMegaMenuTriggerComponent {
   }
 
   get triggerClasses(): string {
-    const variantMap: Record<string, string> = {
+    const variantMap = {
       primary: 'text-white hover:bg-white/15',
       dark: 'text-white hover:bg-white/15',
       white: 'text-govbr-gray-80 hover:bg-govbr-primary-lightest hover:text-govbr-primary',
-    };
+    } as const;
 
     const activeBg = this.isActive
       ? (this.variant === 'white' ? 'bg-govbr-primary-lightest text-govbr-primary' : 'bg-white/15')

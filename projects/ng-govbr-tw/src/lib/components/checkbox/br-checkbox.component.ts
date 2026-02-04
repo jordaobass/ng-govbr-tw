@@ -110,16 +110,16 @@ export class BrCheckboxComponent implements ControlValueAccessor {
   }
 
   get checkmarkClasses(): string {
-    const sizeMap: Record<string, string> = {
+    const sizeMap = {
       default: 'w-5 h-5',
       small: 'w-4 h-4',
-    };
+    } as const;
 
-    const borderColorMap: Record<string, string> = {
+    const borderColorMap = {
       default: 'border-govbr-gray-40',
       valid: 'border-govbr-success',
       invalid: 'border-govbr-danger',
-    };
+    } as const;
 
     const activeBorder = this.error ? 'border-govbr-danger' : borderColorMap[this.state];
 
@@ -138,10 +138,10 @@ export class BrCheckboxComponent implements ControlValueAccessor {
 
   get labelClasses(): string {
     const base = 'font-medium text-govbr-gray-80';
-    const sizeMap: Record<string, string> = {
+    const sizeMap = {
       default: 'ml-3 text-govbr-base',
       small: 'ml-2 text-govbr-sm',
-    };
+    } as const;
     return [base, sizeMap[this.size]].join(' ');
   }
 

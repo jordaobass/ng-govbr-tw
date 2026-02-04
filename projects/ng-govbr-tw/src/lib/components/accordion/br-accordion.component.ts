@@ -95,11 +95,11 @@ export class BrAccordionItemComponent {
   }
 
   get headerClasses(): string {
-    const densityMap: Record<string, string> = {
+    const densityMap = {
       small: 'px-4 py-2.5 text-govbr-sm',
       medium: 'px-4 py-3.5 text-govbr-base',
       large: 'px-6 py-4 text-govbr-lg',
-    };
+    } as const;
 
     const base = [
       'flex items-center w-full transition-colors font-rawline',
@@ -119,11 +119,11 @@ export class BrAccordionItemComponent {
   }
 
   get panelClasses(): string {
-    const densityMap: Record<string, string> = {
+    const densityMap = {
       small: 'px-4 py-3 text-govbr-sm',
       medium: 'px-4 py-4 text-govbr-base',
       large: 'px-6 py-5 text-govbr-base',
-    };
+    } as const;
 
     const base = densityMap[this.density];
 

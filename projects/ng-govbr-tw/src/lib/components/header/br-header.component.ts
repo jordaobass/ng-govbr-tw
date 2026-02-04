@@ -429,14 +429,14 @@ export class BrHeaderComponent implements AfterContentInit {
   }
 
   get bottomRowClasses(): string {
-    const pyMap: Record<string, string> = { small: 'py-2', medium: 'py-3', large: 'py-4' };
+    const pyMap = { small: 'py-2', medium: 'py-3', large: 'py-4' } as const;
     const py = this.isCompact ? 'py-2' : pyMap[this.density];
     const border = this.isWhite ? 'border-t border-govbr-gray-10' : 'border-t border-white/10';
     return `flex items-center justify-between ${py} ${border}`;
   }
 
   get logoClasses(): string {
-    const sizeMap: Record<string, string> = { small: 'h-6', medium: 'h-8', large: 'h-12' };
+    const sizeMap = { small: 'h-6', medium: 'h-8', large: 'h-12' } as const;
     const size = this.isCompact ? 'h-6' : sizeMap[this.density];
     return `${size} flex-shrink-0 transition-all duration-200`;
   }
@@ -507,11 +507,11 @@ export class BrHeaderComponent implements AfterContentInit {
   /** Title: responsive sizes matching GovBR DS tokens */
   get titleClasses(): string {
     // GovBR DS: base → sm: font-size-scale-up-02 → lg: font-size-scale-up-03
-    const sizeMap: Record<string, string> = {
+    const sizeMap = {
       small: 'text-base sm:text-lg',
       medium: 'text-base sm:text-lg lg:text-xl',
       large: 'text-lg sm:text-xl lg:text-2xl',
-    };
+    } as const;
     const size = this.isCompact ? 'text-base sm:text-lg' : sizeMap[this.density];
     const color = this.isWhite ? 'text-govbr-primary' : 'text-white';
     return `${size} font-bold leading-tight ${color}`;
@@ -519,11 +519,11 @@ export class BrHeaderComponent implements AfterContentInit {
 
   /** Subtitle: hidden on mobile, visible sm+, font-weight 500 */
   get subtitleClasses(): string {
-    const sizeMap: Record<string, string> = {
+    const sizeMap = {
       small: 'text-xs',
       medium: 'text-xs lg:text-sm',
       large: 'text-sm lg:text-base',
-    };
+    } as const;
     const size = this.isCompact ? 'text-xs' : sizeMap[this.density];
     const color = this.isWhite ? 'text-govbr-gray-60' : 'text-white/80';
     return `hidden sm:block ${size} font-medium mt-0.5 ${color}`;

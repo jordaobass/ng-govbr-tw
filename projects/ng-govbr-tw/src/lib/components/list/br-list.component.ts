@@ -150,11 +150,11 @@ export class BrListComponent {
 
   get listClasses(): string {
     const base = 'font-rawline';
-    const variantMap: Record<string, string> = {
+    const variantMap = {
       default: '',
       bordered: 'border border-govbr-gray-10 rounded',
       card: 'bg-white border border-govbr-gray-5 rounded shadow-sm',
-    };
+    } as const;
     return `${base} ${variantMap[this.variant]}`;
   }
 }

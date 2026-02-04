@@ -113,22 +113,22 @@ export class BrMessageComponent implements OnInit, OnDestroy, OnChanges {
 
   get messageClasses(): string {
     const base = 'p-4 rounded font-rawline border-l-4 relative overflow-hidden';
-    const styles: Record<string, string> = {
+    const styles = {
       success: 'bg-green-50 border-govbr-success text-govbr-success',
       danger: 'bg-red-50 border-govbr-danger text-govbr-danger',
       warning: 'bg-govbr-warning-bg border-govbr-warning text-govbr-gray-80',
       info: 'bg-govbr-info-bg border-govbr-info text-govbr-primary-dark',
-    };
+    } as const;
     return `${base} ${styles[this.type]}`;
   }
 
   get iconClass(): string {
-    const icons: Record<string, string> = {
+    const icons = {
       success: 'fa-solid fa-circle-check',
       danger: 'fa-solid fa-circle-xmark',
       warning: 'fa-solid fa-triangle-exclamation',
       info: 'fa-solid fa-circle-info',
-    };
+    } as const;
     return icons[this.type];
   }
 }

@@ -125,13 +125,13 @@ export class BrModalComponent {
   titleId = `br-modal-title-${BrModalComponent.nextId++}`;
 
   get modalClasses(): string {
-    const sizes: Record<string, string> = {
+    const sizes = {
       xsmall: 'max-w-[220px]',
       small: 'max-w-[300px]',
       medium: 'max-w-[500px]',
       large: 'max-w-[640px]',
       auto: 'max-w-fit',
-    };
+    } as const;
 
     const base = [
       'relative flex flex-col bg-white shadow-lg z-10 w-full mx-4',

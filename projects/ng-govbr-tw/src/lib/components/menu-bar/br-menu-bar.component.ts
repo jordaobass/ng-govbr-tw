@@ -34,11 +34,11 @@ export class BrMenuBarComponent {
   @Input() variant: 'primary' | 'dark' | 'white' = 'primary';
 
   get barClasses(): string {
-    const variants: Record<string, string> = {
+    const variants = {
       primary: 'bg-govbr-primary text-white font-rawline',
       dark: 'bg-govbr-primary-darkest text-white font-rawline',
       white: 'bg-white text-govbr-gray-80 border-b border-govbr-gray-10 font-rawline',
-    };
+    } as const;
     return variants[this.variant];
   }
 }
@@ -132,11 +132,11 @@ export class BrMenuBarItemComponent {
   }
 
   get itemClasses(): string {
-    const variantMap: Record<string, string> = {
+    const variantMap = {
       primary: 'text-white hover:bg-white/15',
       dark: 'text-white hover:bg-white/15',
       white: 'text-govbr-gray-80 hover:bg-govbr-primary-lightest hover:text-govbr-primary',
-    };
+    } as const;
     return [
       'flex items-center px-4 py-3 text-govbr-sm font-semibold font-rawline transition-colors whitespace-nowrap cursor-pointer',
       'govbr-focus-ring',

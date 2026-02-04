@@ -62,16 +62,16 @@ export class BrMenuComponent {
   }
 
   get panelClasses(): string {
-    const widthMap: Record<string, string> = {
+    const widthMap = {
       narrow: 'w-60',
       default: 'w-64',
       wide: 'w-72',
-    };
+    } as const;
 
-    const variantMap: Record<string, string> = {
+    const variantMap = {
       white: 'bg-white border-r border-govbr-gray-10',
       light: 'bg-govbr-gray-2 border-r border-govbr-gray-10',
-    };
+    } as const;
 
     return [
       'flex flex-col font-rawline min-h-0 h-full flex-shrink-0',

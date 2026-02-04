@@ -178,17 +178,17 @@ export class BrSelectComponent implements ControlValueAccessor {
   }
 
   get triggerClasses(): string {
-    const densityStyles: Record<string, string> = {
+    const densityStyles = {
       small: 'text-govbr-sm',
       medium: 'text-govbr-base',
       large: 'text-govbr-lg',
-    };
+    } as const;
 
-    const densityHeights: Record<string, string> = {
+    const densityHeights = {
       small: 'h-[var(--govbr-input-small)]',
       medium: 'h-[var(--govbr-input-medium)]',
       large: 'h-[var(--govbr-input-large)]',
-    };
+    } as const;
 
     const base = [
       'w-full flex items-center justify-between px-4 font-rawline govbr-input',

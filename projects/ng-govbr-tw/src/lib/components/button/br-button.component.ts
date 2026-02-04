@@ -98,11 +98,11 @@ export class BrButtonComponent {
 
     const emphasisClasses = this.getEmphasisClasses();
 
-    const densityMap: Record<string, string> = {
+    const densityMap = {
       small: this.circle ? 'w-8 h-8 text-sm' : 'px-3 py-1.5 text-sm',
       medium: this.circle ? 'w-10 h-10 text-base' : 'px-5 py-2 text-base',
       large: this.circle ? 'w-12 h-12 text-lg' : 'px-7 py-3 text-lg',
-    };
+    } as const;
 
     const shape = this.circle ? 'rounded-full' : 'rounded-govbr-pill';
     const width = this.block ? 'w-full' : '';
@@ -125,22 +125,22 @@ export class BrButtonComponent {
       return this.getDarkEmphasisClasses();
     }
 
-    const map: Record<string, string> = {
+    const map = {
       primary: 'bg-govbr-primary text-white hover:bg-govbr-primary-dark',
       secondary: 'bg-transparent text-govbr-primary border border-govbr-primary hover:bg-govbr-primary hover:text-white',
       tertiary: 'bg-transparent text-govbr-primary hover:bg-govbr-primary-lightest',
       danger: 'bg-govbr-danger text-white hover:bg-red-700',
-    };
+    } as const;
     return map[this.emphasis] || map['primary'];
   }
 
   private getDarkEmphasisClasses(): string {
-    const map: Record<string, string> = {
+    const map = {
       primary: 'bg-white text-govbr-primary-dark hover:bg-govbr-gray-5',
       secondary: 'bg-transparent text-white border border-white hover:bg-white/10',
       tertiary: 'bg-transparent text-white hover:bg-white/10',
       danger: 'bg-govbr-danger text-white hover:bg-red-700',
-    };
+    } as const;
     return map[this.emphasis] || map['primary'];
   }
 

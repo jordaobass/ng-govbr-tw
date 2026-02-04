@@ -106,11 +106,11 @@ export class BrTabComponent {
   }
 
   getTabClasses(index: number, disabled: boolean): string {
-    const densitySizes: Record<string, string> = {
+    const densitySizes = {
       small: 'px-4 py-2 text-govbr-sm',
       medium: 'px-6 py-3 text-govbr-base',
       large: 'px-8 py-4 text-govbr-lg',
-    };
+    } as const;
 
     const base = [
       'inline-flex items-center whitespace-nowrap font-semibold font-rawline transition-colors',

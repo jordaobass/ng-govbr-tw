@@ -296,11 +296,11 @@ export class BrSidebarComponent {
   get sidebarClasses(): string {
     const widthCls = this.collapsed ? 'w-16' : 'w-64';
 
-    const variantMap: Record<string, string> = {
+    const variantMap = {
       sidebar: 'border-r border-govbr-gray-10',
       floating: 'm-2 rounded-lg shadow-lg border border-govbr-gray-10',
       inset: 'border-r border-govbr-gray-10',
-    };
+    } as const;
 
     return [
       'hidden md:flex flex-col bg-white font-rawline min-h-full relative transition-all duration-200',
