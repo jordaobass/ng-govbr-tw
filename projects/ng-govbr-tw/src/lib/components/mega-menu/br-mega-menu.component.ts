@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
+import { BrAnimationService } from '../../animations/animation.service';
 
 // ─── BrMegaMenu (container) ─────────────────────────────────────────────────
 
@@ -18,6 +19,12 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [],
   encapsulation: ViewEncapsulation.None,
+  styles: [`
+    @keyframes br-mega-menu-dropdown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  `],
   template: `
     <div class="hidden md:block relative font-rawline">
       <!-- Trigger bar -->
@@ -39,6 +46,7 @@ import { RouterModule } from '@angular/router';
           class="absolute left-0 right-0 z-50 bg-white border-b border-govbr-gray-10 shadow-lg"
           role="region"
           [attr.aria-label]="'Painel ' + activePanel"
+          [style.animation]="panelAnimation"
           >
           <div class="max-w-[1280px] mx-auto px-4 py-6">
             <ng-content select="br-mega-menu-panel"></ng-content>
@@ -49,11 +57,17 @@ import { RouterModule } from '@angular/router';
     `,
 })
 export class BrMegaMenuComponent {
+  private readonly animationService = inject(BrAnimationService);
+  private elementRef = inject(ElementRef);
+
   @Input() variant: 'primary' | 'dark' | 'white' = 'primary';
   @Input() activePanel: string | null = null;
   @Output() activePanelChange = new EventEmitter<string | null>();
 
-  private elementRef = inject(ElementRef);
+  get panelAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    return 'br-mega-menu-dropdown 200ms ease-out forwards';
+  }
 
   toggle(panelId: string): void {
     this.activePanel = this.activePanel === panelId ? null : panelId;

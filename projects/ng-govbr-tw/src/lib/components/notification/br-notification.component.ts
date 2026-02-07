@@ -1,4 +1,5 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, inject, Input, ViewEncapsulation } from '@angular/core';
+import { BrAnimationService } from '../../animations/animation.service';
 
 @Component({
   selector: 'br-notification',
@@ -12,6 +13,7 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
         <span
           class="absolute flex items-center justify-center font-rawline font-bold"
           [class]="badgeClasses"
+          [style.animation]="bounceAnimation"
           [attr.aria-label]="ariaLabel"
           role="status"
         >
@@ -26,9 +28,15 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
     br-notification {
       display: inline-flex;
     }
+    @keyframes br-notification-bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
   `],
 })
 export class BrNotificationComponent {
+  private readonly animationService = inject(BrAnimationService);
+
   /** Número de notificações */
   @Input() count = 0;
 
@@ -55,6 +63,14 @@ export class BrNotificationComponent {
 
   /** Pulsar animação */
   @Input() pulse = false;
+
+  /** Animação de bounce ao aparecer */
+  @Input() animate = true;
+
+  get bounceAnimation(): string {
+    if (!this.animate || !this.animationService.isEnabled()) return 'none';
+    return 'br-notification-bounce 400ms ease-out';
+  }
 
   get displayCount(): string {
     if (this.count > this.max) {

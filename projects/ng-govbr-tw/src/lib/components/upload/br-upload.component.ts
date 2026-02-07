@@ -3,12 +3,14 @@ import {
   ElementRef,
   EventEmitter,
   forwardRef,
+  inject,
   Input,
   Output,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { BrAnimationService } from '../../animations/animation.service';
 
 
 export interface BrUploadFile {
@@ -26,6 +28,12 @@ export interface BrUploadFile {
   standalone: true,
   imports: [],
   encapsulation: ViewEncapsulation.None,
+  styles: [`
+    @keyframes br-upload-file-enter {
+      from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  `],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -97,7 +105,7 @@ export interface BrUploadFile {
       @if (files.length > 0) {
         <ul class="mt-3 space-y-2" role="list">
           @for (f of files; track f.name; let i = $index) {
-            <li class="flex items-center gap-3 p-3 bg-govbr-gray-2 rounded-md border border-govbr-gray-10">
+            <li class="flex items-center gap-3 p-3 bg-govbr-gray-2 rounded-md border border-govbr-gray-10" [style.animation]="fileItemAnimation">
               <!-- Preview -->
               @if (f.preview) {
                 <img
@@ -150,6 +158,8 @@ export interface BrUploadFile {
   `,
 })
 export class BrUploadComponent implements ControlValueAccessor {
+  private readonly animationService = inject(BrAnimationService);
+
   @Input() label?: string;
   @Input() accept = '';
   @Input() multiple = false;
@@ -168,6 +178,11 @@ export class BrUploadComponent implements ControlValueAccessor {
 
   files: BrUploadFile[] = [];
   dragging = false;
+
+  get fileItemAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    return 'br-upload-file-enter 250ms ease-out forwards';
+  }
 
   private onChange: (value: File[]) => void = () => {};
   private onTouched: () => void = () => {};

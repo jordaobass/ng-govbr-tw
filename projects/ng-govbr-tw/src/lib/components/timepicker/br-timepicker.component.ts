@@ -15,6 +15,7 @@ import {
   FormsModule,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
+import { BrAnimationService } from '../../animations/animation.service';
 
 /**
  * BrTimepickerComponent — Time picker following GovBR DS pattern.
@@ -29,6 +30,12 @@ import {
   standalone: true,
   imports: [CommonModule, FormsModule],
   encapsulation: ViewEncapsulation.None,
+  styles: [`
+    @keyframes br-timepicker-dropdown {
+      from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  `],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -87,6 +94,7 @@ import {
           class="absolute z-50 mt-1 bg-white border border-govbr-gray-10 rounded shadow-lg p-3 w-48"
           role="listbox"
           aria-label="Selecionar horário"
+          [style.animation]="panelAnimation"
           >
           <div class="flex gap-2">
             <!-- Hours -->
@@ -139,6 +147,8 @@ import {
     `,
 })
 export class BrTimepickerComponent implements ControlValueAccessor {
+  private readonly animationService = inject(BrAnimationService);
+
   @Input() label?: string;
   @Input() placeholder = 'HH:MM';
   @Input() hint?: string;
@@ -159,6 +169,11 @@ export class BrTimepickerComponent implements ControlValueAccessor {
   private onTouched: () => void = () => {};
 
   private elRef = inject(ElementRef);
+
+  get panelAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    return 'br-timepicker-dropdown 200ms ease-out forwards';
+  }
 
   @HostListener('document:click', ['$event'])
   onDocClick(event: MouseEvent): void {

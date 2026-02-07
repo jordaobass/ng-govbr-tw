@@ -15,6 +15,7 @@ import {
   FormsModule,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
+import { BrAnimationService } from '../../animations/animation.service';
 
 /**
  * BrDatepickerComponent — Date picker following GovBR DS pattern.
@@ -29,6 +30,12 @@ import {
   standalone: true,
   imports: [FormsModule],
   encapsulation: ViewEncapsulation.None,
+  styles: [`
+    @keyframes br-datepicker-dropdown {
+      from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  `],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -89,6 +96,7 @@ import {
           class="absolute z-50 mt-1 bg-white border border-govbr-gray-10 rounded shadow-lg p-3 w-72"
           role="dialog"
           aria-label="Selecionar data"
+          [style.animation]="calendarAnimation"
           >
           <!-- Month/Year navigation -->
           <div class="flex items-center justify-between mb-3">
@@ -151,6 +159,8 @@ import {
     `,
 })
 export class BrDatepickerComponent implements ControlValueAccessor {
+  private readonly animationService = inject(BrAnimationService);
+
   @Input() label?: string;
   @Input() placeholder = 'dd/mm/aaaa';
   @Input() hint?: string;
@@ -178,6 +188,11 @@ export class BrDatepickerComponent implements ControlValueAccessor {
   dayNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
   private elRef = inject(ElementRef);
+
+  get calendarAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    return 'br-datepicker-dropdown 200ms ease-out forwards';
+  }
 
   @HostListener('document:click', ['$event'])
   onDocClick(event: MouseEvent): void {

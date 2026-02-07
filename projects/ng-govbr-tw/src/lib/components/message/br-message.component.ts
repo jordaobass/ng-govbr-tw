@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  inject,
   Input,
   OnChanges,
   OnDestroy,
@@ -9,6 +10,7 @@ import {
   SimpleChanges,
   ViewEncapsulation,
 } from '@angular/core';
+import { BrAnimationService } from '../../animations/animation.service';
 
 
 @Component({
@@ -16,9 +18,19 @@ import {
   standalone: true,
   imports: [],
   encapsulation: ViewEncapsulation.None,
+  styles: [`
+    @keyframes br-message-slide-in {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes br-message-fade-out {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0; transform: scale(0.95); }
+    }
+  `],
   template: `
     @if (visible) {
-      <div [class]="messageClasses" role="alert">
+      <div [class]="messageClasses" [style.animation]="enterAnimation" role="alert">
         <div class="flex items-start">
           <i [class]="iconClass + ' mt-0.5 mr-3 text-lg flex-shrink-0'"></i>
           <div class="flex-1 text-sm min-w-0">
@@ -51,6 +63,8 @@ import {
     `,
 })
 export class BrMessageComponent implements OnInit, OnDestroy, OnChanges {
+  private readonly animationService = inject(BrAnimationService);
+
   @Input() type: 'success' | 'danger' | 'warning' | 'info' = 'info';
   @Input() title?: string;
   @Input() dismissible = false;
@@ -62,6 +76,11 @@ export class BrMessageComponent implements OnInit, OnDestroy, OnChanges {
   progressWidth = 100;
 
   private timerId: ReturnType<typeof setTimeout> | null = null;
+
+  get enterAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    return 'br-message-slide-in 300ms ease-out forwards';
+  }
 
   ngOnInit(): void {
     this.startAutoDismiss();

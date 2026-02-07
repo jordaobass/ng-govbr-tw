@@ -3,12 +3,14 @@ import {
   AfterContentInit,
   ContentChildren,
   EventEmitter,
+  inject,
   Input,
   OnChanges,
   Output,
   QueryList,
   ViewEncapsulation,
 } from '@angular/core';
+import { BrAnimationService } from '../../animations/animation.service';
 
 
 /**
@@ -19,19 +21,32 @@ import {
   standalone: true,
   imports: [],
   encapsulation: ViewEncapsulation.None,
+  styles: [`
+    @keyframes br-wizard-step-fade-in {
+      from { opacity: 0; transform: translateX(16px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+  `],
   template: `
     @if (active) {
-      <div class="py-4 font-rawline" role="tabpanel">
+      <div class="py-4 font-rawline" role="tabpanel" [style.animation]="stepAnimation">
         <ng-content></ng-content>
       </div>
     }
     `,
 })
 export class BrWizardStepComponent {
+  private readonly animationService = inject(BrAnimationService);
+
   @Input() label = '';
   @Input() icon?: string;
   @Input() disabled = false;
   active = false;
+
+  get stepAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    return 'br-wizard-step-fade-in 250ms ease-out forwards';
+  }
 }
 
 /**

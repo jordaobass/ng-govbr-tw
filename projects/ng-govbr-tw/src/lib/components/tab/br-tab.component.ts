@@ -2,12 +2,14 @@ import {
   Component,
   ContentChildren,
   EventEmitter,
+  inject,
   Input,
   Output,
   QueryList,
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { BrAnimationService } from '../../animations/animation.service';
 
 
 @Component({
@@ -39,6 +41,12 @@ export class BrTabPanelComponent {
   standalone: true,
   imports: [],
   encapsulation: ViewEncapsulation.None,
+  styles: [`
+    @keyframes br-tab-fade-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  `],
   template: `
     <div class="font-rawline">
       <!-- Tab navigation -->
@@ -70,7 +78,7 @@ export class BrTabPanelComponent {
           </button>
         }
       </nav>
-    
+
       <!-- Tab panels -->
       <div class="tab-content">
         @for (tab of tabs; track tab; let i = $index) {
@@ -78,6 +86,7 @@ export class BrTabPanelComponent {
             role="tabpanel"
             [id]="'br-tab-panel-' + id + '-' + i"
             [class]="panelClasses(i)"
+            [style.animation]="activeIndex === i ? panelAnimation : 'none'"
             >
             @if (activeIndex === i) {
               <ng-content select="br-tab-panel"></ng-content>
@@ -89,6 +98,8 @@ export class BrTabPanelComponent {
     `,
 })
 export class BrTabComponent {
+  private readonly animationService = inject(BrAnimationService);
+
   @Input() density: 'small' | 'medium' | 'large' = 'medium';
   @Input() activeIndex = 0;
   @Input() tabs: BrTabItem[] = [];
@@ -98,6 +109,11 @@ export class BrTabComponent {
 
   private static nextId = 0;
   id = BrTabComponent.nextId++;
+
+  get panelAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    return 'br-tab-fade-in 250ms ease-out forwards';
+  }
 
   get navClasses(): string {
     const base = 'flex overflow-x-auto border-b border-govbr-gray-10 scrollbar-thin';

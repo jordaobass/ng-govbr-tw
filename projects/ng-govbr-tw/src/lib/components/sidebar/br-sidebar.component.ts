@@ -2,12 +2,14 @@ import {
   Component,
   EventEmitter,
   HostListener,
+  inject,
   Input,
   Output,
   ViewEncapsulation,
 } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
+import { BrAnimationService } from '../../animations/animation.service';
 
 // ─── BrSidebarGroup ─────────────────────────────────────────────────────────
 
@@ -185,6 +187,16 @@ export class BrSidebarSubComponent {
   standalone: true,
   imports: [],
   encapsulation: ViewEncapsulation.None,
+  styles: [`
+    @keyframes br-sidebar-slide-in {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(0); }
+    }
+    @keyframes br-sidebar-fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  `],
   template: `
     <!-- Desktop sidebar -->
     <aside
@@ -232,6 +244,7 @@ export class BrSidebarSubComponent {
     @if (mobileOpen) {
       <div
         class="md:hidden fixed inset-0 z-[998] bg-black/40"
+        [style.animation]="overlayAnimation"
         (click)="closeMobile()"
         (keydown.enter)="closeMobile()"
         role="button"
@@ -239,11 +252,12 @@ export class BrSidebarSubComponent {
         aria-label="Fechar menu lateral"
       ></div>
     }
-    
+
     <!-- Mobile drawer -->
     @if (mobileOpen) {
       <aside
         class="md:hidden fixed top-0 left-0 z-[999] w-72 h-full bg-white border-r border-govbr-gray-10 shadow-xl overflow-y-auto font-rawline flex flex-col"
+        [style.animation]="drawerAnimation"
         role="navigation"
         aria-label="Menu lateral"
         >
@@ -265,6 +279,8 @@ export class BrSidebarSubComponent {
     `,
 })
 export class BrSidebarComponent {
+  private readonly animationService = inject(BrAnimationService);
+
   @Input() collapsed = false;
   @Input() collapsible = true;
   @Input() variant: 'sidebar' | 'floating' | 'inset' = 'sidebar';
@@ -274,6 +290,16 @@ export class BrSidebarComponent {
 
   @Output() collapsedChange = new EventEmitter<boolean>();
   @Output() mobileOpenChange = new EventEmitter<boolean>();
+
+  get overlayAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    return 'br-sidebar-fade-in 200ms ease-out forwards';
+  }
+
+  get drawerAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    return 'br-sidebar-slide-in 250ms ease-out forwards';
+  }
 
   toggleCollapse(): void {
     this.collapsed = !this.collapsed;

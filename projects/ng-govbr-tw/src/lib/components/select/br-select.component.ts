@@ -10,12 +10,19 @@ import {
 } from '@angular/core';
 
 import { ControlValueAccessor, FormsModule, NgControl, ValidationErrors } from '@angular/forms';
+import { BrAnimationService } from '../../animations/animation.service';
 
 @Component({
   selector: 'br-select',
   standalone: true,
   imports: [FormsModule],
   encapsulation: ViewEncapsulation.None,
+  styles: [`
+    @keyframes br-select-dropdown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  `],
   template: `
     <div class="relative font-rawline mb-4" #selectContainer>
       @if (label) {
@@ -57,7 +64,8 @@ import { ControlValueAccessor, FormsModule, NgControl, ValidationErrors } from '
       <!-- Dropdown -->
       @if (expanded) {
         <div
-          class="absolute left-0 right-0 z-10 mt-1 bg-white border border-govbr-gray-10 shadow-lg max-h-[404px] overflow-y-auto"
+          class="absolute left-0 right-0 z-10 mt-1 bg-white border border-govbr-gray-10 shadow-lg max-h-[404px] overflow-y-auto rounded"
+          [style.animation]="dropdownAnimation"
           >
           <!-- Search filter -->
           @if (searchable) {
@@ -155,6 +163,12 @@ export class BrSelectComponent implements ControlValueAccessor {
   onTouched: () => void = () => {};
 
   private elementRef = inject(ElementRef);
+  private readonly animationService = inject(BrAnimationService);
+
+  get dropdownAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    return 'br-select-dropdown 200ms ease-out forwards';
+  }
 
   private static readonly defaultErrorMessages: Record<string, string> = {
     required: 'Campo obrigatório',

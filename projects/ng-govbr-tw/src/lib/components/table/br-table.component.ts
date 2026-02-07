@@ -26,18 +26,19 @@ import { BrPaginationComponent } from '../pagination/br-pagination.component';
         <ng-content></ng-content>
       </table>
 
-      @if (totalPages > 1) {
-        <div
-          class="flex items-center justify-between px-4 py-3 border-t border-govbr-gray-5"
-          >
-          <span class="text-sm text-govbr-gray-40">
-            Página {{ page }} de {{ totalPages }}
-          </span>
+      @if (totalPages > 1 || showItemsPerPage) {
+        <div class="px-4 py-3 border-t border-govbr-gray-5">
           <br-pagination
             [page]="page"
             [totalPages]="totalPages"
+            [totalItems]="totalItems"
+            [itemsPerPage]="itemsPerPage"
+            [itemsPerPageOptions]="itemsPerPageOptions"
+            [showItemsPerPage]="showItemsPerPage"
+            [showSummary]="showSummary"
             density="small"
             (pageChange)="onPageChange($event)"
+            (itemsPerPageChange)="onItemsPerPageChange($event)"
           ></br-pagination>
         </div>
       }
@@ -186,9 +187,15 @@ export class BrTableComponent {
 
   @Input() page = 1;
   @Input() totalPages = 1;
+  @Input() totalItems = 0;
+  @Input() itemsPerPage = 10;
+  @Input() itemsPerPageOptions = [10, 25, 50, 100];
+  @Input() showItemsPerPage = false;
+  @Input() showSummary = false;
   @Input() selectable = false;
 
   @Output() pageChange = new EventEmitter<number>();
+  @Output() itemsPerPageChange = new EventEmitter<number>();
   @Output() selectionChange = new EventEmitter<Set<string | number>>();
 
   selectedRows = new Set<string | number>();
@@ -196,6 +203,11 @@ export class BrTableComponent {
   onPageChange(p: number): void {
     this.page = p;
     this.pageChange.emit(p);
+  }
+
+  onItemsPerPageChange(size: number): void {
+    this.itemsPerPage = size;
+    this.itemsPerPageChange.emit(size);
   }
 
   toggleRow(id: string | number): void {

@@ -1,10 +1,12 @@
 import {
   Component,
   EventEmitter,
+  inject,
   Input,
   Output,
   ViewEncapsulation,
 } from '@angular/core';
+import { BrAnimationService } from '../../animations/animation.service';
 
 
 export interface BrCookieGroup {
@@ -36,6 +38,16 @@ export interface BrCookieGroup {
   standalone: true,
   imports: [],
   encapsulation: ViewEncapsulation.None,
+  styles: [`
+    @keyframes br-cookiebar-slide-up {
+      from { opacity: 0; transform: translateY(100%); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes br-cookiebar-fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  `],
   template: `
     @if (visible) {
       <div
@@ -48,6 +60,7 @@ export interface BrCookieGroup {
         @if (expanded) {
           <div
             class="fixed inset-0 bg-black/40 z-40"
+            [style.animation]="scrimAnimation"
             (click)="expanded = false"
             (keydown.enter)="expanded = false"
             role="button"
@@ -55,7 +68,7 @@ export interface BrCookieGroup {
             aria-label="Fechar definições de cookies"
           ></div>
         }
-        <div [class]="barClasses">
+        <div [class]="barClasses" [style.animation]="barAnimation">
           <!-- Main bar -->
           <div class="flex flex-col sm:flex-row sm:items-center gap-4">
             <div class="flex-1 text-sm text-govbr-gray-80">
@@ -151,6 +164,8 @@ export interface BrCookieGroup {
     `,
 })
 export class BrCookiebarComponent {
+  private readonly animationService = inject(BrAnimationService);
+
   @Input() visible = false;
   @Input() cookieGroups: BrCookieGroup[] = [];
 
@@ -160,6 +175,16 @@ export class BrCookiebarComponent {
   @Output() visibleChange = new EventEmitter<boolean>();
 
   expanded = false;
+
+  get barAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    return 'br-cookiebar-slide-up 300ms ease-out forwards';
+  }
+
+  get scrimAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    return 'br-cookiebar-fade-in 200ms ease-out forwards';
+  }
 
   trackGroup(_: number, group: BrCookieGroup): string {
     return group.id;

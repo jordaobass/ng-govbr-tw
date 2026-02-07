@@ -2,10 +2,12 @@ import {
   Component,
   EventEmitter,
   HostListener,
+  inject,
   Input,
   Output,
   ViewEncapsulation,
 } from '@angular/core';
+import { BrAnimationService } from '../../animations/animation.service';
 
 
 /**
@@ -21,10 +23,17 @@ import {
   standalone: true,
   imports: [],
   encapsulation: ViewEncapsulation.None,
+  styles: [`
+    @keyframes br-menu-slide-in {
+      from { opacity: 0; transform: translateX(-16px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+  `],
   template: `
     @if (open) {
       <nav
         [class]="panelClasses"
+        [style.animation]="panelAnimation"
         role="navigation"
         [attr.aria-label]="ariaLabel"
         >
@@ -41,6 +50,8 @@ import {
     `,
 })
 export class BrMenuComponent {
+  private readonly animationService = inject(BrAnimationService);
+
   @Input() open = true;
   @Output() openChange = new EventEmitter<boolean>();
 
@@ -52,6 +63,11 @@ export class BrMenuComponent {
   close(): void {
     this.open = false;
     this.openChange.emit(false);
+  }
+
+  get panelAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    return 'br-menu-slide-in 200ms ease-out forwards';
   }
 
   @HostListener('document:keydown.escape')
