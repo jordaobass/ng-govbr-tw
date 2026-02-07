@@ -59,6 +59,55 @@ html.govbr-contrast .text-white {
   color: #fff !important;
 }
 
+/* ═══ Botões Primary (br-button) ═══ */
+/* Botão primary: fundo branco + texto preto */
+html.govbr-contrast br-button button.bg-govbr-primary {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+html.govbr-contrast br-button button.bg-govbr-primary:hover:not(:disabled) {
+  background-color: #ffff00 !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast br-button button.bg-govbr-primary i {
+  color: #000 !important;
+}
+
+/* Botão secondary (outline) */
+html.govbr-contrast br-button button.border-govbr-primary {
+  border-color: #fff !important;
+  color: #fff !important;
+}
+
+html.govbr-contrast br-button button.border-govbr-primary:hover:not(:disabled) {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+/* Botão tertiary (text) */
+html.govbr-contrast br-button button.bg-transparent.text-govbr-primary {
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast br-button button.bg-transparent.text-govbr-primary:hover:not(:disabled) {
+  background-color: #333 !important;
+  color: #ffff00 !important;
+}
+
+/* Botão danger */
+html.govbr-contrast br-button button.bg-govbr-danger {
+  background-color: #ff5f5f !important;
+  color: #000 !important;
+  border: 2px solid #ff5f5f !important;
+}
+
+html.govbr-contrast br-button button.bg-govbr-danger:hover:not(:disabled) {
+  background-color: #ff8080 !important;
+}
+
 /* Menu item ativo: fundo branco precisa de texto preto */
 html.govbr-contrast .bg-govbr-primary.text-white {
   color: #000 !important;
@@ -115,36 +164,91 @@ html.govbr-contrast br-sidebar aside {
   border-color: #444 !important;
 }
 
+/* Itens inativos */
 html.govbr-contrast br-sidebar-item a,
 html.govbr-contrast br-sidebar-item button {
   color: #fff !important;
 }
 
-html.govbr-contrast br-sidebar-item a:hover,
-html.govbr-contrast br-sidebar-item button:hover {
+html.govbr-contrast br-sidebar-item a i,
+html.govbr-contrast br-sidebar-item button i {
+  color: #ccc !important;
+}
+
+/* Hover em itens inativos */
+html.govbr-contrast br-sidebar-item a:hover:not(.br-sidebar-item-active),
+html.govbr-contrast br-sidebar-item button:hover:not(.br-sidebar-item-active) {
   background-color: #333 !important;
   color: #ffff00 !important;
 }
 
-html.govbr-contrast br-sidebar-item .br-sidebar-item-active,
+html.govbr-contrast br-sidebar-item a:hover:not(.br-sidebar-item-active) i,
+html.govbr-contrast br-sidebar-item button:hover:not(.br-sidebar-item-active) i {
+  color: #ffff00 !important;
+}
+
+/* Item ativo - fundo branco, texto preto */
+html.govbr-contrast br-sidebar-item a.br-sidebar-item-active,
+html.govbr-contrast br-sidebar-item button.br-sidebar-item-active,
 html.govbr-contrast .br-sidebar-item-active {
   background-color: #fff !important;
   color: #000 !important;
 }
 
+html.govbr-contrast br-sidebar-item a.br-sidebar-item-active i,
+html.govbr-contrast br-sidebar-item button.br-sidebar-item-active i,
 html.govbr-contrast .br-sidebar-item-active i {
   color: #000 !important;
 }
 
+/* Badge */
+html.govbr-contrast br-sidebar-item span.bg-govbr-danger {
+  background-color: #ff5f5f !important;
+  color: #000 !important;
+}
+
+/* Group label */
 html.govbr-contrast br-sidebar-group-label h4 {
   color: #aaa !important;
 }
 
+/* Submenu trigger */
 html.govbr-contrast br-sidebar-sub button {
   color: #fff !important;
 }
 
+html.govbr-contrast br-sidebar-sub button i {
+  color: #ccc !important;
+}
+
 html.govbr-contrast br-sidebar-sub button:hover {
+  background-color: #333 !important;
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast br-sidebar-sub button:hover i {
+  color: #ffff00 !important;
+}
+
+/* Submenu items border */
+html.govbr-contrast br-sidebar-sub .border-l {
+  border-color: #444 !important;
+}
+
+/* Mobile drawer */
+html.govbr-contrast br-sidebar aside.fixed {
+  background-color: #000 !important;
+  border-color: #444 !important;
+}
+
+/* Collapse toggle button */
+html.govbr-contrast br-sidebar button.absolute {
+  background-color: #222 !important;
+  border-color: #666 !important;
+  color: #fff !important;
+}
+
+html.govbr-contrast br-sidebar button.absolute:hover {
   background-color: #333 !important;
   color: #ffff00 !important;
 }
@@ -290,19 +394,64 @@ html.govbr-contrast br-divider span {
 }
 
 /* ═══ Pagination (br-pagination) ═══ */
+html.govbr-contrast br-pagination nav {
+  color: #fff !important;
+}
+
+/* Página ativa - fundo branco, texto preto */
 html.govbr-contrast br-pagination button.bg-govbr-primary {
   background-color: #fff !important;
   color: #000 !important;
+  border: 2px solid #fff !important;
 }
 
-html.govbr-contrast br-pagination button:not(.bg-govbr-primary):not(:disabled) {
+html.govbr-contrast br-pagination button.bg-govbr-primary:hover {
+  background-color: #ffff00 !important;
+  color: #000 !important;
+}
+
+/* Páginas inativas - texto amarelo */
+html.govbr-contrast br-pagination button.text-govbr-primary {
   color: #ffff00 !important;
 }
 
+html.govbr-contrast br-pagination button.text-govbr-primary:hover:not(:disabled) {
+  background-color: #333 !important;
+  color: #ffff00 !important;
+}
+
+/* Botões de navegação (prev/next) desabilitados */
+html.govbr-contrast br-pagination button.text-govbr-gray-20 {
+  color: #444 !important;
+}
+
+/* Botões de navegação ativos */
+html.govbr-contrast br-pagination button:not(.bg-govbr-primary):not(.text-govbr-gray-20):not(:disabled) {
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast br-pagination button:not(.bg-govbr-primary):not(:disabled):hover {
+  background-color: #333 !important;
+}
+
+/* Select de itens por página */
 html.govbr-contrast br-pagination select {
   background-color: #111 !important;
   color: #fff !important;
   border-color: #666 !important;
+}
+
+html.govbr-contrast br-pagination label {
+  color: #ccc !important;
+}
+
+html.govbr-contrast br-pagination span {
+  color: #aaa !important;
+}
+
+/* Elipsis */
+html.govbr-contrast br-pagination span.text-govbr-gray-40 {
+  color: #666 !important;
 }
 
 /* ═══ Notification Badge (br-notification) ═══ */

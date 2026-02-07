@@ -40,17 +40,27 @@ import { BrAnimationService } from '../../animations/animation.service';
       (click)="handleClick($event)"
       >
       @if (loading) {
-        <i class="fa-solid fa-spinner fa-spin flex-shrink-0 leading-none" [class.mr-2]="!circle" aria-hidden="true"></i>
+        <i class="fa-solid fa-spinner fa-spin flex-shrink-0" [class.mr-2]="!circle" aria-hidden="true"></i>
       }
       @if (icon && !loading) {
         <i [class]="iconClasses" aria-hidden="true"></i>
       }
       @if (!circle) {
-        <span class="leading-none"><ng-content></ng-content></span>
+        <span><ng-content></ng-content></span>
       }
     </button>
     `,
   styles: [`
+    /* Ensure icon vertical alignment */
+    br-button button {
+      line-height: 1;
+    }
+    br-button button i {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     /* Hover lift effect */
     .br-button-hover-lift {
       transition: transform 200ms ease-out, box-shadow 200ms ease-out, background-color 200ms, color 200ms !important;
@@ -151,7 +161,7 @@ export class BrButtonComponent {
 
   get iconClasses(): string {
     const spacing = this.circle ? '' : (this.iconPosition === 'right' ? 'ml-2' : 'mr-2');
-    return `fa-solid fa-${this.icon} flex-shrink-0 leading-none ${spacing}`;
+    return `fa-solid fa-${this.icon} flex-shrink-0 ${spacing}`;
   }
 
   private getHoverEffectClass(): string {
