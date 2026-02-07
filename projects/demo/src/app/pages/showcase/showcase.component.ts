@@ -28,6 +28,9 @@ import {
   BrDatepickerComponent,
   BrTimepickerComponent,
   BrDatetimepickerComponent,
+  BrUploadComponent,
+  BrAvatarComponent,
+  BrSkeletonComponent,
 } from 'ng-govbr-tw';
 import type { BrRadioOption, BrSelectOption, BrBreadcrumbItem, BrTabItem } from 'ng-govbr-tw';
 
@@ -63,6 +66,9 @@ import type { BrRadioOption, BrSelectOption, BrBreadcrumbItem, BrTabItem } from 
     BrDatepickerComponent,
     BrTimepickerComponent,
     BrDatetimepickerComponent,
+    BrUploadComponent,
+    BrAvatarComponent,
+    BrSkeletonComponent,
   ],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -344,37 +350,77 @@ import type { BrRadioOption, BrSelectOption, BrBreadcrumbItem, BrTabItem } from 
       <!-- ─── TABLE ──────────────────────────────────────────────── -->
       <section>
         <h2 class="text-2xl font-bold text-govbr-gray-80 mb-1">Tabela</h2>
-        <p class="text-govbr-sm text-govbr-gray-40 mb-4">Componente: <code>br-table</code></p>
-        <br-table [page]="tablePage" [totalPages]="5" (pageChange)="tablePage = $event">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>CPF</th>
-              <th>Situacao</th>
-              <th>Acoes</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Maria da Silva</td>
-              <td>123.456.789-00</td>
-              <td><br-badge variant="success">Ativo</br-badge></td>
-              <td><br-button variant="secondary" size="small" icon="eye">Ver</br-button></td>
-            </tr>
-            <tr>
-              <td>Joao Santos</td>
-              <td>987.654.321-00</td>
-              <td><br-badge variant="warning">Pendente</br-badge></td>
-              <td><br-button variant="secondary" size="small" icon="eye">Ver</br-button></td>
-            </tr>
-            <tr>
-              <td>Ana Oliveira</td>
-              <td>456.789.123-00</td>
-              <td><br-badge variant="danger">Inativo</br-badge></td>
-              <td><br-button variant="secondary" size="small" icon="eye">Ver</br-button></td>
-            </tr>
-          </tbody>
-        </br-table>
+        <p class="text-govbr-sm text-govbr-gray-40 mb-4">Componente: <code>br-table</code> com <code>headerStyle</code>: primary | secondary | light</p>
+
+        <div class="space-y-6">
+          <div>
+            <p class="text-govbr-xs font-semibold text-govbr-gray-40 mb-2 uppercase">headerStyle="primary" (default)</p>
+            <br-table headerStyle="primary" [page]="tablePage" [totalPages]="5" (pageChange)="tablePage = $event">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>CPF</th>
+                  <th>Situacao</th>
+                  <th>Acoes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Maria da Silva</td>
+                  <td>123.456.789-00</td>
+                  <td><br-badge variant="success">Ativo</br-badge></td>
+                  <td><br-button variant="secondary" size="small" icon="eye">Ver</br-button></td>
+                </tr>
+                <tr>
+                  <td>Joao Santos</td>
+                  <td>987.654.321-00</td>
+                  <td><br-badge variant="warning">Pendente</br-badge></td>
+                  <td><br-button variant="secondary" size="small" icon="eye">Ver</br-button></td>
+                </tr>
+              </tbody>
+            </br-table>
+          </div>
+
+          <div>
+            <p class="text-govbr-xs font-semibold text-govbr-gray-40 mb-2 uppercase">headerStyle="secondary"</p>
+            <br-table headerStyle="secondary">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>CPF</th>
+                  <th>Situacao</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Carlos Souza</td>
+                  <td>111.222.333-44</td>
+                  <td><br-badge variant="success">Ativo</br-badge></td>
+                </tr>
+              </tbody>
+            </br-table>
+          </div>
+
+          <div>
+            <p class="text-govbr-xs font-semibold text-govbr-gray-40 mb-2 uppercase">headerStyle="light"</p>
+            <br-table headerStyle="light">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>CPF</th>
+                  <th>Situacao</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Ana Oliveira</td>
+                  <td>456.789.123-00</td>
+                  <td><br-badge variant="danger">Inativo</br-badge></td>
+                </tr>
+              </tbody>
+            </br-table>
+          </div>
+        </div>
       </section>
 
       <!-- ─── PAGINATION ─────────────────────────────────────────── -->
@@ -430,6 +476,8 @@ import type { BrRadioOption, BrSelectOption, BrBreadcrumbItem, BrTabItem } from 
         <div class="flex flex-wrap gap-3">
           <br-button variant="primary" (click)="modalOpen = true">Abrir Modal</br-button>
           <br-button variant="secondary" (click)="modalSmallOpen = true">Modal Pequeno</br-button>
+          <br-button variant="danger" (click)="modalDangerOpen = true">Modal Danger</br-button>
+          <br-button variant="primary" (click)="modalSuccessOpen = true">Modal Success</br-button>
         </div>
         <br-modal
           [isOpen]="modalOpen"
@@ -456,6 +504,34 @@ import type { BrRadioOption, BrSelectOption, BrBreadcrumbItem, BrTabItem } from 
           (confirmed)="modalSmallOpen = false"
         >
           <br-message type="info">Sua sessao expira em 5 minutos.</br-message>
+        </br-modal>
+        <br-modal
+          [isOpen]="modalDangerOpen"
+          title="Excluir registro"
+          size="small"
+          variant="danger"
+          primaryText="Excluir"
+          (closed)="modalDangerOpen = false"
+          (confirmed)="modalDangerOpen = false"
+          (canceled)="modalDangerOpen = false"
+        >
+          <p class="text-govbr-sm text-govbr-gray-60">
+            Esta acao ira excluir permanentemente o registro. Deseja continuar?
+          </p>
+        </br-modal>
+        <br-modal
+          [isOpen]="modalSuccessOpen"
+          title="Operacao concluida"
+          size="small"
+          variant="success"
+          primaryText="Fechar"
+          [showCancelButton]="false"
+          (closed)="modalSuccessOpen = false"
+          (confirmed)="modalSuccessOpen = false"
+        >
+          <p class="text-govbr-sm text-govbr-gray-60">
+            O cadastro foi realizado com sucesso.
+          </p>
         </br-modal>
       </section>
 
@@ -492,6 +568,68 @@ import type { BrRadioOption, BrSelectOption, BrBreadcrumbItem, BrTabItem } from 
           <br-datepicker label="Data de nascimento" [(ngModel)]="dateValue"></br-datepicker>
           <br-timepicker label="Horario" [(ngModel)]="timeValue"></br-timepicker>
           <br-datetimepicker label="Agendamento" layout="vertical" [(ngModel)]="datetimeValue"></br-datetimepicker>
+        </div>
+      </section>
+
+      <!-- ─── AVATAR ────────────────────────────────────────────── -->
+      <section>
+        <h2 class="text-2xl font-bold text-govbr-gray-80 mb-1">Avatar</h2>
+        <p class="text-govbr-sm text-govbr-gray-40 mb-4">Componente: <code>br-avatar</code></p>
+        <div class="flex flex-wrap gap-4 items-end">
+          <br-avatar name="Maria Silva" size="xsmall"></br-avatar>
+          <br-avatar name="Joao Santos" size="small" variant="neutral"></br-avatar>
+          <br-avatar name="Ana Oliveira" size="medium" status="online"></br-avatar>
+          <br-avatar name="Carlos Souza" size="large" variant="success" status="busy"></br-avatar>
+          <br-avatar src="https://i.pravatar.cc/80?img=5" name="Foto" size="large" status="online"></br-avatar>
+          <br-avatar name="Pedro Lima" size="xlarge" variant="danger" status="away"></br-avatar>
+        </div>
+      </section>
+
+      <!-- ─── UPLOAD ────────────────────────────────────────────── -->
+      <section>
+        <h2 class="text-2xl font-bold text-govbr-gray-80 mb-1">Upload</h2>
+        <p class="text-govbr-sm text-govbr-gray-40 mb-4">Componente: <code>br-upload</code></p>
+        <div class="max-w-lg space-y-6">
+          <br-upload
+            label="Documentos"
+            accept=".pdf,.jpg,.png"
+            [multiple]="true"
+            [maxSizeMB]="5"
+            helperText="PDF, JPG ou PNG ate 5MB cada"
+          ></br-upload>
+          <br-upload
+            label="Foto de perfil"
+            accept="image/*"
+            [maxFiles]="1"
+          ></br-upload>
+        </div>
+      </section>
+
+      <!-- ─── SKELETON ──────────────────────────────────────────── -->
+      <section>
+        <h2 class="text-2xl font-bold text-govbr-gray-80 mb-1">Skeleton</h2>
+        <p class="text-govbr-sm text-govbr-gray-40 mb-4">Componente: <code>br-skeleton</code></p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <p class="text-govbr-xs font-semibold text-govbr-gray-40 mb-2 uppercase">Linhas</p>
+            <div class="space-y-2">
+              <br-skeleton variant="line" width="w-3/4"></br-skeleton>
+              <br-skeleton variant="line"></br-skeleton>
+              <br-skeleton variant="line" width="w-1/2"></br-skeleton>
+            </div>
+          </div>
+          <div>
+            <p class="text-govbr-xs font-semibold text-govbr-gray-40 mb-2 uppercase">Lista</p>
+            <br-skeleton variant="list" [rows]="3"></br-skeleton>
+          </div>
+          <div>
+            <p class="text-govbr-xs font-semibold text-govbr-gray-40 mb-2 uppercase">Card</p>
+            <br-skeleton variant="card"></br-skeleton>
+          </div>
+          <div>
+            <p class="text-govbr-xs font-semibold text-govbr-gray-40 mb-2 uppercase">Tabela</p>
+            <br-skeleton variant="table" [rows]="3" [cols]="4"></br-skeleton>
+          </div>
         </div>
       </section>
 
@@ -548,6 +686,8 @@ export class ShowcaseComponent {
   // Modal
   modalOpen = false;
   modalSmallOpen = false;
+  modalDangerOpen = false;
+  modalSuccessOpen = false;
 
   // Wizard
   wizardStep = 0;

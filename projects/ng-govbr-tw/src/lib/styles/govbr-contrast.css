@@ -59,6 +59,37 @@ html.govbr-contrast .text-white {
   color: #fff !important;
 }
 
+/* Menu item ativo: fundo branco precisa de texto preto */
+html.govbr-contrast .bg-govbr-primary.text-white {
+  color: #000 !important;
+}
+
+/* Hover do menu em alto contraste */
+html.govbr-contrast .hover\:bg-govbr-primary-lightest:hover {
+  background-color: #333 !important;
+}
+
+/* ═══ Menu Lateral (br-menu) ═══ */
+html.govbr-contrast br-menu nav {
+  background-color: #111 !important;
+  border-color: #444 !important;
+}
+
+/* Menu item ativo - icone tambem preto */
+html.govbr-contrast br-menu-item a.bg-govbr-primary i,
+html.govbr-contrast .bg-govbr-primary .text-white {
+  color: #000 !important;
+}
+
+/* Menu item inativo - texto branco/amarelo */
+html.govbr-contrast br-menu-item a:not(.bg-govbr-primary) {
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast br-menu-item a:not(.bg-govbr-primary) i {
+  color: #fff !important;
+}
+
 html.govbr-contrast .text-govbr-gray-80 {
   color: #fff !important;
 }
@@ -76,4 +107,74 @@ html.govbr-contrast .shadow-sm,
 html.govbr-contrast .shadow-md,
 html.govbr-contrast .shadow-lg {
   box-shadow: 0 0 0 1px #444 !important;
+}
+
+/* ═══ Sidebar (br-sidebar) ═══ */
+html.govbr-contrast br-sidebar aside {
+  background-color: #111 !important;
+  border-color: #444 !important;
+}
+
+html.govbr-contrast br-sidebar-item a,
+html.govbr-contrast br-sidebar-item button {
+  color: #fff !important;
+}
+
+html.govbr-contrast br-sidebar-item a:hover,
+html.govbr-contrast br-sidebar-item button:hover {
+  background-color: #333 !important;
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast br-sidebar-item .br-sidebar-item-active,
+html.govbr-contrast .br-sidebar-item-active {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast .br-sidebar-item-active i {
+  color: #000 !important;
+}
+
+html.govbr-contrast br-sidebar-group-label h4 {
+  color: #aaa !important;
+}
+
+html.govbr-contrast br-sidebar-sub button {
+  color: #fff !important;
+}
+
+html.govbr-contrast br-sidebar-sub button:hover {
+  background-color: #333 !important;
+  color: #ffff00 !important;
+}
+
+/* ═══ Tabela (br-table) ═══ */
+html.govbr-contrast br-table table {
+  border-color: #444 !important;
+}
+
+html.govbr-contrast br-table table thead th {
+  background-color: #fff !important;
+  color: #000 !important;
+  border-color: #666 !important;
+}
+
+html.govbr-contrast br-table table tbody td {
+  background-color: #000 !important;
+  color: #fff !important;
+  border-color: #444 !important;
+}
+
+html.govbr-contrast br-table table tbody tr:nth-child(even) td {
+  background-color: #111 !important;
+}
+
+html.govbr-contrast br-table table tbody tr:hover td {
+  background-color: #222 !important;
+}
+
+html.govbr-contrast br-table table tbody tr.br-table-row-selected td {
+  background-color: #333 !important;
+  outline: 2px solid #ffff00;
 }

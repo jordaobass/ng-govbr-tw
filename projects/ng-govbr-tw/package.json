@@ -1,6 +1,6 @@
 {
   "name": "@schenkerjon/ng-govbr-tw",
-  "version": "0.0.4",
+  "version": "0.4.1",
   "description": "Angular components following Gov.br Design System, styled with Tailwind CSS 3",
   "license": "MIT",
   "keywords": [

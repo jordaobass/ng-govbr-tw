@@ -13,30 +13,28 @@ import { RouterModule } from '@angular/router';
   encapsulation: ViewEncapsulation.None,
   template: `
     <nav class="font-rawline" aria-label="Breadcrumb">
-      <ol class="flex flex-wrap items-center overflow-x-auto">
+      <ol class="flex flex-wrap items-center overflow-x-auto gap-y-1">
         <!-- Home -->
         @if (showHome) {
-          <li class="flex items-center">
+          <li class="inline-flex items-center">
             <a
               [routerLink]="homeRoute"
-              class="text-govbr-primary hover:text-govbr-primary-dark govbr-focus-ring rounded transition-colors"
+              class="inline-flex items-center text-govbr-primary hover:text-govbr-primary-dark govbr-focus-ring rounded transition-colors"
               aria-label="Página inicial"
               >
-              <i class="fa-solid fa-house text-govbr-sm"></i>
+              <i class="fa-solid fa-house text-govbr-sm leading-none"></i>
             </a>
-            <i class="fa-solid fa-chevron-right text-[10px] text-govbr-gray-40 mx-2"></i>
+            <i class="fa-solid fa-chevron-right text-[10px] text-govbr-gray-40 mx-2 leading-none"></i>
           </li>
         }
-    
+
         <!-- Items -->
         @for (item of items; track item; let last = $last) {
-          <li
-            class="flex items-center"
-            >
+          <li class="inline-flex items-center">
             @if (!last && item.route) {
               <a
                 [routerLink]="item.route"
-                class="text-govbr-sm text-govbr-primary hover:text-govbr-primary-dark truncate max-w-[180px] transition-colors govbr-focus-ring rounded"
+                class="inline-flex items-center text-govbr-sm leading-none text-govbr-primary hover:text-govbr-primary-dark truncate max-w-[180px] transition-colors govbr-focus-ring rounded"
                 [title]="item.label"
                 >
                 {{ item.label }}
@@ -44,7 +42,7 @@ import { RouterModule } from '@angular/router';
             }
             @if (last || !item.route) {
               <span
-                class="text-govbr-sm text-govbr-gray-60 truncate max-w-[180px]"
+                class="inline-flex items-center text-govbr-sm leading-none text-govbr-gray-60 truncate max-w-[180px]"
                 [attr.aria-current]="last ? 'page' : null"
                 [title]="item.label"
                 >
@@ -52,9 +50,7 @@ import { RouterModule } from '@angular/router';
               </span>
             }
             @if (!last) {
-              <i
-                class="fa-solid fa-chevron-right text-[10px] text-govbr-gray-40 mx-2"
-              ></i>
+              <i class="fa-solid fa-chevron-right text-[10px] text-govbr-gray-40 mx-2 leading-none"></i>
             }
           </li>
         }

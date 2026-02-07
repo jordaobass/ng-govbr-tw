@@ -3,7 +3,9 @@ import {
   EventEmitter,
   forwardRef,
   Input,
+  Optional,
   Output,
+  Self,
   ViewEncapsulation,
 } from '@angular/core';
 
@@ -11,6 +13,8 @@ import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
   FormsModule,
+  NgControl,
+  ValidationErrors,
 } from '@angular/forms';
 
 @Component({
@@ -18,13 +22,6 @@ import {
   standalone: true,
   imports: [FormsModule],
   encapsulation: ViewEncapsulation.None,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => BrInputComponent),
-      multi: true,
-    },
-  ],
   template: `
     <div class="mb-4 font-rawline" [class.inline-input]="inline">
       @if (label) {
@@ -166,25 +163,25 @@ import {
       }
     
       <!-- Feedback messages -->
-      @if (error) {
+      @if (displayError) {
         <span class="flex items-center mt-1 text-govbr-sm text-govbr-danger">
-          <i class="fa-solid fa-times-circle mr-1"></i>{{ error }}
+          <i class="fa-solid fa-times-circle mr-1"></i>{{ displayError }}
         </span>
       }
-    
-      @if (successMessage && !error) {
+
+      @if (successMessage && !displayError) {
         <span class="flex items-center mt-1 text-govbr-sm text-govbr-success">
           <i class="fa-solid fa-check-circle mr-1"></i>{{ successMessage }}
         </span>
       }
-    
-      @if (warningMessage && !error && !successMessage) {
+
+      @if (warningMessage && !displayError && !successMessage) {
         <span class="flex items-center mt-1 text-govbr-sm text-govbr-warning">
           <i class="fa-solid fa-exclamation-triangle mr-1"></i>{{ warningMessage }}
         </span>
       }
-    
-      @if (infoMessage && !error && !successMessage && !warningMessage) {
+
+      @if (infoMessage && !displayError && !successMessage && !warningMessage) {
         <span class="flex items-center mt-1 text-govbr-sm text-govbr-info">
           <i class="fa-solid fa-info-circle mr-1"></i>{{ infoMessage }}
         </span>
@@ -205,6 +202,7 @@ export class BrInputComponent implements ControlValueAccessor {
     | 'textarea' = 'text';
   @Input() placeholder = '';
   @Input() required = false;
+  /** Mensagem de erro manual (sobrescreve erros automáticos do validator) */
   @Input() error?: string;
   @Input() successMessage?: string;
   @Input() warningMessage?: string;
@@ -218,6 +216,9 @@ export class BrInputComponent implements ControlValueAccessor {
   @Input() maxLength?: number;
   @Input() rows = 3;
 
+  /** Mensagens customizadas para erros de validação */
+  @Input() errorMessages: Record<string, string> = {};
+
   @Output() fileSelected = new EventEmitter<File>();
   @Output() searchSubmit = new EventEmitter<string>();
 
@@ -228,6 +229,34 @@ export class BrInputComponent implements ControlValueAccessor {
 
   private static nextId = 0;
   inputId = `br-input-${BrInputComponent.nextId++}`;
+
+  private static readonly defaultErrorMessages: Record<string, string | ((err: unknown) => string)> = {
+    required: 'Campo obrigatório',
+    email: 'Email inválido',
+    minlength: (err: unknown) => {
+      const e = err as { requiredLength: number };
+      return `Mínimo de ${e.requiredLength} caracteres`;
+    },
+    maxlength: (err: unknown) => {
+      const e = err as { requiredLength: number };
+      return `Máximo de ${e.requiredLength} caracteres`;
+    },
+    min: (err: unknown) => {
+      const e = err as { min: number };
+      return `Valor mínimo: ${e.min}`;
+    },
+    max: (err: unknown) => {
+      const e = err as { max: number };
+      return `Valor máximo: ${e.max}`;
+    },
+    pattern: 'Formato inválido',
+  };
+
+  constructor(@Self() @Optional() private ngControl: NgControl) {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
 
   onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
@@ -246,6 +275,50 @@ export class BrInputComponent implements ControlValueAccessor {
 
   get containerClasses(): string {
     return this.type !== 'file' ? 'relative' : '';
+  }
+
+  /**
+   * Retorna a mensagem de erro a ser exibida.
+   * Prioridade: error manual > erro do validator (se touched/dirty)
+   */
+  get displayError(): string | undefined {
+    // Erro manual sempre tem prioridade
+    if (this.error) {
+      return this.error;
+    }
+
+    // Se não tem NgControl, não há erro automático
+    if (!this.ngControl?.control) {
+      return undefined;
+    }
+
+    const control = this.ngControl.control;
+
+    // Só mostra erro se o controle foi tocado ou modificado E está inválido
+    if (!control.errors || (!control.touched && !control.dirty)) {
+      return undefined;
+    }
+
+    // Busca a primeira mensagem de erro
+    return this.getFirstErrorMessage(control.errors);
+  }
+
+  private getFirstErrorMessage(errors: ValidationErrors): string {
+    for (const key of Object.keys(errors)) {
+      // Primeiro verifica mensagens customizadas do usuário
+      if (this.errorMessages[key]) {
+        return this.errorMessages[key];
+      }
+
+      // Depois verifica mensagens padrão
+      const defaultMsg = BrInputComponent.defaultErrorMessages[key];
+      if (defaultMsg) {
+        return typeof defaultMsg === 'function' ? defaultMsg(errors[key]) : defaultMsg;
+      }
+    }
+
+    // Fallback genérico
+    return 'Campo inválido';
   }
 
   get inputClasses(): string {
@@ -273,7 +346,7 @@ export class BrInputComponent implements ControlValueAccessor {
       ? 'h-[var(--govbr-input-highlight)] bg-govbr-gray-2 border-transparent text-govbr-lg px-6'
       : '';
 
-    const statusCls = this.error
+    const statusCls = this.displayError
       ? 'govbr-input--danger'
       : this.successMessage
         ? 'govbr-input--success'

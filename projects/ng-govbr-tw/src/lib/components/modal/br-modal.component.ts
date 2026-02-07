@@ -37,13 +37,18 @@ import {
           role="document"
           >
           <!-- Header -->
-          <div class="flex items-center justify-between px-6 py-4 border-b border-govbr-gray-10">
-            <h4
-              [id]="titleId"
-              class="text-govbr-lg font-semibold text-govbr-gray-80 font-rawline truncate pr-4"
-              >
-              {{ title }}
-            </h4>
+          <div [class]="headerClasses">
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              @if (variantIcon) {
+                <i [class]="variantIcon + ' text-xl flex-shrink-0 ' + variantIconColor"></i>
+              }
+              <h4
+                [id]="titleId"
+                class="text-govbr-lg font-semibold text-govbr-gray-80 font-rawline truncate"
+                >
+                {{ title }}
+              </h4>
+            </div>
             @if (showCloseButton) {
               <button
                 type="button"
@@ -87,7 +92,7 @@ import {
                   <button
                     type="button"
                     [disabled]="primaryDisabled"
-                    class="px-5 py-2 text-govbr-base font-semibold font-rawline text-white bg-govbr-primary rounded-govbr-pill hover:bg-govbr-primary-dark transition-colors govbr-focus-ring disabled:opacity-50 disabled:cursor-not-allowed"
+                    [class]="primaryButtonClasses"
                     (click)="confirm()"
                     >
                     {{ primaryText }}
@@ -105,6 +110,7 @@ export class BrModalComponent {
   @Input() isOpen = false;
   @Input() title = '';
   @Input() size: 'xsmall' | 'small' | 'medium' | 'large' | 'auto' = 'medium';
+  @Input() variant: 'default' | 'danger' | 'warning' | 'success' = 'default';
   @Input() showCloseButton = true;
   @Input() showFooter = true;
   @Input() showCancelButton = true;
@@ -123,6 +129,48 @@ export class BrModalComponent {
 
   private static nextId = 0;
   titleId = `br-modal-title-${BrModalComponent.nextId++}`;
+
+  get variantIcon(): string | null {
+    const icons = {
+      default: null,
+      danger: 'fa-solid fa-triangle-exclamation',
+      warning: 'fa-solid fa-circle-exclamation',
+      success: 'fa-solid fa-circle-check',
+    } as const;
+    return icons[this.variant];
+  }
+
+  get variantIconColor(): string {
+    const colors = {
+      default: '',
+      danger: 'text-govbr-danger',
+      warning: 'text-govbr-warning',
+      success: 'text-govbr-success',
+    } as const;
+    return colors[this.variant];
+  }
+
+  get headerClasses(): string {
+    const base = 'flex items-center justify-between px-6 py-4 border-b';
+    const borderColors = {
+      default: 'border-govbr-gray-10',
+      danger: 'border-govbr-danger/20',
+      warning: 'border-govbr-warning/30',
+      success: 'border-govbr-success/20',
+    } as const;
+    return `${base} ${borderColors[this.variant]}`;
+  }
+
+  get primaryButtonClasses(): string {
+    const base = 'px-5 py-2 text-govbr-base font-semibold font-rawline rounded-govbr-pill transition-colors govbr-focus-ring disabled:opacity-50 disabled:cursor-not-allowed';
+    const variantStyles = {
+      default: 'text-white bg-govbr-primary hover:bg-govbr-primary-dark',
+      danger: 'text-white bg-govbr-danger hover:bg-red-700',
+      warning: 'text-govbr-gray-80 bg-govbr-warning hover:bg-yellow-500',
+      success: 'text-white bg-govbr-success hover:bg-green-700',
+    } as const;
+    return `${base} ${variantStyles[this.variant]}`;
+  }
 
   get modalClasses(): string {
     const sizes = {

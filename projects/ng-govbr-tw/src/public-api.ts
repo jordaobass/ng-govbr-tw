@@ -63,3 +63,12 @@ export { BrDatetimepickerComponent } from './lib/components/datetimepicker/br-da
 export { BrMagicButtonComponent } from './lib/components/magic-button/br-magic-button.component';
 export type { BrMagicAction } from './lib/components/magic-button/br-magic-button.component';
 export { BrItemComponent, BrListComponent } from './lib/components/list/br-list.component';
+export { BrUploadComponent } from './lib/components/upload/br-upload.component';
+export type { BrUploadFile } from './lib/components/upload/br-upload.component';
+export { BrAvatarComponent } from './lib/components/avatar/br-avatar.component';
+export { BrSkeletonComponent } from './lib/components/skeleton/br-skeleton.component';
+export { BrToastContainerComponent } from './lib/components/toast/br-toast.component';
+export { BrToastService } from './lib/components/toast/br-toast.service';
+export type { BrToast, BrToastOptions } from './lib/components/toast/br-toast.service';
+export { BrInputCpfComponent } from './lib/components/input-cpf/br-input-cpf.component';
+export { BrInputCnpjComponent } from './lib/components/input-cnpj/br-input-cnpj.component';

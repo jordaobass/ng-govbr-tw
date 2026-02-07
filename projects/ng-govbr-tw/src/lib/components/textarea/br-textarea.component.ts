@@ -1,24 +1,18 @@
 import {
   Component,
-  forwardRef,
   Input,
+  Optional,
+  Self,
   ViewEncapsulation,
 } from '@angular/core';
 
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NgControl, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'br-textarea',
   standalone: true,
   imports: [],
   encapsulation: ViewEncapsulation.None,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => BrTextareaComponent),
-      multi: true,
-    },
-  ],
   template: `
     <div class="mb-4 font-rawline">
       @if (label) {
@@ -65,25 +59,25 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       }
     
       <!-- Feedback -->
-      @if (error) {
+      @if (displayError) {
         <span class="flex items-center mt-1 text-govbr-sm text-govbr-danger">
-          <i class="fa-solid fa-times-circle mr-1"></i>{{ error }}
+          <i class="fa-solid fa-times-circle mr-1"></i>{{ displayError }}
         </span>
       }
-    
-      @if (successMessage && !error) {
+
+      @if (successMessage && !displayError) {
         <span class="flex items-center mt-1 text-govbr-sm text-govbr-success">
           <i class="fa-solid fa-check-circle mr-1"></i>{{ successMessage }}
         </span>
       }
-    
-      @if (warningMessage && !error && !successMessage) {
+
+      @if (warningMessage && !displayError && !successMessage) {
         <span class="flex items-center mt-1 text-govbr-sm text-govbr-warning">
           <i class="fa-solid fa-exclamation-triangle mr-1"></i>{{ warningMessage }}
         </span>
       }
-    
-      @if (infoMessage && !error && !successMessage && !warningMessage) {
+
+      @if (infoMessage && !displayError && !successMessage && !warningMessage) {
         <span class="flex items-center mt-1 text-govbr-sm text-govbr-info">
           <i class="fa-solid fa-info-circle mr-1"></i>{{ infoMessage }}
         </span>
@@ -98,12 +92,16 @@ export class BrTextareaComponent implements ControlValueAccessor {
   @Input() rows = 4;
   @Input() maxLength?: number;
   @Input() helperText?: string;
+  /** Mensagem de erro manual (sobrescreve erros automáticos do validator) */
   @Input() error?: string;
   @Input() successMessage?: string;
   @Input() warningMessage?: string;
   @Input() infoMessage?: string;
   @Input() density: 'small' | 'medium' | 'large' = 'medium';
   @Input() resizable: 'none' | 'vertical' | 'both' = 'vertical';
+
+  /** Mensagens customizadas para erros de validação */
+  @Input() errorMessages: Record<string, string> = {};
 
   value = '';
   isDisabled = false;
@@ -114,8 +112,60 @@ export class BrTextareaComponent implements ControlValueAccessor {
   onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
 
+  private static readonly defaultErrorMessages: Record<string, string | ((err: unknown) => string)> = {
+    required: 'Campo obrigatório',
+    minlength: (err: unknown) => {
+      const e = err as { requiredLength: number };
+      return `Mínimo de ${e.requiredLength} caracteres`;
+    },
+    maxlength: (err: unknown) => {
+      const e = err as { requiredLength: number };
+      return `Máximo de ${e.requiredLength} caracteres`;
+    },
+  };
+
+  constructor(@Self() @Optional() private ngControl: NgControl) {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
+
   get isOverLimit(): boolean {
     return !!this.maxLength && (this.value?.length || 0) >= this.maxLength;
+  }
+
+  /**
+   * Retorna a mensagem de erro a ser exibida.
+   */
+  get displayError(): string | undefined {
+    if (this.error) {
+      return this.error;
+    }
+
+    if (!this.ngControl?.control) {
+      return undefined;
+    }
+
+    const control = this.ngControl.control;
+
+    if (!control.errors || (!control.touched && !control.dirty)) {
+      return undefined;
+    }
+
+    return this.getFirstErrorMessage(control.errors);
+  }
+
+  private getFirstErrorMessage(errors: ValidationErrors): string {
+    for (const key of Object.keys(errors)) {
+      if (this.errorMessages[key]) {
+        return this.errorMessages[key];
+      }
+      const defaultMsg = BrTextareaComponent.defaultErrorMessages[key];
+      if (defaultMsg) {
+        return typeof defaultMsg === 'function' ? defaultMsg(errors[key]) : defaultMsg;
+      }
+    }
+    return 'Campo inválido';
   }
 
   get textareaClasses(): string {
@@ -137,7 +187,7 @@ export class BrTextareaComponent implements ControlValueAccessor {
       resizeMap[this.resizable],
     ].join(' ');
 
-    const statusCls = this.error
+    const statusCls = this.displayError
       ? 'govbr-input--danger'
       : this.successMessage
         ? 'govbr-input--success'

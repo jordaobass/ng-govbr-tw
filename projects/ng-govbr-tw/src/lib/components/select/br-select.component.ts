@@ -2,28 +2,22 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  forwardRef,
   HostListener,
   inject,
   Input,
+  Optional,
   Output,
+  Self,
   ViewEncapsulation,
 } from '@angular/core';
 
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
+import { ControlValueAccessor, FormsModule, NgControl, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'br-select',
   standalone: true,
   imports: [FormsModule],
   encapsulation: ViewEncapsulation.None,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => BrSelectComponent),
-      multi: true,
-    },
-  ],
   template: `
     <div class="relative font-rawline mb-4" #selectContainer>
       @if (label) {
@@ -122,9 +116,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/f
       }
     
       <!-- Error -->
-      @if (error) {
+      @if (displayError) {
         <span class="flex items-center mt-1 text-govbr-sm text-govbr-danger">
-          <i class="fa-solid fa-times-circle mr-1"></i>{{ error }}
+          <i class="fa-solid fa-times-circle mr-1"></i>{{ displayError }}
         </span>
       }
     </div>
@@ -136,11 +130,15 @@ export class BrSelectComponent implements ControlValueAccessor {
   @Input() helperText?: string;
   @Input() options: BrSelectOption[] = [];
   @Input() required = false;
+  /** Mensagem de erro manual (sobrescreve erros automáticos do validator) */
   @Input() error?: string;
   @Input() multiple = false;
   @Input() searchable = false;
   @Input() searchPlaceholder = 'Buscar...';
   @Input() density: 'small' | 'medium' | 'large' = 'medium';
+
+  /** Mensagens customizadas para erros de validação */
+  @Input() errorMessages: Record<string, string> = {};
 
   @Output() selectionChange = new EventEmitter<string | string[]>();
 
@@ -159,6 +157,50 @@ export class BrSelectComponent implements ControlValueAccessor {
   onTouched: () => void = () => {};
 
   private elementRef = inject(ElementRef);
+
+  private static readonly defaultErrorMessages: Record<string, string> = {
+    required: 'Campo obrigatório',
+  };
+
+  constructor(@Self() @Optional() private ngControl: NgControl) {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
+
+  /**
+   * Retorna a mensagem de erro a ser exibida.
+   */
+  get displayError(): string | undefined {
+    if (this.error) {
+      return this.error;
+    }
+
+    if (!this.ngControl?.control) {
+      return undefined;
+    }
+
+    const control = this.ngControl.control;
+
+    if (!control.errors || (!control.touched && !control.dirty)) {
+      return undefined;
+    }
+
+    return this.getFirstErrorMessage(control.errors);
+  }
+
+  private getFirstErrorMessage(errors: ValidationErrors): string {
+    for (const key of Object.keys(errors)) {
+      if (this.errorMessages[key]) {
+        return this.errorMessages[key];
+      }
+      const defaultMsg = BrSelectComponent.defaultErrorMessages[key];
+      if (defaultMsg) {
+        return defaultMsg;
+      }
+    }
+    return 'Campo inválido';
+  }
 
   get displayValue(): string {
     if (this.multiple) {
@@ -196,7 +238,7 @@ export class BrSelectComponent implements ControlValueAccessor {
       densityHeights[this.density],
     ].join(' ');
 
-    const statusCls = this.error
+    const statusCls = this.displayError
       ? 'govbr-input--danger'
       : '';
 

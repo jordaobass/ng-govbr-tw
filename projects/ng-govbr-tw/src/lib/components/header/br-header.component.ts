@@ -21,7 +21,7 @@ import {
   encapsulation: ViewEncapsulation.None,
   template: `
     <header [class]="headerClasses" role="banner" #headerEl>
-      <div class="max-w-[1280px] mx-auto px-4">
+      <div [class]="containerClasses">
     
         <!-- ═══ HEADER-TOP ═══ -->
         <div [class]="topRowClasses">
@@ -305,6 +305,8 @@ export class BrHeaderComponent implements AfterContentInit {
   @Input() sticky = false;
 
   @Input() menuMode: 'sidebar' | 'mega' | 'none' = 'sidebar';
+  /** Se true, o conteúdo ocupa 100% da largura. Se false, limita a 1280px e centraliza. */
+  @Input() fullWidth = false;
 
   @Output() menuToggle = new EventEmitter<boolean>();
   @Output() logout = new EventEmitter<void>();
@@ -414,6 +416,12 @@ export class BrHeaderComponent implements AfterContentInit {
   get isWhite(): boolean { return this.variant === 'white'; }
 
   // ── Style getters ──
+
+  get containerClasses(): string {
+    return this.fullWidth
+      ? 'px-4 sm:px-6 lg:px-8'
+      : 'max-w-[1280px] mx-auto px-4';
+  }
 
   get headerClasses(): string {
     const base = 'font-rawline relative z-[1000]';
