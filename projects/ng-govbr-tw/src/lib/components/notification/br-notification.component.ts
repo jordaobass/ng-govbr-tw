@@ -14,6 +14,7 @@ import { BrAnimationService } from '../../animations/animation.service';
           class="absolute flex items-center justify-center font-rawline font-bold"
           [class]="badgeClasses"
           [style.animation]="bounceAnimation"
+          [style.transform]="offsetTransform"
           [attr.aria-label]="ariaLabel"
           role="status"
         >
@@ -72,6 +73,11 @@ export class BrNotificationComponent {
     return 'br-notification-bounce 400ms ease-out';
   }
 
+  get offsetTransform(): string | null {
+    if (!this.offsetX && !this.offsetY) return null;
+    return `translate(${this.offsetX}px, ${this.offsetY}px)`;
+  }
+
   get displayCount(): string {
     if (this.count > this.max) {
       return `${this.max}+`;
@@ -116,17 +122,12 @@ export class BrNotificationComponent {
 
     const pulseClass = this.pulse ? 'animate-pulse' : '';
 
-    const transform = (this.offsetX || this.offsetY)
-      ? `transform translate-x-[${this.offsetX}px] translate-y-[${this.offsetY}px]`
-      : '';
-
     return [
       'rounded-full',
       variantStyles[this.variant],
       sizeStyles[this.size],
       positionStyles[this.position],
       pulseClass,
-      transform,
     ].filter(Boolean).join(' ');
   }
 }

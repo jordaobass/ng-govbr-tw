@@ -52,11 +52,15 @@ import { BrAnimationService } from '../../animations/animation.service';
         (click)="toggle()"
         (blur)="onBlur()"
         >
-        <span [class]="displayValue ? 'text-govbr-gray-80' : 'text-govbr-gray-40'">
+        <span
+          class="truncate min-w-0 flex-1 text-left"
+          [class.text-govbr-gray-80]="displayValue"
+          [class.text-govbr-gray-40]="!displayValue"
+        >
           {{ displayValue || placeholder }}
         </span>
         <i
-          class="fa-solid fa-chevron-down text-govbr-primary transition-transform duration-200"
+          class="fa-solid fa-chevron-down text-govbr-primary transition-transform duration-200 flex-shrink-0 ml-2"
           [class.rotate-180]="expanded"
         ></i>
       </button>
@@ -247,7 +251,7 @@ export class BrSelectComponent implements ControlValueAccessor {
     } as const;
 
     const base = [
-      'w-full flex items-center justify-between px-4 font-rawline govbr-input',
+      'w-full flex items-center justify-between px-4 font-rawline govbr-input overflow-hidden',
       densityStyles[this.density],
       densityHeights[this.density],
     ].join(' ');

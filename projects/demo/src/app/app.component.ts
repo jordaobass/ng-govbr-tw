@@ -1,11 +1,8 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {
-  BrLayoutComponent,
   BrHeaderComponent,
   BrFooterComponent,
-  BrMenuComponent,
-  BrMenuItemComponent,
 } from 'ng-govbr-tw';
 
 @Component({
@@ -13,42 +10,41 @@ import {
   standalone: true,
   imports: [
     RouterOutlet,
-    BrLayoutComponent,
     BrHeaderComponent,
     BrFooterComponent,
-    BrMenuComponent,
-    BrMenuItemComponent,
   ],
   encapsulation: ViewEncapsulation.None,
   template: `
-    <br-layout>
+    <div class="min-h-screen flex flex-col bg-govbr-gray-2">
       <br-header
-        systemTitle="Gov.br Tailwind Demo"
-        systemSubtitle="Biblioteca de componentes Angular"
+        systemTitle="ng-govbr-tw"
+        systemSubtitle="Componentes Angular + Tailwind"
         logoSrc="https://www.gov.br/++theme++flavor/static/images/govbr-logo-large.png"
-        userName="Administrador"
-        userRole="Gestor do Sistema"
-        (logout)="onLogout()"
+        [showSearch]="false"
+        [showLogin]="false"
       ></br-header>
 
-      <br-menu>
-        <br-menu-item route="/showcase" label="Showcase" icon="grid-2"></br-menu-item>
-        <br-menu-item route="/showcase" label="Dashboard" icon="chart-line"></br-menu-item>
-        <br-menu-item route="/showcase" label="Usuarios" icon="users"></br-menu-item>
-        <br-menu-item route="/showcase" label="Configuracoes" icon="gear"></br-menu-item>
-      </br-menu>
+      <main class="flex-1">
+        <router-outlet></router-outlet>
+      </main>
 
-      <router-outlet></router-outlet>
-
-      <br-footer logoSrc="https://www.gov.br/++theme++flavor/static/images/govbr-logo-large.png">
-        <p>Governo Digital &mdash; Todos os direitos reservados</p>
-        <p>Desenvolvido com &#64;aspect-br/ng-govbr-tw</p>
+      <br-footer
+        logoSrc="https://www.gov.br/++theme++flavor/static/images/govbr-logo-large.png"
+      >
+        <div class="text-center text-sm text-govbr-gray-60">
+          <p>Biblioteca open-source para Angular 17+</p>
+          <p class="mt-1">
+            <a href="https://github.com/jordaobass/ng-govbr-tw" target="_blank" class="text-govbr-primary hover:underline">
+              GitHub
+            </a>
+            &bull;
+            <a href="https://www.npmjs.com/package/@schenkerjon/ng-govbr-tw" target="_blank" class="text-govbr-primary hover:underline">
+              NPM
+            </a>
+          </p>
+        </div>
       </br-footer>
-    </br-layout>
+    </div>
   `,
 })
-export class AppComponent {
-  onLogout(): void {
-    console.log('Logout clicked');
-  }
-}
+export class AppComponent {}

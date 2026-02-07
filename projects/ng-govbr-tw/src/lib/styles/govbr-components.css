@@ -33,8 +33,23 @@
   --govbr-line-height-medium: 1.45;
 
   /* === Gov.br DS Tokens — Espacamento === */
-  --govbr-spacing-4: 16px;
+  --govbr-spacing-1: 4px;
+  --govbr-spacing-2: 8px;
   --govbr-spacing-3: 12px;
+  --govbr-spacing-4: 16px;
+  --govbr-spacing-5: 20px;
+  --govbr-spacing-6: 24px;
+  --govbr-spacing-8: 32px;
+
+  /* === Gov.br DS Tokens — Tipografia Escala === */
+  --govbr-font-size-xs: 12px;
+  --govbr-font-size-sm: 14px;
+  --govbr-font-size-base: 16px;
+  --govbr-font-size-lg: 18px;
+  --govbr-font-size-xl: 20px;
+  --govbr-font-weight-regular: 400;
+  --govbr-font-weight-medium: 500;
+  --govbr-font-weight-bold: 700;
 
   /* === Gov.br DS Tokens — Focus (acessibilidade) === */
   --govbr-focus-color: #ffbe2e;

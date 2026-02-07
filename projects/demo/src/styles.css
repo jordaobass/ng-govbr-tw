@@ -1,6 +1,9 @@
 @import url('https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
 
+/* Gov.br component styles (input borders, focus states, etc.) */
+@import '../../ng-govbr-tw/src/lib/styles/govbr-components.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

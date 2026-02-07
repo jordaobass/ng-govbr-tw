@@ -1,6 +1,12 @@
 # @schenkerjon/ng-govbr-tw
 
 <p align="center">
+  <a href="https://jordaobass.github.io/ng-govbr-tw/">
+    <img src="https://img.shields.io/badge/🚀_SHOWCASE-Ver_Demo_Online-1351b4?style=for-the-badge&labelColor=071D41" alt="Ver Demo Online" />
+  </a>
+</p>
+
+<p align="center">
   <img src="https://www.gov.br/++theme++padrao_govbr/img/govbr-logo-large.png" alt="Gov.br" height="60" />
 </p>
 
@@ -768,7 +774,9 @@ export class InputsComponent {
 
 ## Demo
 
-O projeto inclui uma aplicação demo com exemplos interativos de todos os componentes:
+**[🔗 Ver Demo Online](https://jordaobass.github.io/ng-govbr-tw/)** — Showcase interativo com todos os componentes.
+
+Para rodar localmente:
 
 ```bash
 git clone https://github.com/jordaobass/ng-govbr-tw.git

@@ -3,6 +3,7 @@ import {
   EventEmitter,
   forwardRef,
   Input,
+  OnChanges,
   Output,
   ViewEncapsulation,
 } from '@angular/core';
@@ -22,76 +23,263 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     },
   ],
   template: `
-    <label
-      [class]="containerClasses"
-      [for]="checkboxId"
-      >
+    <div [class]="containerClasses">
       <input
         type="checkbox"
         [id]="checkboxId"
+        [name]="name || checkboxId"
         [checked]="checked"
         [disabled]="isDisabled"
         [indeterminate]="indeterminate"
-        [class]="inputClasses"
         (change)="onCheckChange($event)"
         (blur)="onTouched()"
-        />
-      <span [class]="checkmarkClasses">
-        <!-- Checkmark icon -->
-        @if (checked && !indeterminate) {
-          <svg
-            class="w-3 h-3 text-white"
-            viewBox="0 0 12 10"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            >
-            <polyline points="1.5 5 4.5 8 10.5 2" />
-          </svg>
-        }
-        <!-- Indeterminate icon -->
-        @if (indeterminate) {
-          <svg
-            class="w-3 h-3 text-white"
-            viewBox="0 0 12 12"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            >
-            <line x1="2" y1="6" x2="10" y2="6" />
-          </svg>
-        }
-      </span>
-      @if (label) {
-        <span
-          [class]="labelClasses"
-          >
-          {{ label }}
-        </span>
-      }
-    </label>
-    
-    @if (error) {
-      <span class="block mt-1 text-govbr-sm text-govbr-danger ml-8">
-        <i class="fa-solid fa-times-circle mr-1"></i>{{ error }}
+      />
+      <label [for]="checkboxId">{{ label }}</label>
+    </div>
+    @if (errorMessage) {
+      <span class="br-checkbox-feedback danger">
+        <i class="fas fa-times-circle" aria-hidden="true"></i>
+        {{ errorMessage }}
       </span>
     }
-    `,
+  `,
+  styles: [`
+    /* ═══════════════════════════════════════════════════════════════
+       BR-CHECKBOX — Padrão Gov.br Design System
+       ═══════════════════════════════════════════════════════════════ */
+
+    .br-checkbox {
+      --checkbox-size: 24px;
+      --checkbox-padding: 8px;
+      display: flex;
+      position: relative;
+    }
+
+    .br-checkbox + .br-checkbox {
+      margin-top: 8px;
+    }
+
+    /* Hidden input (still focusable) */
+    .br-checkbox input {
+      margin: 0;
+      opacity: 0;
+      position: absolute;
+    }
+
+    /* Label styling */
+    .br-checkbox input + label {
+      cursor: pointer;
+      display: inline-block;
+      font-family: var(--govbr-font-family, 'Rawline', sans-serif);
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--govbr-gray-80, #333);
+      margin-bottom: 0;
+      min-height: var(--checkbox-size);
+      min-width: var(--checkbox-size);
+      padding-left: calc(var(--checkbox-padding) + var(--checkbox-size));
+      position: relative;
+      line-height: var(--checkbox-size);
+    }
+
+    /* Checkbox box (::before) */
+    .br-checkbox input + label::before {
+      background: var(--govbr-bg, #fff);
+      border: 1px solid var(--govbr-gray-40, #888);
+      border-radius: 4px;
+      content: "";
+      height: var(--checkbox-size);
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: var(--checkbox-size);
+      transition: background-color 0.15s, border-color 0.15s;
+    }
+
+    /* Checkmark (::after) - Traço azul no fundo branco */
+    .br-checkbox input:checked + label::after {
+      border: solid var(--govbr-primary, #1351b4);
+      border-width: 0 3px 3px 0;
+      content: "";
+      height: 12px;
+      left: 8px;
+      position: absolute;
+      top: 4px;
+      transform: rotate(45deg);
+      width: 8px;
+    }
+
+    /* Checked - mantém fundo branco com borda azul */
+    .br-checkbox input:checked + label::before {
+      border-color: var(--govbr-primary, #1351b4);
+    }
+
+    /* Indeterminate state - fundo azul com traço branco */
+    .br-checkbox input:indeterminate + label::before {
+      background: var(--govbr-primary, #1351b4);
+      border-color: var(--govbr-primary, #1351b4);
+    }
+
+    .br-checkbox input:indeterminate + label::after {
+      border-color: #fff;
+      border-width: 0 0 3px;
+      height: 0;
+      left: 6px;
+      top: 10px;
+      transform: none;
+      width: 12px;
+      content: "";
+      position: absolute;
+    }
+
+    /* Hover state */
+    .br-checkbox input:hover:not(:disabled) + label::before {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04));
+    }
+
+    /* Focus state */
+    .br-checkbox input:focus-visible + label::before,
+    .br-checkbox input:focus + label::before {
+      border-color: var(--govbr-focus-color, #ffbe2e) !important;
+      box-shadow: 0 0 0 3px rgba(255, 190, 46, 0.45);
+      outline: none;
+    }
+
+    /* Disabled state */
+    .br-checkbox.disabled input + label,
+    .br-checkbox input:disabled + label {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .br-checkbox.disabled input:disabled + label * {
+      pointer-events: none;
+    }
+
+    /* Invalid state */
+    .br-checkbox.invalid input + label::before,
+    .br-checkbox.is-invalid input + label::before {
+      border-color: var(--govbr-danger, #e52207);
+    }
+
+    .br-checkbox.invalid input:checked + label::after,
+    .br-checkbox.is-invalid input:checked + label::after {
+      border-color: var(--govbr-danger, #e52207);
+    }
+
+    /* Valid state */
+    .br-checkbox.valid input + label::before,
+    .br-checkbox.is-valid input + label::before {
+      border-color: var(--govbr-success, #168821);
+    }
+
+    .br-checkbox.valid input:checked + label::after,
+    .br-checkbox.is-valid input:checked + label::after {
+      border-color: var(--govbr-success, #168821);
+    }
+
+    /* Small size */
+    .br-checkbox.small {
+      --checkbox-size: 20px;
+    }
+
+    .br-checkbox.small input + label {
+      font-size: 12px;
+      line-height: 20px;
+    }
+
+    .br-checkbox.small input:checked + label::after {
+      border-width: 0 2px 2px 0;
+      height: 10px;
+      left: 7px;
+      top: 3px;
+      width: 6px;
+    }
+
+    .br-checkbox.small input:indeterminate + label::after {
+      border-width: 0 0 2px;
+      left: 5px;
+      top: 8px;
+      width: 10px;
+    }
+
+    /* Hidden label (icon only) */
+    .br-checkbox.hidden-label input + label {
+      padding-left: var(--checkbox-size);
+      text-indent: -10000px;
+      white-space: nowrap;
+      width: 0;
+      overflow: hidden;
+    }
+
+    /* Dark mode / inverted */
+    .br-checkbox.inverted,
+    .br-checkbox.inverted label,
+    .br-checkbox.dark-mode,
+    .br-checkbox.dark-mode label {
+      color: #fff;
+    }
+
+    /* Feedback message */
+    .br-checkbox-feedback {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      margin-left: 32px;
+      font-size: 14px;
+    }
+
+    .br-checkbox-feedback i {
+      flex-shrink: 0;
+    }
+
+    .br-checkbox-feedback.danger {
+      color: var(--govbr-danger, #e52207);
+    }
+  `],
 })
-export class BrCheckboxComponent implements ControlValueAccessor {
-  @Input() label?: string;
+export class BrCheckboxComponent implements ControlValueAccessor, OnChanges {
+  /** Label do checkbox */
+  @Input() label = '';
+
+  /** Nome do input */
+  @Input() name?: string;
+
+  /** Estado indeterminado */
   @Input() indeterminate = false;
-  @Input() error?: string;
+
+  /** Mensagem de erro */
+  @Input() errorMessage?: string;
+
+  /** @deprecated Use errorMessage */
+  @Input() set error(value: string | undefined) {
+    this.errorMessage = value;
+  }
+
+  /** Tamanho: default ou small */
   @Input() size: 'default' | 'small' = 'default';
+
+  /** Estado de validação */
   @Input() state: 'default' | 'valid' | 'invalid' = 'default';
+
+  /** Ocultar label (apenas checkbox visual) */
+  @Input() hiddenLabel = false;
+
+  /** Modo escuro/invertido */
+  @Input() inverted = false;
+
+  /** Desabilitado */
+  @Input() disabled = false;
 
   @Output() checkedChange = new EventEmitter<boolean>();
 
   checked = false;
   isDisabled = false;
+
+  ngOnChanges(): void {
+    this.isDisabled = this.disabled;
+  }
 
   private static nextId = 0;
   checkboxId = `br-checkbox-${BrCheckboxComponent.nextId++}`;
@@ -100,49 +288,31 @@ export class BrCheckboxComponent implements ControlValueAccessor {
   onTouched: () => void = () => {};
 
   get containerClasses(): string {
-    const base = 'inline-flex items-center font-rawline cursor-pointer select-none group';
-    const disabledCls = this.isDisabled ? 'opacity-50 cursor-not-allowed' : '';
-    return [base, disabledCls].filter(Boolean).join(' ');
-  }
+    const classes = ['br-checkbox'];
 
-  get inputClasses(): string {
-    return 'sr-only peer govbr-focus-checkbox';
-  }
+    if (this.size === 'small') {
+      classes.push('small');
+    }
 
-  get checkmarkClasses(): string {
-    const sizeMap = {
-      default: 'w-5 h-5',
-      small: 'w-4 h-4',
-    } as const;
+    if (this.isDisabled) {
+      classes.push('disabled');
+    }
 
-    const borderColorMap = {
-      default: 'border-govbr-gray-40',
-      valid: 'border-govbr-success',
-      invalid: 'border-govbr-danger',
-    } as const;
+    if (this.state === 'invalid' || this.errorMessage) {
+      classes.push('invalid');
+    } else if (this.state === 'valid') {
+      classes.push('valid');
+    }
 
-    const activeBorder = this.error ? 'border-govbr-danger' : borderColorMap[this.state];
+    if (this.hiddenLabel) {
+      classes.push('hidden-label');
+    }
 
-    const base = [
-      'flex items-center justify-center flex-shrink-0 rounded-sm border-2 transition-colors',
-      sizeMap[this.size],
-    ].join(' ');
+    if (this.inverted) {
+      classes.push('inverted');
+    }
 
-    const checkedCls =
-      this.checked || this.indeterminate
-        ? 'bg-govbr-primary border-govbr-primary'
-        : `bg-white ${activeBorder} group-hover:border-govbr-primary`;
-
-    return [base, checkedCls].filter(Boolean).join(' ');
-  }
-
-  get labelClasses(): string {
-    const base = 'font-medium text-govbr-gray-80';
-    const sizeMap = {
-      default: 'ml-3 text-govbr-base',
-      small: 'ml-2 text-govbr-sm',
-    } as const;
-    return [base, sizeMap[this.size]].join(' ');
+    return classes.join(' ');
   }
 
   writeValue(value: boolean): void {

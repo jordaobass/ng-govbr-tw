@@ -20,171 +20,465 @@ import {
   imports: [FormsModule],
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div class="mb-4 font-rawline" [class.inline-input]="inline">
+    <div class="br-input" [class]="containerClasses">
       @if (label) {
-        <label
-          [for]="inputId"
-          class="block text-govbr-sm font-semibold text-govbr-gray-80 mb-1"
-          [class.sr-only]="inline"
-          >
+        <label [for]="inputId" class="br-input-label">
           {{ label }}
           @if (required) {
-            <span class="text-govbr-danger ml-0.5">*</span>
+            <span class="br-input-required">*</span>
           }
         </label>
       }
-    
-      @if (helperText && !error && !successMessage) {
-        <span class="block text-govbr-xs text-govbr-gray-60 mb-1">
-          {{ helperText }}
-        </span>
+
+      @if (helperText && !displayError && !successMessage) {
+        <span class="br-input-helper">{{ helperText }}</span>
       }
-    
-      <div [class]="containerClasses">
-        <!-- Icon (left) -->
+
+      <div class="br-input-group">
+        @if (prefix) {
+          <span class="br-input-addon br-input-prefix">{{ prefix }}</span>
+        }
+
         @if (icon && !iconRight) {
-          <i
-            [class]="'fa-solid fa-' + icon + ' absolute left-3 top-1/2 -translate-y-1/2 text-govbr-gray-40 pointer-events-none'"
-          ></i>
+          <div class="br-input-icon">
+            <i [class]="'fas fa-' + icon" aria-hidden="true"></i>
+          </div>
         }
-    
-        <!-- Select -->
-        @if (type === 'select') {
-          <select
-            [id]="inputId"
-            [disabled]="isDisabled"
-            [class]="inputClasses"
-            [value]="value"
-            (change)="onSelectChange($event)"
-            (blur)="onTouched()"
-            >
-            <option value="" disabled [selected]="!value">{{ placeholder }}</option>
-            <ng-content></ng-content>
-          </select>
-        }
-    
-        <!-- Textarea -->
+
         @if (type === 'textarea') {
           <textarea
             [id]="inputId"
+            class="br-input-field"
             [placeholder]="placeholder"
             [disabled]="isDisabled"
-            [class]="inputClasses"
             [rows]="rows"
             [attr.maxlength]="maxLength || null"
             [value]="value"
             (input)="onInputChange($event)"
             (blur)="onTouched()"
           ></textarea>
-        }
-    
-        <!-- File -->
-        @if (type === 'file') {
-          <div class="flex items-center">
-            <label
-              [for]="inputId"
-              class="inline-flex items-center px-4 py-2 bg-govbr-primary text-white rounded-govbr-pill cursor-pointer hover:bg-govbr-primary-dark transition-colors text-govbr-sm font-semibold"
-              [class.opacity-50]="isDisabled"
-              [class.cursor-not-allowed]="isDisabled"
-              >
-              <i class="fa-solid fa-upload mr-2"></i>
-              {{ placeholder || 'Selecionar arquivo' }}
-            </label>
-            <input
-              [id]="inputId"
-              type="file"
-              class="hidden"
-              [disabled]="isDisabled"
-              (change)="onFileChange($event)"
-              />
-            @if (fileName) {
-              <span class="ml-2 text-govbr-sm text-govbr-gray-60">{{ fileName }}</span>
-            }
-          </div>
-        }
-    
-        <!-- Text / Email / Password / Number / Search -->
-        @if (isStandardInput) {
+        } @else {
           <input
             [id]="inputId"
             [type]="actualType"
+            class="br-input-field"
+            [class.has-prefix]="prefix"
+            [class.has-suffix]="suffix"
             [placeholder]="placeholder"
             [disabled]="isDisabled"
-            [class]="inputClasses"
             [attr.maxlength]="maxLength || null"
             [value]="value"
             (input)="onInputChange($event)"
             (blur)="onTouched()"
-            />
+          />
         }
-    
-        <!-- Password toggle button -->
+
         @if (type === 'password') {
           <button
             type="button"
-            class="absolute right-3 top-1/2 -translate-y-1/2 text-govbr-primary hover:text-govbr-primary-dark govbr-focus-ring"
+            class="br-input-button"
             [attr.aria-label]="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
             (click)="togglePassword()"
-            >
-            <i [class]="showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i>
+          >
+            <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'" aria-hidden="true"></i>
           </button>
         }
-    
-        <!-- Icon (right) -->
-        @if (icon && iconRight && type !== 'password') {
-          <i
-            [class]="'fa-solid fa-' + icon + ' absolute right-3 top-1/2 -translate-y-1/2 text-govbr-gray-40 pointer-events-none'"
-          ></i>
-        }
-    
-        <!-- Search button -->
+
         @if (type === 'search') {
           <button
             type="button"
-            class="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-govbr-primary hover:bg-govbr-primary-lightest govbr-focus-ring transition-colors"
+            class="br-input-button"
             aria-label="Buscar"
             (click)="searchSubmit.emit(value)"
-            >
-            <i class="fa-solid fa-magnifying-glass"></i>
+          >
+            <i class="fas fa-search" aria-hidden="true"></i>
           </button>
         }
+
+        @if (icon && iconRight && type !== 'password' && type !== 'search') {
+          <div class="br-input-icon right">
+            <i [class]="'fas fa-' + icon" aria-hidden="true"></i>
+          </div>
+        }
+
+        @if (suffix) {
+          <span class="br-input-addon br-input-suffix">{{ suffix }}</span>
+        }
       </div>
-    
-      <!-- Character counter -->
+
       @if (maxLength && (type === 'textarea' || isStandardInput)) {
-        <div class="flex justify-end mt-0.5">
-          <span class="text-govbr-xs text-govbr-gray-40">
-            {{ value?.length || 0 }}/{{ maxLength }}
-          </span>
-        </div>
+        <span class="br-input-counter">{{ value?.length || 0 }}/{{ maxLength }}</span>
       }
-    
-      <!-- Feedback messages -->
+
       @if (displayError) {
-        <span class="flex items-center mt-1 text-govbr-sm text-govbr-danger">
-          <i class="fa-solid fa-times-circle mr-1"></i>{{ displayError }}
+        <span class="br-input-feedback danger">
+          <i class="fas fa-times-circle" aria-hidden="true"></i>
+          <span>{{ displayError }}</span>
         </span>
       }
 
       @if (successMessage && !displayError) {
-        <span class="flex items-center mt-1 text-govbr-sm text-govbr-success">
-          <i class="fa-solid fa-check-circle mr-1"></i>{{ successMessage }}
+        <span class="br-input-feedback success">
+          <i class="fas fa-check-circle" aria-hidden="true"></i>
+          <span>{{ successMessage }}</span>
         </span>
       }
 
       @if (warningMessage && !displayError && !successMessage) {
-        <span class="flex items-center mt-1 text-govbr-sm text-govbr-warning">
-          <i class="fa-solid fa-exclamation-triangle mr-1"></i>{{ warningMessage }}
+        <span class="br-input-feedback warning">
+          <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+          <span>{{ warningMessage }}</span>
         </span>
       }
 
       @if (infoMessage && !displayError && !successMessage && !warningMessage) {
-        <span class="flex items-center mt-1 text-govbr-sm text-govbr-info">
-          <i class="fa-solid fa-info-circle mr-1"></i>{{ infoMessage }}
+        <span class="br-input-feedback info">
+          <i class="fas fa-info-circle" aria-hidden="true"></i>
+          <span>{{ infoMessage }}</span>
         </span>
       }
     </div>
-    `,
+  `,
+  styles: [`
+    /* ═══════════════════════════════════════════════════════════════
+       BR-INPUT — Padrão Gov.br Design System
+       ═══════════════════════════════════════════════════════════════ */
+
+    .br-input {
+      display: flex;
+      flex-direction: column;
+      font-family: var(--govbr-font-family, 'Rawline', sans-serif);
+      margin-bottom: 16px;
+    }
+
+    /* Label */
+    .br-input-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--govbr-gray-80, #333);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .br-input-required {
+      color: var(--govbr-danger, #e52207);
+      margin-left: 4px;
+    }
+
+    /* Helper text */
+    .br-input-helper {
+      display: block;
+      font-size: 12px;
+      color: var(--govbr-gray-60, #555);
+      margin-bottom: 8px;
+    }
+
+    /* Input group */
+    .br-input-group {
+      position: relative;
+      display: flex;
+      align-items: stretch;
+    }
+
+    /* Input field */
+    .br-input-field {
+      flex: 1;
+      width: 100%;
+      height: 40px;
+      padding: 0 16px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--govbr-gray-80, #333);
+      background-color: #fff;
+      border: 1px solid var(--govbr-gray-40, #888);
+      border-radius: 4px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .br-input-field.has-prefix {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-left: none;
+    }
+
+    .br-input-field.has-suffix {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-right: none;
+    }
+
+    .br-input-field::placeholder {
+      color: var(--govbr-gray-40, #888);
+      font-weight: 400;
+    }
+
+    .br-input-field:hover:not(:disabled) {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04));
+    }
+
+    .br-input-field:focus {
+      outline: none;
+      border-color: var(--govbr-focus-color, #ffbe2e);
+      box-shadow: 0 0 0 3px rgba(255, 190, 46, 0.45);
+    }
+
+    .br-input-field.has-prefix:focus {
+      box-shadow: -3px 0 0 0 rgba(255, 190, 46, 0.45), 0 0 0 3px rgba(255, 190, 46, 0.45);
+    }
+
+    .br-input-field.has-suffix:focus {
+      box-shadow: 3px 0 0 0 rgba(255, 190, 46, 0.45), 0 0 0 3px rgba(255, 190, 46, 0.45);
+    }
+
+    .br-input-field:disabled {
+      background-color: var(--govbr-gray-5, #f8f8f8);
+      color: var(--govbr-gray-40, #888);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    /* Prefix/Suffix addon */
+    .br-input-addon {
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--govbr-gray-80, #333);
+      background-color: var(--govbr-gray-10, #e6e6e6);
+      border: 1px solid var(--govbr-gray-40, #888);
+      white-space: nowrap;
+    }
+
+    .br-input-prefix {
+      border-right: none;
+      border-radius: 4px 0 0 4px;
+    }
+
+    .br-input-suffix {
+      border-left: none;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Textarea */
+    textarea.br-input-field {
+      height: auto;
+      min-height: 80px;
+      padding: 12px 16px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    /* Icon */
+    .br-input-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--govbr-gray-40, #888);
+      font-size: 14px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .br-input-icon.right {
+      left: auto;
+      right: 12px;
+    }
+
+    .br-input.has-icon-left .br-input-field {
+      padding-left: 40px;
+    }
+
+    .br-input.has-icon-right .br-input-field {
+      padding-right: 40px;
+    }
+
+    /* Button (password toggle, search) */
+    .br-input-button {
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      background: transparent;
+      border: none;
+      border-radius: 50%;
+      color: var(--govbr-primary, #1351b4);
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+
+    .br-input-button:hover {
+      background-color: var(--govbr-primary-lightest, #dbe8fb);
+    }
+
+    .br-input-button:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 190, 46, 0.45);
+    }
+
+    .br-input.has-button .br-input-field {
+      padding-right: 44px;
+    }
+
+    /* Counter */
+    .br-input-counter {
+      display: block;
+      text-align: right;
+      font-size: 12px;
+      color: var(--govbr-gray-40, #888);
+      margin-top: 4px;
+    }
+
+    /* Feedback messages */
+    .br-input-feedback {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    .br-input-feedback i {
+      flex-shrink: 0;
+    }
+
+    .br-input-feedback.danger {
+      color: var(--govbr-danger, #e52207);
+    }
+
+    .br-input-feedback.success {
+      color: var(--govbr-success, #168821);
+    }
+
+    .br-input-feedback.warning {
+      color: var(--govbr-warning-alt, #c27800);
+    }
+
+    .br-input-feedback.info {
+      color: var(--govbr-info, #155bcb);
+    }
+
+    /* States */
+    .br-input.invalid .br-input-field {
+      border-color: var(--govbr-danger, #e52207);
+      border-width: 2px;
+    }
+
+    .br-input.invalid .br-input-addon {
+      border-color: var(--govbr-danger, #e52207);
+      border-width: 2px;
+    }
+
+    .br-input.invalid .br-input-field:focus {
+      border-color: var(--govbr-danger, #e52207);
+      box-shadow: 0 0 0 3px rgba(229, 34, 7, 0.25);
+    }
+
+    .br-input.valid .br-input-field {
+      border-color: var(--govbr-success, #168821);
+      border-width: 2px;
+    }
+
+    .br-input.valid .br-input-addon {
+      border-color: var(--govbr-success, #168821);
+      border-width: 2px;
+    }
+
+    .br-input.valid .br-input-field:focus {
+      border-color: var(--govbr-success, #168821);
+      box-shadow: 0 0 0 3px rgba(22, 136, 33, 0.25);
+    }
+
+    /* Density: Small */
+    .br-input.density-small .br-input-field {
+      height: 32px;
+      font-size: 12px;
+      padding: 0 12px;
+    }
+
+    .br-input.density-small .br-input-addon {
+      font-size: 12px;
+      padding: 0 10px;
+    }
+
+    .br-input.density-small .br-input-label {
+      font-size: 12px;
+    }
+
+    .br-input.density-small.has-icon-left .br-input-field {
+      padding-left: 32px;
+    }
+
+    .br-input.density-small .br-input-icon {
+      left: 10px;
+      font-size: 12px;
+    }
+
+    /* Density: Large */
+    .br-input.density-large .br-input-field {
+      height: 48px;
+      font-size: 16px;
+      padding: 0 20px;
+    }
+
+    .br-input.density-large .br-input-addon {
+      font-size: 16px;
+      padding: 0 16px;
+    }
+
+    .br-input.density-large .br-input-label {
+      font-size: 16px;
+    }
+
+    .br-input.density-large.has-icon-left .br-input-field {
+      padding-left: 48px;
+    }
+
+    .br-input.density-large .br-input-icon {
+      left: 16px;
+      font-size: 16px;
+    }
+
+    /* Highlight */
+    .br-input.highlight .br-input-field {
+      height: 56px;
+      font-size: 18px;
+      font-weight: 600;
+      background-color: var(--govbr-gray-2, #f8f8f8);
+      border-color: transparent;
+      padding: 0 24px;
+    }
+
+    .br-input.highlight .br-input-field:focus {
+      background-color: #fff;
+      border-color: var(--govbr-focus-color, #ffbe2e);
+    }
+
+    /* Inline */
+    .br-input.inline {
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .br-input.inline .br-input-label {
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+
+    .br-input.inline .br-input-group {
+      flex: 1;
+    }
+  `],
 })
 export class BrInputComponent implements ControlValueAccessor {
   @Input() label?: string;
@@ -192,14 +486,13 @@ export class BrInputComponent implements ControlValueAccessor {
     | 'text'
     | 'email'
     | 'password'
-    | 'select'
-    | 'file'
     | 'number'
     | 'search'
+    | 'tel'
+    | 'url'
     | 'textarea' = 'text';
   @Input() placeholder = '';
   @Input() required = false;
-  /** Mensagem de erro manual (sobrescreve erros automáticos do validator) */
   @Input() error?: string;
   @Input() successMessage?: string;
   @Input() warningMessage?: string;
@@ -212,16 +505,14 @@ export class BrInputComponent implements ControlValueAccessor {
   @Input() inline = false;
   @Input() maxLength?: number;
   @Input() rows = 3;
-
-  /** Mensagens customizadas para erros de validação */
   @Input() errorMessages: Record<string, string> = {};
+  @Input() prefix?: string;
+  @Input() suffix?: string;
 
-  @Output() fileSelected = new EventEmitter<File>();
   @Output() searchSubmit = new EventEmitter<string>();
 
   value: string = '';
   isDisabled = false;
-  fileName = '';
   showPassword = false;
 
   private static nextId = 0;
@@ -261,7 +552,7 @@ export class BrInputComponent implements ControlValueAccessor {
   onTouched: () => void = () => {};
 
   get isStandardInput(): boolean {
-    return this.type !== 'select' && this.type !== 'file' && this.type !== 'textarea';
+    return this.type !== 'textarea';
   }
 
   get actualType(): string {
@@ -273,99 +564,75 @@ export class BrInputComponent implements ControlValueAccessor {
   }
 
   get containerClasses(): string {
-    return this.type !== 'file' ? 'relative' : '';
+    const classes: string[] = [];
+
+    // Density
+    if (this.density !== 'medium') {
+      classes.push(`density-${this.density}`);
+    }
+
+    // Icon
+    if (this.icon && !this.iconRight) {
+      classes.push('has-icon-left');
+    }
+    if (this.icon && this.iconRight) {
+      classes.push('has-icon-right');
+    }
+
+    // Button (password, search)
+    if (this.type === 'password' || this.type === 'search') {
+      classes.push('has-button');
+    }
+
+    // States
+    if (this.displayError) {
+      classes.push('invalid');
+    } else if (this.successMessage) {
+      classes.push('valid');
+    }
+
+    // Modifiers
+    if (this.highlight) {
+      classes.push('highlight');
+    }
+    if (this.inline) {
+      classes.push('inline');
+    }
+
+    return classes.join(' ');
   }
 
-  /**
-   * Retorna a mensagem de erro a ser exibida.
-   * Prioridade: error manual > erro do validator (se touched/dirty)
-   */
   get displayError(): string | undefined {
-    // Erro manual sempre tem prioridade
     if (this.error) {
       return this.error;
     }
 
-    // Se não tem NgControl, não há erro automático
     if (!this.ngControl?.control) {
       return undefined;
     }
 
     const control = this.ngControl.control;
 
-    // Só mostra erro se o controle foi tocado ou modificado E está inválido
     if (!control.errors || (!control.touched && !control.dirty)) {
       return undefined;
     }
 
-    // Busca a primeira mensagem de erro
     return this.getFirstErrorMessage(control.errors);
   }
 
   private getFirstErrorMessage(errors: ValidationErrors): string {
     for (const key of Object.keys(errors)) {
-      // Primeiro verifica mensagens customizadas do usuário
       if (this.errorMessages[key]) {
         return this.errorMessages[key];
       }
 
-      // Depois verifica mensagens padrão
       const defaultMsg = BrInputComponent.defaultErrorMessages[key];
       if (defaultMsg) {
         return typeof defaultMsg === 'function' ? defaultMsg(errors[key]) : defaultMsg;
       }
     }
 
-    // Fallback genérico
     return 'Campo inválido';
-  }
-
-  get inputClasses(): string {
-    const densityStyles = {
-      small: 'text-govbr-sm',
-      medium: 'text-govbr-base',
-      large: 'text-govbr-lg',
-    } as const;
-
-    const densityHeights = {
-      small: 'h-[var(--govbr-input-small)]',
-      medium: 'h-[var(--govbr-input-medium)]',
-      large: 'h-[var(--govbr-input-large)]',
-    } as const;
-
-    const base = [
-      'w-full px-4 font-rawline govbr-input',
-      this.type === 'textarea' ? 'py-2' : '',
-    ].join(' ');
-
-    const density = densityStyles[this.density];
-    const height = this.type !== 'textarea' ? densityHeights[this.density] : '';
-
-    const highlightCls = this.highlight
-      ? 'h-[var(--govbr-input-highlight)] bg-govbr-gray-2 border-transparent text-govbr-lg px-6'
-      : '';
-
-    const statusCls = this.displayError
-      ? 'govbr-input--danger'
-      : this.successMessage
-        ? 'govbr-input--success'
-        : this.warningMessage
-          ? 'govbr-input--warning'
-          : '';
-
-    const disabledCls = this.isDisabled
-      ? 'bg-govbr-gray-2 text-govbr-gray-40 cursor-not-allowed'
-      : 'bg-white text-govbr-gray-80';
-
-    const iconPaddingLeft = this.icon && !this.iconRight ? 'pl-10' : '';
-    const iconPaddingRight =
-      (this.icon && this.iconRight) || this.type === 'password' || this.type === 'search'
-        ? 'pr-10'
-        : '';
-
-    return [base, density, height, highlightCls, statusCls, disabledCls, iconPaddingLeft, iconPaddingRight]
-      .filter(Boolean)
-      .join(' ');
   }
 
   writeValue(value: string): void {
@@ -392,20 +659,5 @@ export class BrInputComponent implements ControlValueAccessor {
     const target = event.target as HTMLInputElement | HTMLTextAreaElement;
     this.value = target.value;
     this.onChange(target.value);
-  }
-
-  onSelectChange(event: Event): void {
-    const val = (event.target as HTMLSelectElement).value;
-    this.value = val;
-    this.onChange(val);
-  }
-
-  onFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      this.fileName = file.name;
-      this.fileSelected.emit(file);
-    }
   }
 }
