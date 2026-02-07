@@ -1,0 +1,601 @@
+/**
+ * Keyframes de animação Gov.br
+ * @description Animações CSS reutilizáveis seguindo padrão Gov.br
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMAÇÕES DE ENTRADA (Enter)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes br-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes br-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes br-fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes br-fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes br-fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes br-scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes br-slideInUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes br-slideInDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes br-slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes br-slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes br-expandHeight {
+  from {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+  to {
+    height: var(--br-expand-height, auto);
+    opacity: 1;
+    overflow: visible;
+  }
+}
+
+@keyframes br-expandWidth {
+  from {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+  to {
+    width: var(--br-expand-width, auto);
+    opacity: 1;
+    overflow: visible;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMAÇÕES DE SAÍDA (Leave)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes br-fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes br-fadeOutUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+}
+
+@keyframes br-fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@keyframes br-fadeOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+
+@keyframes br-fadeOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+}
+
+@keyframes br-scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+@keyframes br-slideOutUp {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes br-slideOutDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes br-slideOutLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes br-slideOutRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes br-collapseHeight {
+  from {
+    height: var(--br-collapse-height, auto);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+}
+
+@keyframes br-collapseWidth {
+  from {
+    width: var(--br-collapse-width, auto);
+    opacity: 1;
+  }
+  to {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMAÇÕES DE ATENÇÃO/FEEDBACK
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes br-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes br-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes br-bounce {
+  0%, 20%, 53%, 100% {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translateY(0);
+  }
+  40%, 43% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translateY(-12px);
+  }
+  70% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translateY(-6px);
+  }
+  80% {
+    transform: translateY(0);
+  }
+  90% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes br-wiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+  75% {
+    transform: rotate(-3deg);
+  }
+}
+
+@keyframes br-flash {
+  0%, 50%, 100% {
+    opacity: 1;
+  }
+  25%, 75% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes br-heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.1);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.1);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+
+@keyframes br-swing {
+  0%, 100% {
+    transform: rotate(0deg);
+    transform-origin: top center;
+  }
+  20% {
+    transform: rotate(10deg);
+  }
+  40% {
+    transform: rotate(-8deg);
+  }
+  60% {
+    transform: rotate(5deg);
+  }
+  80% {
+    transform: rotate(-3deg);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMAÇÕES DE LOADING
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes br-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes br-dots {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes br-bars {
+  0%, 100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes br-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes br-wave {
+  0%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.5);
+  }
+}
+
+@keyframes br-progressIndeterminate {
+  0% {
+    left: -35%;
+    right: 100%;
+  }
+  60% {
+    left: 100%;
+    right: -90%;
+  }
+  100% {
+    left: 100%;
+    right: -90%;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMAÇÕES DE HOVER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes br-lift {
+  from {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  to {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@keyframes br-grow {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes br-shrink {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.95);
+  }
+}
+
+@keyframes br-glow {
+  from {
+    box-shadow: 0 0 0 0 rgba(19, 81, 180, 0.4);
+  }
+  to {
+    box-shadow: 0 0 20px 8px rgba(19, 81, 180, 0.2);
+  }
+}
+
+@keyframes br-ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMAÇÕES DE SUCESSO/FEEDBACK
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes br-checkmark {
+  0% {
+    stroke-dashoffset: 48;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes br-successPop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes br-errorShake {
+  0%, 100% {
+    transform: translateX(0);
+    border-color: var(--govbr-danger);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes br-warningPulse {
+  0%, 100% {
+    background-color: var(--govbr-warning);
+    transform: scale(1);
+  }
+  50% {
+    background-color: rgba(255, 193, 7, 0.7);
+    transform: scale(1.02);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CLASSES UTILITÁRIAS DE ANIMAÇÃO
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Durações */
+.br-animate-instant { animation-duration: 100ms !important; }
+.br-animate-fast { animation-duration: 150ms !important; }
+.br-animate-normal { animation-duration: 250ms !important; }
+.br-animate-slow { animation-duration: 400ms !important; }
+.br-animate-slower { animation-duration: 600ms !important; }
+
+/* Delays */
+.br-animate-delay-0 { animation-delay: 0ms !important; }
+.br-animate-delay-100 { animation-delay: 100ms !important; }
+.br-animate-delay-200 { animation-delay: 200ms !important; }
+.br-animate-delay-300 { animation-delay: 300ms !important; }
+.br-animate-delay-500 { animation-delay: 500ms !important; }
+
+/* Easings */
+.br-animate-ease-linear { animation-timing-function: linear !important; }
+.br-animate-ease-in { animation-timing-function: ease-in !important; }
+.br-animate-ease-out { animation-timing-function: ease-out !important; }
+.br-animate-ease-in-out { animation-timing-function: ease-in-out !important; }
+.br-animate-ease-bounce { animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1) !important; }
+
+/* Iterações */
+.br-animate-once { animation-iteration-count: 1 !important; }
+.br-animate-twice { animation-iteration-count: 2 !important; }
+.br-animate-infinite { animation-iteration-count: infinite !important; }
+
+/* Fill modes */
+.br-animate-fill-none { animation-fill-mode: none !important; }
+.br-animate-fill-forwards { animation-fill-mode: forwards !important; }
+.br-animate-fill-backwards { animation-fill-mode: backwards !important; }
+.br-animate-fill-both { animation-fill-mode: both !important; }
+
+/* Pausa/Play */
+.br-animate-paused { animation-play-state: paused !important; }
+.br-animate-running { animation-play-state: running !important; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPEITO A PREFERS-REDUCED-MOTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

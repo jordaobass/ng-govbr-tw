@@ -2,6 +2,9 @@
  * Public API Surface of @aspect-br/ng-govbr-tw
  */
 
+// Animation System
+export * from './lib/animations/index';
+
 // Components
 export { BrButtonComponent } from './lib/components/button/br-button.component';
 export { BrInputComponent } from './lib/components/input/br-input.component';
@@ -72,3 +75,16 @@ export { BrToastService } from './lib/components/toast/br-toast.service';
 export type { BrToast, BrToastOptions } from './lib/components/toast/br-toast.service';
 export { BrInputCpfComponent } from './lib/components/input-cpf/br-input-cpf.component';
 export { BrInputCnpjComponent } from './lib/components/input-cnpj/br-input-cnpj.component';
+export { BrTimelineComponent } from './lib/components/timeline/br-timeline.component';
+export type { BrTimelineItem } from './lib/components/timeline/br-timeline.component';
+export { BrSwitchComponent } from './lib/components/switch/br-switch.component';
+export { BrChipComponent } from './lib/components/chip/br-chip.component';
+export { BrDividerComponent } from './lib/components/divider/br-divider.component';
+export { BrStepperComponent } from './lib/components/stepper/br-stepper.component';
+export type { BrStepperStep } from './lib/components/stepper/br-stepper.component';
+export { BrInputTelefoneComponent } from './lib/components/input-telefone/br-input-telefone.component';
+export { BrInputCepComponent } from './lib/components/input-cep/br-input-cep.component';
+export type { BrCepAddress } from './lib/components/input-cep/br-input-cep.component';
+export { BrInputMoneyComponent } from './lib/components/input-money/br-input-money.component';
+export { BrNotificationComponent } from './lib/components/notification/br-notification.component';
+export { BrSigninComponent } from './lib/components/signin/br-signin.component';

@@ -5,7 +5,9 @@ import {
   Input,
   Output,
   ViewEncapsulation,
+  inject,
 } from '@angular/core';
+import { BrAnimationService } from '../../animations/animation.service';
 
 
 @Component({
@@ -24,7 +26,8 @@ import {
         >
         <!-- Backdrop -->
         <div
-          class="absolute inset-0 bg-govbr-primary-darkest/60 transition-opacity"
+          [class]="backdropClasses"
+          [style.animation]="backdropAnimation"
           (click)="onScrimClick()"
           (keydown.enter)="onScrimClick()"
           role="button"
@@ -34,13 +37,14 @@ import {
         <!-- Modal container -->
         <div
           [class]="modalClasses"
+          [style.animation]="modalAnimation"
           role="document"
           >
           <!-- Header -->
           <div [class]="headerClasses">
             <div class="flex items-center gap-3 min-w-0 flex-1">
               @if (variantIcon) {
-                <i [class]="variantIcon + ' text-xl flex-shrink-0 ' + variantIconColor"></i>
+                <i [class]="variantIcon + ' text-xl flex-shrink-0 ' + variantIconColor" aria-hidden="true"></i>
               }
               <h4
                 [id]="titleId"
@@ -56,7 +60,7 @@ import {
                 aria-label="Fechar"
                 (click)="close()"
                 >
-                <i class="fa-solid fa-xmark"></i>
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
               </button>
             }
           </div>
@@ -65,7 +69,7 @@ import {
             <!-- Loading state -->
             @if (loading) {
               <div class="flex items-center justify-center py-10">
-                <i class="fa-solid fa-spinner fa-spin text-govbr-primary text-2xl"></i>
+                <i class="fa-solid fa-spinner fa-spin text-govbr-primary text-2xl" aria-hidden="true"></i>
               </div>
             }
             @if (!loading) {
@@ -105,8 +109,27 @@ import {
       </div>
     }
     `,
+  styles: [`
+    @keyframes br-modal-backdrop-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes br-modal-enter {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+  `],
 })
 export class BrModalComponent {
+  private readonly animationService = inject(BrAnimationService);
+
   @Input() isOpen = false;
   @Input() title = '';
   @Input() size: 'xsmall' | 'small' | 'medium' | 'large' | 'auto' = 'medium';
@@ -129,6 +152,22 @@ export class BrModalComponent {
 
   private static nextId = 0;
   titleId = `br-modal-title-${BrModalComponent.nextId++}`;
+
+  get backdropAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    const duration = this.animationService.resolveDuration('fast');
+    return `br-modal-backdrop-in ${duration}ms ease-out forwards`;
+  }
+
+  get modalAnimation(): string {
+    if (!this.animationService.isEnabled()) return 'none';
+    const duration = this.animationService.resolveDuration('normal');
+    return `br-modal-enter ${duration}ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards`;
+  }
+
+  get backdropClasses(): string {
+    return 'absolute inset-0 bg-govbr-primary-darkest/60';
+  }
 
   get variantIcon(): string | null {
     const icons = {
@@ -182,9 +221,8 @@ export class BrModalComponent {
     } as const;
 
     const base = [
-      'relative flex flex-col bg-white shadow-lg z-10 w-full mx-4',
+      'relative flex flex-col bg-white shadow-lg z-10 w-full mx-4 rounded',
       'max-h-[90vh]',
-      'animate-modal-in',
     ].join(' ');
 
     return [base, sizes[this.size]].filter(Boolean).join(' ');

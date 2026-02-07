@@ -178,3 +178,185 @@ html.govbr-contrast br-table table tbody tr.br-table-row-selected td {
   background-color: #333 !important;
   outline: 2px solid #ffff00;
 }
+
+/* ═══ Timeline (br-timeline) ═══ */
+html.govbr-contrast .br-timeline-title {
+  color: #fff !important;
+}
+
+html.govbr-contrast .br-timeline-description {
+  color: #ccc !important;
+}
+
+html.govbr-contrast .br-timeline-date {
+  color: #aaa !important;
+}
+
+html.govbr-contrast .br-timeline-line {
+  background-color: #666 !important;
+}
+
+html.govbr-contrast .br-timeline-item-completed .br-timeline-icon {
+  background-color: #00ff5f !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast .br-timeline-item-completed .br-timeline-line {
+  background-color: #00ff5f !important;
+}
+
+html.govbr-contrast .br-timeline-item-current .br-timeline-icon {
+  background-color: #fff !important;
+  color: #000 !important;
+  box-shadow: 0 0 0 4px #ffff00 !important;
+}
+
+html.govbr-contrast .br-timeline-item-current .br-timeline-title {
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast .br-timeline-item-pending .br-timeline-icon {
+  background-color: #333 !important;
+  border-color: #666 !important;
+}
+
+/* ═══ Switch (br-switch) ═══ */
+html.govbr-contrast br-switch button[role="switch"] {
+  border: 2px solid #fff !important;
+}
+
+html.govbr-contrast br-switch button[role="switch"][aria-checked="true"] {
+  background-color: #00ff5f !important;
+}
+
+html.govbr-contrast br-switch button[role="switch"][aria-checked="false"] {
+  background-color: #333 !important;
+}
+
+/* ═══ Chip (br-chip) ═══ */
+html.govbr-contrast br-chip span {
+  border: 1px solid #666 !important;
+}
+
+html.govbr-contrast br-chip span[aria-pressed="true"] {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast br-chip span[aria-pressed="false"] {
+  background-color: #222 !important;
+  color: #fff !important;
+}
+
+/* ═══ Stepper (br-stepper) ═══ */
+html.govbr-contrast .br-stepper button span {
+  color: #fff !important;
+}
+
+html.govbr-contrast .br-stepper .bg-govbr-success {
+  background-color: #00ff5f !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast .br-stepper .bg-govbr-primary {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast .br-stepper .text-govbr-primary {
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast .br-stepper .text-govbr-success {
+  color: #00ff5f !important;
+}
+
+html.govbr-contrast .br-stepper-connector {
+  background-color: #666 !important;
+}
+
+html.govbr-contrast .br-stepper-connector.bg-govbr-success {
+  background-color: #00ff5f !important;
+}
+
+/* ═══ Divider (br-divider) ═══ */
+html.govbr-contrast br-divider div {
+  background-color: #666 !important;
+  border-color: #666 !important;
+}
+
+html.govbr-contrast br-divider span {
+  color: #aaa !important;
+}
+
+/* ═══ Pagination (br-pagination) ═══ */
+html.govbr-contrast br-pagination button.bg-govbr-primary {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast br-pagination button:not(.bg-govbr-primary):not(:disabled) {
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast br-pagination select {
+  background-color: #111 !important;
+  color: #fff !important;
+  border-color: #666 !important;
+}
+
+/* ═══ Notification Badge (br-notification) ═══ */
+html.govbr-contrast br-notification span[role="status"] {
+  border: 1px solid #fff !important;
+}
+
+html.govbr-contrast br-notification .bg-govbr-danger {
+  background-color: #ff5f5f !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast br-notification .bg-govbr-success {
+  background-color: #00ff5f !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast br-notification .bg-govbr-warning {
+  background-color: #ffff00 !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast br-notification .bg-govbr-info {
+  background-color: #5fc8ff !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast br-notification .bg-govbr-primary {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+/* ═══ Sign-in Gov.br (br-signin) ═══ */
+html.govbr-contrast br-signin button {
+  border: 2px solid #fff !important;
+}
+
+html.govbr-contrast br-signin button.bg-\[#1351b4\],
+html.govbr-contrast br-signin button.bg-\[#071d41\] {
+  background-color: #000 !important;
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast br-signin button.bg-white {
+  background-color: #111 !important;
+  color: #ffff00 !important;
+  border-color: #ffff00 !important;
+}
+
+html.govbr-contrast br-signin button:hover:not(:disabled) {
+  background-color: #333 !important;
+}
+
+html.govbr-contrast br-signin svg circle,
+html.govbr-contrast br-signin svg path {
+  fill: currentColor !important;
+}

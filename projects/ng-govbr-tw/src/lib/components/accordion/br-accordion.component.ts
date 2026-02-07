@@ -4,7 +4,12 @@ import {
   Input,
   Output,
   ViewEncapsulation,
+  inject,
+  ElementRef,
+  AfterViewInit,
+  ViewChild,
 } from '@angular/core';
+import { BrAnimationService } from '../../animations/animation.service';
 
 
 // ─── BrAccordionItem ────────────────────────────────────────────────────────
@@ -30,12 +35,13 @@ import {
         @if (icon) {
           <i
             [class]="'fa-solid fa-' + icon + ' mr-3 text-govbr-primary flex-shrink-0'"
+            aria-hidden="true"
           ></i>
         }
-    
+
         <!-- Title -->
         <span class="flex-1 text-left font-semibold truncate">{{ title }}</span>
-    
+
         <!-- Badge -->
         @if (badge) {
           <span
@@ -44,29 +50,44 @@ import {
             {{ badge }}
           </span>
         }
-    
+
         <!-- Chevron -->
         <i
-          class="fa-solid fa-chevron-down text-xs text-govbr-primary transition-transform duration-300 flex-shrink-0"
-          [class.rotate-180]="open"
+          class="fa-solid fa-chevron-down text-xs text-govbr-primary flex-shrink-0"
+          [class]="chevronClasses"
+          aria-hidden="true"
         ></i>
       </button>
-    
+
       <!-- Content panel -->
-      @if (open) {
-        <div
-          [id]="'br-accordion-panel-' + itemId"
-          [attr.aria-labelledby]="'br-accordion-header-' + itemId"
-          role="region"
-          [class]="panelClasses"
-          >
+      <div
+        #panelRef
+        [id]="'br-accordion-panel-' + itemId"
+        [attr.aria-labelledby]="'br-accordion-header-' + itemId"
+        role="region"
+        [class]="panelClasses"
+        [style.maxHeight]="panelMaxHeight"
+        [style.opacity]="panelOpacity"
+        [style.overflow]="'hidden'"
+        [attr.aria-hidden]="!open"
+        >
+        <div class="panel-content">
           <ng-content></ng-content>
         </div>
-      }
+      </div>
     </div>
     `,
+  styles: [`
+    br-accordion-item .panel-content {
+      padding: inherit;
+    }
+  `],
 })
-export class BrAccordionItemComponent {
+export class BrAccordionItemComponent implements AfterViewInit {
+  private readonly animationService = inject(BrAnimationService);
+
+  @ViewChild('panelRef') panelRef!: ElementRef<HTMLDivElement>;
+
   @Input() title = '';
   @Input() icon?: string;
   @Input() badge?: string | number;
@@ -79,12 +100,52 @@ export class BrAccordionItemComponent {
 
   private static nextId = 0;
   itemId = BrAccordionItemComponent.nextId++;
+  private contentHeight = 0;
+
+  ngAfterViewInit(): void {
+    // Calcula altura inicial se aberto
+    if (this.open) {
+      this.measureContentHeight();
+    }
+  }
 
   toggle(): void {
-    if (!this.disabled) {
-      this.open = !this.open;
-      this.openChange.emit(this.open);
+    if (this.disabled) return;
+
+    this.open = !this.open;
+    this.openChange.emit(this.open);
+
+    if (this.open) {
+      // Mede a altura antes de animar
+      requestAnimationFrame(() => this.measureContentHeight());
     }
+  }
+
+  private measureContentHeight(): void {
+    if (this.panelRef?.nativeElement) {
+      const content = this.panelRef.nativeElement.querySelector('.panel-content');
+      if (content) {
+        this.contentHeight = content.scrollHeight;
+      }
+    }
+  }
+
+  get panelMaxHeight(): string {
+    if (!this.animationService.isEnabled()) {
+      return this.open ? 'none' : '0';
+    }
+    return this.open ? `${this.contentHeight || 1000}px` : '0';
+  }
+
+  get panelOpacity(): string {
+    return this.open ? '1' : '0';
+  }
+
+  get chevronClasses(): string {
+    const base = 'transition-transform';
+    const duration = this.animationService.isEnabled() ? 'duration-300' : 'duration-0';
+    const rotation = this.open ? 'rotate-180' : '';
+    return `${base} ${duration} ${rotation}`;
   }
 
   get containerClasses(): string {
@@ -126,10 +187,15 @@ export class BrAccordionItemComponent {
     } as const;
 
     const base = densityMap[this.density];
+    const transition = this.animationService.isEnabled()
+      ? 'transition-all duration-300 ease-out'
+      : '';
 
-    return this.variant === 'negative'
-      ? `${base} text-white/80`
-      : `${base} text-govbr-gray-60`;
+    const colorCls = this.variant === 'negative'
+      ? 'text-white/80'
+      : 'text-govbr-gray-60';
+
+    return `${base} ${transition} ${colorCls}`;
   }
 }
 

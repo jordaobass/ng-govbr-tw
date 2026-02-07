@@ -1,0 +1,96 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrStepperComponent, BrStepperStep } from './br-stepper.component';
+
+describe('BrStepperComponent', () => {
+  let component: BrStepperComponent;
+  let fixture: ComponentFixture<BrStepperComponent>;
+
+  const mockSteps: BrStepperStep[] = [
+    { label: 'Step 1', description: 'First step' },
+    { label: 'Step 2', description: 'Second step' },
+    { label: 'Step 3', description: 'Third step', optional: true },
+  ];
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [BrStepperComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(BrStepperComponent);
+    component = fixture.componentInstance;
+    component.steps = mockSteps;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should render all steps', () => {
+    const steps = fixture.nativeElement.querySelectorAll('li');
+    expect(steps.length).toBe(3);
+  });
+
+  it('should show step labels', () => {
+    const labels = fixture.nativeElement.querySelectorAll('button span.font-medium');
+    expect(labels[0].textContent).toContain('Step 1');
+    expect(labels[1].textContent).toContain('Step 2');
+  });
+
+  it('should show optional indicator', () => {
+    const optional = fixture.nativeElement.querySelector('span.text-xs');
+    expect(optional.textContent).toContain('opcional');
+  });
+
+  it('should apply completed styles to previous steps', () => {
+    component.currentStep = 2;
+    fixture.detectChanges();
+
+    const completedIndicator = fixture.nativeElement.querySelector('.bg-govbr-success');
+    expect(completedIndicator).toBeTruthy();
+  });
+
+  it('should apply current styles to active step', () => {
+    component.currentStep = 1;
+    fixture.detectChanges();
+
+    const currentItem = fixture.nativeElement.querySelector('[aria-current="step"]');
+    expect(currentItem).toBeTruthy();
+  });
+
+  it('should emit stepChange when clicking previous step', () => {
+    component.clickable = true;
+    component.currentStep = 2;
+    fixture.detectChanges();
+
+    const spy = jest.spyOn(component.stepChange, 'emit');
+    component.onStepClick(0);
+
+    expect(spy).toHaveBeenCalledWith(0);
+  });
+
+  it('should not emit stepChange when clicking future step', () => {
+    component.clickable = true;
+    component.currentStep = 0;
+    fixture.detectChanges();
+
+    const spy = jest.spyOn(component.stepChange, 'emit');
+    component.onStepClick(2);
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('should apply vertical orientation class', () => {
+    component.orientation = 'vertical';
+    fixture.detectChanges();
+
+    const stepper = fixture.nativeElement.querySelector('.br-stepper-vertical');
+    expect(stepper).toBeTruthy();
+  });
+
+  it('should have proper accessibility attributes', () => {
+    const nav = fixture.nativeElement.querySelector('nav');
+    expect(nav.getAttribute('role')).toBe('navigation');
+    expect(nav.getAttribute('aria-label')).toBe('Etapas do processo');
+  });
+});

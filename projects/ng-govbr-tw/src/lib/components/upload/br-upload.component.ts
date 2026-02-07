@@ -37,12 +37,12 @@ export interface BrUploadFile {
     <!-- Drop zone -->
     <div class="font-rawline">
       @if (label) {
-        <label class="block text-govbr-sm font-semibold text-govbr-gray-80 mb-1">
+        <span class="block text-govbr-sm font-semibold text-govbr-gray-80 mb-1">
           {{ label }}
           @if (required) {
-            <span class="text-govbr-danger">*</span>
+            <span class="text-govbr-danger" aria-hidden="true">*</span>
           }
-        </label>
+        </span>
       }
 
       <div

@@ -5,9 +5,7 @@ import {
   HostListener,
   inject,
   Input,
-  Optional,
   Output,
-  Self,
   ViewEncapsulation,
 } from '@angular/core';
 
@@ -162,7 +160,9 @@ export class BrSelectComponent implements ControlValueAccessor {
     required: 'Campo obrigatório',
   };
 
-  constructor(@Self() @Optional() private ngControl: NgControl) {
+  private readonly ngControl = inject(NgControl, { optional: true, self: true });
+
+  constructor() {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }

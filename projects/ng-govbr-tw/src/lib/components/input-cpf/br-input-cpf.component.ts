@@ -1,9 +1,8 @@
 import {
   Component,
   Input,
-  Optional,
-  Self,
   ViewEncapsulation,
+  inject,
 } from '@angular/core';
 
 import { ControlValueAccessor, NgControl, ValidationErrors, Validator, AbstractControl } from '@angular/forms';
@@ -84,7 +83,9 @@ export class BrInputCpfComponent implements ControlValueAccessor, Validator {
     cpfIncomplete: 'CPF incompleto',
   };
 
-  constructor(@Self() @Optional() private ngControl: NgControl) {
+  private readonly ngControl = inject(NgControl, { optional: true, self: true });
+
+  constructor() {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }

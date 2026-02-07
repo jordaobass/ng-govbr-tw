@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation, inject } from '@angular/core';
+import { BrAnimationService } from '../../animations/animation.service';
 
 
 /**
@@ -12,6 +13,7 @@ import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angu
  * - **dark**: inverted colors for dark backgrounds
  * - **loading**: spinner state
  * - **active**: pressed/active state
+ * - **hoverEffect**: lift, grow, none (requires animations enabled)
  *
  * Usage:
  * ```html
@@ -20,6 +22,7 @@ import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angu
  * <br-button emphasis="tertiary" icon="trash">Excluir</br-button>
  * <br-button emphasis="primary" [circle]="true" icon="plus"></br-button>
  * <br-button emphasis="primary" [dark]="true">Modo escuro</br-button>
+ * <br-button emphasis="primary" hoverEffect="lift">Com hover lift</br-button>
  * ```
  */
 @Component({
@@ -47,8 +50,35 @@ import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angu
       }
     </button>
     `,
+  styles: [`
+    /* Hover lift effect */
+    .br-button-hover-lift {
+      transition: transform 200ms ease-out, box-shadow 200ms ease-out, background-color 200ms, color 200ms !important;
+    }
+    .br-button-hover-lift:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .br-button-hover-lift:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Hover grow effect */
+    .br-button-hover-grow {
+      transition: transform 200ms ease-out, background-color 200ms, color 200ms !important;
+    }
+    .br-button-hover-grow:hover:not(:disabled) {
+      transform: scale(1.02);
+    }
+    .br-button-hover-grow:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+  `],
 })
 export class BrButtonComponent {
+  private readonly animationService = inject(BrAnimationService);
+
   /** Emphasis level: primary (filled), secondary (outlined), tertiary (text-only), danger */
   @Input() emphasis: 'primary' | 'secondary' | 'tertiary' | 'danger' = 'primary';
 
@@ -91,6 +121,9 @@ export class BrButtonComponent {
   /** Icon position: left (default) or right */
   @Input() iconPosition: 'left' | 'right' = 'left';
 
+  /** Hover effect animation (requires animations enabled) */
+  @Input() hoverEffect: 'none' | 'lift' | 'grow' = 'none';
+
   @Output() clicked = new EventEmitter<MouseEvent>();
 
   get buttonClasses(): string {
@@ -109,8 +142,9 @@ export class BrButtonComponent {
     const disabledCls = this.disabled || this.loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
     const activeCls = this.active && !this.disabled ? 'ring-2 ring-offset-1' : '';
     const direction = this.iconPosition === 'right' ? 'flex-row-reverse' : '';
+    const hoverCls = this.getHoverEffectClass();
 
-    return [base, emphasisClasses, densityMap[this.density], shape, width, disabledCls, activeCls, direction]
+    return [base, emphasisClasses, densityMap[this.density], shape, width, disabledCls, activeCls, direction, hoverCls]
       .filter(Boolean)
       .join(' ');
   }
@@ -118,6 +152,18 @@ export class BrButtonComponent {
   get iconClasses(): string {
     const spacing = this.circle ? '' : (this.iconPosition === 'right' ? 'ml-2' : 'mr-2');
     return `fa-solid fa-${this.icon} flex-shrink-0 leading-none ${spacing}`;
+  }
+
+  private getHoverEffectClass(): string {
+    if (!this.animationService.isEnabled()) return '';
+    if (this.hoverEffect === 'none') return '';
+
+    const effectMap = {
+      lift: 'br-button-hover-lift',
+      grow: 'br-button-hover-grow',
+    } as const;
+
+    return effectMap[this.hoverEffect] || '';
   }
 
   private getEmphasisClasses(): string {

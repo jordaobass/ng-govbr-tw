@@ -1,5 +1,135 @@
 # Changelog
 
+## [1.0.0] - 2026-02-07
+
+### Adicionado
+
+- **Sistema de Animações** — Arquitetura completa e configurável:
+  - `BrAnimationService` — Serviço central com configuração global
+  - `BrAnimateDirective` — Diretiva para animar qualquer elemento
+  - `BrSuccessCheckComponent` — Checkmark animado para feedback
+  - Animações desabilitadas por padrão (opt-in)
+  - Respeita `prefers-reduced-motion` automaticamente
+  - 20+ keyframes: fadeIn, scaleIn, slideIn, pulse, shake, bounce, shimmer, etc.
+
+- **Interfaces de Animação** — Tipos TypeScript completos:
+  - `BrAnimationType`, `BrAnimationConfig`, `BrTransitionConfig`
+  - `BrAnimationEasing`, `BrAnimationDuration`
+  - `BrAnimationTrigger`: immediate, visible, hover, focus, click, manual
+  - `BrStaggerConfig` para animações em sequência
+
+### Melhorado
+
+- **`br-accordion`** — Animação de collapse/expand suave no painel
+- **`br-modal`** — Animação de entrada fade+scale no modal e backdrop
+- **`br-tooltip`** — Animação de entrada com fade+translate
+- **`br-skeleton`** — Nova animação shimmer (além de pulse e wave)
+- **`br-button`** — Novo input `hoverEffect` com opções: `lift`, `grow`, `none`
+- **`br-card`** — Novo input `hoverEffect` com opções: `lift`, `glow`, `shadow`, `none`
+
+### Como habilitar animações
+
+```typescript
+// No módulo principal ou providers
+import { BR_ANIMATION_CONFIG } from '@schenkerjon/ng-govbr-tw';
+
+providers: [
+  {
+    provide: BR_ANIMATION_CONFIG,
+    useValue: { enabled: true }
+  }
+]
+
+// Ou programaticamente
+constructor(private animationService: BrAnimationService) {
+  this.animationService.enable();
+}
+```
+
+## [0.5.1] - 2026-02-07
+
+### Adicionado
+
+- **`br-notification` (novo)** — Badge de notificação (contador no ícone):
+  - Contador numérico com máximo configurável (ex: `99+`)
+  - Modo dot (apenas ponto)
+  - Variantes: `danger`, `warning`, `success`, `info`, `primary`
+  - Posições: `top-right`, `top-left`, `bottom-right`, `bottom-left`
+  - Animação pulse opcional
+
+- **`br-signin` (novo)** — Botão "Entrar com Gov.br":
+  - Identidade visual oficial Gov.br
+  - Variantes: `primary` (azul), `secondary` (branco), `dark` (azul escuro)
+  - Tamanhos: `small`, `medium`, `large`
+  - Loading state com spinner
+  - Logo Gov.br integrado
+
+### Acessibilidade
+
+- Adicionadas regras de alto contraste para `br-notification` e `br-signin`
+
+## [0.5.0] - 2026-02-07
+
+### Adicionado
+
+- **`br-timeline` (novo)** — Componente de linha do tempo com estados:
+  - Status: `completed`, `current`, `pending`
+  - Orientação vertical ou horizontal
+  - Ícones customizáveis
+  - Suporte a data e descrição
+
+- **`br-switch` (novo)** — Toggle on/off estilo Gov.br:
+  - Suporte a ReactiveForms e ngModel
+  - Tamanhos: `small`, `medium`
+  - Label opcional
+
+- **`br-chip` (novo)** — Tags/chips selecionáveis:
+  - Variantes: `default`, `primary`, `success`, `warning`, `danger`, `info`
+  - Tamanhos: `small`, `medium`, `large`
+  - Selecionável com `selectable`
+  - Removível com `removable`
+
+- **`br-divider` (novo)** — Linha divisória:
+  - Variantes: `solid`, `dashed`, `dotted`
+  - Texto central opcional
+  - Orientação horizontal ou vertical
+
+- **`br-stepper` (novo)** — Indicador de etapas (diferente do wizard):
+  - Orientação horizontal ou vertical
+  - Modo compacto
+  - Clicável para navegação
+  - Etapas opcionais
+
+- **`br-input-telefone` (novo)** — Input especializado para telefone:
+  - Máscara automática: `(XX) XXXXX-XXXX` (celular) ou `(XX) XXXX-XXXX` (fixo)
+  - Validação de DDD (11-99) e primeiro dígito de celular (9)
+  - Suporte a ReactiveForms e ngModel
+
+- **`br-input-cep` (novo)** — Input especializado para CEP:
+  - Máscara automática: `XXXXX-XXX`
+  - Busca automática via ViaCEP API
+  - Output `addressFound` com dados do endereço
+  - Suporte a ReactiveForms e ngModel
+
+- **`br-input-money` (novo)** — Input monetário:
+  - Máscara brasileira: `R$ 1.234,56`
+  - Prefixo configurável
+  - Validação de min/max
+  - Valor armazenado em centavos para precisão
+
+### Melhorado
+
+- **`br-pagination`** — Melhorias para uso em sistemas:
+  - Novo input `showItemsPerPage` com seletor de itens por página
+  - Novo input `showSummary` exibe "Mostrando X-Y de Z"
+  - Input `itemsPerPageOptions` para customizar opções
+  - Output `itemsPerPageChange` para paginação server-side
+
+### Acessibilidade
+
+- Adicionadas regras de alto contraste para todos os novos componentes
+- Timeline, Switch, Chip, Stepper, Divider e Pagination com suporte completo
+
 ## [0.4.1] - 2026-02-07
 
 ### Corrigido

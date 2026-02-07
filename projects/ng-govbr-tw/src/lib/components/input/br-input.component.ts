@@ -1,17 +1,14 @@
 import {
   Component,
   EventEmitter,
-  forwardRef,
+  inject,
   Input,
-  Optional,
   Output,
-  Self,
   ViewEncapsulation,
 } from '@angular/core';
 
 import {
   ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
   FormsModule,
   NgControl,
   ValidationErrors,
@@ -252,7 +249,9 @@ export class BrInputComponent implements ControlValueAccessor {
     pattern: 'Formato inválido',
   };
 
-  constructor(@Self() @Optional() private ngControl: NgControl) {
+  private readonly ngControl = inject(NgControl, { optional: true, self: true });
+
+  constructor() {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
