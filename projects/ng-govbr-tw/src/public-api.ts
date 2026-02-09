@@ -28,6 +28,7 @@ export {
   BrMegaMenuColumnComponent,
   BrMegaMenuLinkComponent,
 } from './lib/components/mega-menu/br-mega-menu.component';
+export type { BrMenuItem, BrSocialLink } from './lib/components/mega-menu/br-mega-menu.component';
 export { BrLayoutComponent } from './lib/components/layout/br-layout.component';
 export { BrModalComponent } from './lib/components/modal/br-modal.component';
 export { BrLoadingComponent } from './lib/components/loading/br-loading.component';

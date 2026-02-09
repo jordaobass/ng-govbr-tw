@@ -16,14 +16,6 @@ import {
   encapsulation: ViewEncapsulation.None,
   template: `
     <div class="min-h-screen flex flex-col bg-govbr-gray-2">
-      <br-header
-        systemTitle="ng-govbr-tw"
-        systemSubtitle="Componentes Angular + Tailwind"
-        logoSrc="https://www.gov.br/++theme++flavor/static/images/govbr-logo-large.png"
-        [showSearch]="false"
-        [showLogin]="false"
-      ></br-header>
-
       <main class="flex-1">
         <router-outlet></router-outlet>
       </main>

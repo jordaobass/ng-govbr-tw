@@ -227,7 +227,10 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       gap: 8px;
       margin-top: 8px;
       margin-left: 32px;
+      padding: 8px 12px;
       font-size: 14px;
+      font-weight: 500;
+      border-radius: 4px;
     }
 
     .br-checkbox-feedback i {
@@ -236,6 +239,22 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
     .br-checkbox-feedback.danger {
       color: var(--govbr-danger, #e52207);
+      background-color: #fde0dc;
+    }
+
+    .br-checkbox-feedback.success {
+      color: var(--govbr-success, #168821);
+      background-color: #d4edda;
+    }
+
+    .br-checkbox-feedback.warning {
+      color: var(--govbr-warning-alt, #c27800);
+      background-color: #fff3cd;
+    }
+
+    .br-checkbox-feedback.info {
+      color: var(--govbr-info, #155bcb);
+      background-color: #d4e5ff;
     }
   `],
 })

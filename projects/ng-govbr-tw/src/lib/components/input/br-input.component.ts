@@ -185,7 +185,7 @@ import {
     .br-input-field {
       flex: 1;
       width: 100%;
-      height: 40px;
+      height: var(--govbr-input-medium, 40px);
       padding: 0 16px;
       font-family: inherit;
       font-size: 14px;
@@ -214,8 +214,8 @@ import {
       font-weight: 400;
     }
 
-    .br-input-field:hover:not(:disabled) {
-      background-image: linear-gradient(rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04));
+    .br-input-field:not(:disabled):hover {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08));
     }
 
     .br-input-field:focus {
@@ -344,7 +344,10 @@ import {
       align-items: center;
       gap: 8px;
       margin-top: 8px;
+      padding: 8px 12px;
       font-size: 14px;
+      font-weight: 500;
+      border-radius: 4px;
     }
 
     .br-input-feedback i {
@@ -353,18 +356,22 @@ import {
 
     .br-input-feedback.danger {
       color: var(--govbr-danger, #e52207);
+      background-color: #fde0dc;
     }
 
     .br-input-feedback.success {
       color: var(--govbr-success, #168821);
+      background-color: #d4edda;
     }
 
     .br-input-feedback.warning {
       color: var(--govbr-warning-alt, #c27800);
+      background-color: #fff3cd;
     }
 
     .br-input-feedback.info {
       color: var(--govbr-info, #155bcb);
+      background-color: #d4e5ff;
     }
 
     /* States */
@@ -400,7 +407,7 @@ import {
 
     /* Density: Small */
     .br-input.density-small .br-input-field {
-      height: 32px;
+      height: var(--govbr-input-small, 32px);
       font-size: 12px;
       padding: 0 12px;
     }
@@ -425,7 +432,7 @@ import {
 
     /* Density: Large */
     .br-input.density-large .br-input-field {
-      height: 48px;
+      height: var(--govbr-input-large, 48px);
       font-size: 16px;
       padding: 0 20px;
     }

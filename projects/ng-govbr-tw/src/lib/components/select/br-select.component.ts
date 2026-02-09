@@ -262,7 +262,7 @@ export class BrSelectComponent implements ControlValueAccessor {
 
     const disabledCls = this.isDisabled
       ? 'bg-govbr-gray-2 text-govbr-gray-40 cursor-not-allowed'
-      : 'bg-white cursor-pointer';
+      : 'bg-white cursor-pointer hover:bg-[rgba(0,0,0,0.08)]';
 
     return [base, statusCls, disabledCls].filter(Boolean).join(' ');
   }

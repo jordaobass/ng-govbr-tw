@@ -275,7 +275,8 @@ html.govbr-contrast br-table table tbody tr:nth-child(even) td {
 }
 
 html.govbr-contrast br-table table tbody tr:hover td {
-  background-color: #222 !important;
+  background-color: #333 !important;
+  color: #fff !important;
 }
 
 html.govbr-contrast br-table table tbody tr.br-table-row-selected td {
@@ -508,4 +509,546 @@ html.govbr-contrast br-signin button:hover:not(:disabled) {
 html.govbr-contrast br-signin svg circle,
 html.govbr-contrast br-signin svg path {
   fill: currentColor !important;
+}
+
+/* ═══ Input (br-input) ═══ */
+html.govbr-contrast .br-input-field {
+  background-color: #111 !important;
+  color: #fff !important;
+  border-color: #666 !important;
+}
+
+html.govbr-contrast .br-input-field::placeholder {
+  color: #888 !important;
+}
+
+html.govbr-contrast .br-input-field:focus {
+  border-color: #ffff00 !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 0, 0.4) !important;
+}
+
+html.govbr-contrast .br-input-field:disabled {
+  background-color: #222 !important;
+  color: #666 !important;
+}
+
+html.govbr-contrast .br-input-label {
+  color: #fff !important;
+}
+
+html.govbr-contrast .br-input-helper {
+  color: #aaa !important;
+}
+
+html.govbr-contrast .br-input-required {
+  color: #ff5f5f !important;
+}
+
+html.govbr-contrast .br-input-addon {
+  background-color: #222 !important;
+  color: #fff !important;
+  border-color: #666 !important;
+}
+
+html.govbr-contrast .br-input-icon {
+  color: #aaa !important;
+}
+
+html.govbr-contrast .br-input-button {
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast .br-input-button:hover {
+  background-color: #333 !important;
+}
+
+html.govbr-contrast .br-input-counter {
+  color: #888 !important;
+}
+
+/* Input feedback messages */
+html.govbr-contrast .br-input-feedback.danger {
+  background-color: #330000 !important;
+  color: #ff5f5f !important;
+}
+
+html.govbr-contrast .br-input-feedback.success {
+  background-color: #003300 !important;
+  color: #00ff5f !important;
+}
+
+html.govbr-contrast .br-input-feedback.warning {
+  background-color: #332200 !important;
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast .br-input-feedback.info {
+  background-color: #001133 !important;
+  color: #5fc8ff !important;
+}
+
+/* Input invalid state */
+html.govbr-contrast .br-input.invalid .br-input-field {
+  border-color: #ff5f5f !important;
+}
+
+html.govbr-contrast .br-input.invalid .br-input-field:focus {
+  box-shadow: 0 0 0 3px rgba(255, 95, 95, 0.4) !important;
+}
+
+/* Input valid state */
+html.govbr-contrast .br-input.valid .br-input-field {
+  border-color: #00ff5f !important;
+}
+
+html.govbr-contrast .br-input.valid .br-input-field:focus {
+  box-shadow: 0 0 0 3px rgba(0, 255, 95, 0.4) !important;
+}
+
+/* Highlight input */
+html.govbr-contrast .br-input.highlight .br-input-field {
+  background-color: #1a1a1a !important;
+}
+
+/* ═══ Textarea ═══ */
+html.govbr-contrast textarea.br-input-field {
+  background-color: #111 !important;
+  color: #fff !important;
+}
+
+/* ═══ Checkbox (br-checkbox) contrast improvements ═══ */
+html.govbr-contrast .br-checkbox input + label {
+  color: #fff !important;
+}
+
+html.govbr-contrast .br-checkbox input + label::before {
+  background-color: #111 !important;
+  border-color: #666 !important;
+}
+
+html.govbr-contrast .br-checkbox input:checked + label::before {
+  border-color: #fff !important;
+}
+
+html.govbr-contrast .br-checkbox input:checked + label::after {
+  border-color: #fff !important;
+}
+
+html.govbr-contrast .br-checkbox input:indeterminate + label::before {
+  background-color: #fff !important;
+  border-color: #fff !important;
+}
+
+html.govbr-contrast .br-checkbox input:indeterminate + label::after {
+  border-color: #000 !important;
+}
+
+html.govbr-contrast .br-checkbox input:focus + label::before,
+html.govbr-contrast .br-checkbox input:focus-visible + label::before {
+  border-color: #ffff00 !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 0, 0.4) !important;
+}
+
+html.govbr-contrast .br-checkbox.invalid input + label::before {
+  border-color: #ff5f5f !important;
+}
+
+html.govbr-contrast .br-checkbox.valid input + label::before {
+  border-color: #00ff5f !important;
+}
+
+html.govbr-contrast .br-checkbox-feedback.danger {
+  background-color: #330000 !important;
+  color: #ff5f5f !important;
+}
+
+html.govbr-contrast .br-checkbox-feedback.success {
+  background-color: #003300 !important;
+  color: #00ff5f !important;
+}
+
+/* ═══ Radio (br-radio) ═══ */
+html.govbr-contrast .br-radio label {
+  color: #fff !important;
+}
+
+html.govbr-contrast .br-radio label::before {
+  background-color: #111 !important;
+  border-color: #666 !important;
+}
+
+html.govbr-contrast .br-radio input:checked + label::before {
+  border-color: #fff !important;
+}
+
+html.govbr-contrast .br-radio input:checked + label::after {
+  background-color: #fff !important;
+}
+
+html.govbr-contrast .br-radio input:focus + label::before {
+  border-color: #ffff00 !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 0, 0.4) !important;
+}
+
+/* ═══ Select (br-select) ═══ */
+html.govbr-contrast br-select button.govbr-input {
+  background-color: #111 !important;
+  color: #fff !important;
+  border-color: #666 !important;
+}
+
+html.govbr-contrast br-select button.govbr-input:hover:not(:disabled) {
+  background-color: #222 !important;
+}
+
+html.govbr-contrast br-select button.govbr-input:focus {
+  border-color: #ffff00 !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 0, 0.4) !important;
+}
+
+html.govbr-contrast br-select button.govbr-input:disabled {
+  background-color: #222 !important;
+  color: #666 !important;
+}
+
+html.govbr-contrast br-select button.govbr-input span.text-govbr-gray-80 {
+  color: #fff !important;
+}
+
+html.govbr-contrast br-select button.govbr-input span.text-govbr-gray-40 {
+  color: #888 !important;
+}
+
+html.govbr-contrast br-select button.govbr-input i {
+  color: #ffff00 !important;
+}
+
+/* Select dropdown */
+html.govbr-contrast br-select div.bg-white {
+  background-color: #111 !important;
+  border-color: #444 !important;
+}
+
+html.govbr-contrast br-select ul li {
+  color: #fff !important;
+}
+
+html.govbr-contrast br-select ul li:hover {
+  background-color: #333 !important;
+}
+
+html.govbr-contrast br-select ul li.bg-govbr-primary-lightest {
+  background-color: #333 !important;
+  color: #ffff00 !important;
+}
+
+/* Select search input */
+html.govbr-contrast br-select input[type="text"] {
+  background-color: #1a1a1a !important;
+  color: #fff !important;
+  border-color: #666 !important;
+}
+
+html.govbr-contrast br-select input[type="text"]:focus {
+  border-color: #ffff00 !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 0, 0.4) !important;
+}
+
+html.govbr-contrast br-select input[type="text"]::placeholder {
+  color: #888 !important;
+}
+
+/* Select multiple checkbox */
+html.govbr-contrast br-select span.bg-govbr-primary {
+  background-color: #fff !important;
+  border-color: #fff !important;
+}
+
+html.govbr-contrast br-select span.bg-govbr-primary svg {
+  color: #000 !important;
+}
+
+/* Select error */
+html.govbr-contrast br-select span.text-govbr-danger {
+  color: #ff5f5f !important;
+}
+
+/* ═══ Pagination contextual inputs ═══ */
+html.govbr-contrast .br-pagination input[type="number"],
+html.govbr-contrast .br-pagination input[type="text"] {
+  background-color: #111 !important;
+  color: #fff !important;
+  border-color: #666 !important;
+}
+
+html.govbr-contrast .br-pagination input:focus {
+  border-color: #ffff00 !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 0, 0.4) !important;
+}
+
+html.govbr-contrast .br-pagination.variant-contextual {
+  background-color: #111 !important;
+}
+
+html.govbr-contrast .br-pagination .br-pagination-divider {
+  background-color: #444 !important;
+}
+
+html.govbr-contrast .br-pagination .br-pagination-info {
+  color: #aaa !important;
+}
+
+/* ═══ Generic form classes (Tailwind-based) ═══ */
+html.govbr-contrast .govbr-input {
+  background-color: #111 !important;
+  color: #fff !important;
+  border-color: #666 !important;
+}
+
+html.govbr-contrast .govbr-input:focus {
+  border-color: #ffff00 !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 0, 0.4) !important;
+}
+
+html.govbr-contrast .govbr-input:hover:not(:disabled) {
+  background-color: #1a1a1a !important;
+}
+
+html.govbr-contrast .govbr-input:disabled {
+  background-color: #222 !important;
+  color: #666 !important;
+}
+
+/* ═══ Card (br-card) ═══ */
+html.govbr-contrast br-card .bg-white {
+  background-color: #111 !important;
+  border-color: #444 !important;
+}
+
+html.govbr-contrast br-card .text-govbr-gray-80 {
+  color: #fff !important;
+}
+
+html.govbr-contrast br-card .text-govbr-gray-60 {
+  color: #ccc !important;
+}
+
+/* ═══ Accordion (br-accordion) ═══ */
+html.govbr-contrast br-accordion .bg-white {
+  background-color: #111 !important;
+}
+
+html.govbr-contrast br-accordion button {
+  color: #fff !important;
+}
+
+html.govbr-contrast br-accordion button:hover {
+  background-color: #222 !important;
+}
+
+html.govbr-contrast br-accordion button i {
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast br-accordion .border-govbr-gray-10 {
+  border-color: #444 !important;
+}
+
+/* ═══ Tooltip (br-tooltip) ═══ */
+html.govbr-contrast .br-tooltip {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 1px solid #666 !important;
+}
+
+/* ═══ Modal (br-modal) ═══ */
+html.govbr-contrast br-modal .bg-white {
+  background-color: #111 !important;
+  border: 1px solid #444 !important;
+}
+
+html.govbr-contrast br-modal .text-govbr-gray-80 {
+  color: #fff !important;
+}
+
+html.govbr-contrast br-modal button.text-govbr-gray-60 {
+  color: #ccc !important;
+}
+
+html.govbr-contrast br-modal button.text-govbr-gray-60:hover {
+  color: #fff !important;
+  background-color: #333 !important;
+}
+
+/* ═══ Breadcrumb (br-breadcrumb) ═══ */
+html.govbr-contrast br-breadcrumb a {
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast br-breadcrumb span.text-govbr-gray-60 {
+  color: #aaa !important;
+}
+
+html.govbr-contrast br-breadcrumb span.text-govbr-gray-80 {
+  color: #fff !important;
+}
+
+/* ═══ Tab (br-tab) ═══ */
+html.govbr-contrast br-tab button {
+  color: #fff !important;
+}
+
+html.govbr-contrast br-tab button:hover {
+  background-color: #222 !important;
+}
+
+html.govbr-contrast br-tab button.border-govbr-primary {
+  border-color: #fff !important;
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast br-tab .border-govbr-gray-10 {
+  border-color: #444 !important;
+}
+
+/* ═══ List (br-list) ═══ */
+html.govbr-contrast br-list .bg-white {
+  background-color: #111 !important;
+}
+
+html.govbr-contrast br-list li {
+  color: #fff !important;
+  border-color: #444 !important;
+}
+
+html.govbr-contrast br-list li:hover {
+  background-color: #222 !important;
+}
+
+/* ═══ Loading (br-loading) ═══ */
+html.govbr-contrast br-loading .text-govbr-primary {
+  color: #fff !important;
+}
+
+/* ═══ Message (br-message) ═══ */
+html.govbr-contrast br-message .bg-govbr-info-light,
+html.govbr-contrast br-message div[class*="bg-"] {
+  background-color: #001133 !important;
+  border-color: #5fc8ff !important;
+}
+
+html.govbr-contrast br-message .bg-govbr-success-light {
+  background-color: #003300 !important;
+  border-color: #00ff5f !important;
+}
+
+html.govbr-contrast br-message .bg-govbr-warning-light {
+  background-color: #332200 !important;
+  border-color: #ffff00 !important;
+}
+
+html.govbr-contrast br-message .bg-govbr-danger-light {
+  background-color: #330000 !important;
+  border-color: #ff5f5f !important;
+}
+
+html.govbr-contrast br-message .text-govbr-info {
+  color: #5fc8ff !important;
+}
+
+html.govbr-contrast br-message .text-govbr-success {
+  color: #00ff5f !important;
+}
+
+html.govbr-contrast br-message .text-govbr-warning {
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast br-message .text-govbr-danger {
+  color: #ff5f5f !important;
+}
+
+/* ═══ Badge (br-badge) ═══ */
+html.govbr-contrast br-badge .bg-govbr-primary {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast br-badge .bg-govbr-success {
+  background-color: #00ff5f !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast br-badge .bg-govbr-danger {
+  background-color: #ff5f5f !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast br-badge .bg-govbr-warning {
+  background-color: #ffff00 !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast br-badge .bg-govbr-info {
+  background-color: #5fc8ff !important;
+  color: #000 !important;
+}
+
+/* ═══ Showcase Topbar ═══ */
+html.govbr-contrast .showcase-topbar {
+  background: #000 !important;
+  border-bottom: 1px solid #444 !important;
+}
+
+html.govbr-contrast .showcase-topbar-title {
+  color: #fff !important;
+}
+
+html.govbr-contrast .showcase-topbar-link {
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast .showcase-topbar-link:hover,
+html.govbr-contrast .showcase-topbar-link.active {
+  background: #333 !important;
+  color: #fff !important;
+}
+
+html.govbr-contrast .showcase-sidebar {
+  background: #111 !important;
+  border-color: #444 !important;
+}
+
+html.govbr-contrast .showcase-nav-item {
+  color: #fff !important;
+}
+
+html.govbr-contrast .showcase-nav-item:hover {
+  background: #333 !important;
+}
+
+html.govbr-contrast .showcase-nav-item.active {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast .showcase-section-title h2,
+html.govbr-contrast .showcase-section-title p {
+  color: #fff !important;
+}
+
+html.govbr-contrast .bg-white {
+  background-color: #111 !important;
+}
+
+html.govbr-contrast .border-govbr-gray-10 {
+  border-color: #444 !important;
+}
+
+html.govbr-contrast .bg-govbr-gray-2 {
+  background-color: #1a1a1a !important;
+}
+
+html.govbr-contrast pre code {
+  color: #fff !important;
 }

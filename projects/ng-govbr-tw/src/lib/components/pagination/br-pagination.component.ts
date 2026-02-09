@@ -16,6 +16,9 @@ import {
       class="br-pagination font-rawline"
       [class.density-small]="density === 'small'"
       [class.density-large]="density === 'large'"
+      [class.variant-default]="variant === 'default'"
+      [class.variant-contextual]="variant === 'contextual'"
+      [attr.data-variant]="variant"
       [attr.data-total]="totalItems"
       [attr.data-current]="page"
       [attr.data-per-page]="itemsPerPage"
@@ -124,149 +127,143 @@ import {
 
       <!-- ═══ CONTEXTUAL VARIANT: Padrão Gov.br oficial ═══ -->
       @if (variant === 'contextual') {
-        <!-- LEFT GROUP: Exibir + Info -->
-        <div class="pagination-left-group">
-          <!-- Items per page -->
-          @if (showItemsPerPage) {
-            <div class="pagination-per-page">
-              <div class="br-pagination-dropdown">
-                <div class="br-pagination-dropdown-input">
-                  <label [for]="perPageSelectId">Exibir</label>
-                  <input
-                    [id]="perPageSelectId"
-                    type="text"
-                    [value]="itemsPerPage"
-                    readonly
-                    (click)="togglePerPageDropdown()"
-                    (keydown.enter)="togglePerPageDropdown()"
-                    (keydown.space)="togglePerPageDropdown(); $event.preventDefault()"
-                  />
-                  <button
-                    type="button"
-                    class="br-pagination-dropdown-trigger"
-                    aria-label="Exibir lista"
-                    tabindex="-1"
-                    (click)="togglePerPageDropdown()"
-                  >
-                    <i class="fas fa-angle-down" aria-hidden="true"></i>
-                  </button>
-                </div>
-                @if (perPageDropdownOpen) {
-                  <div class="br-pagination-dropdown-list" tabindex="0">
-                    @for (option of itemsPerPageOptions; track option) {
-                      <div
-                        class="br-pagination-dropdown-item"
-                        [class.selected]="option === itemsPerPage"
-                        tabindex="-1"
-                        (click)="selectItemsPerPage(option)"
-                        (keydown.enter)="selectItemsPerPage(option)"
-                      >
-                        <input
-                          type="radio"
-                          [id]="'per-page-' + option + '-' + uniqueId"
-                          [name]="'per-page-' + uniqueId"
-                          [value]="option"
-                          [checked]="option === itemsPerPage"
-                        />
-                        <label [for]="'per-page-' + option + '-' + uniqueId">{{ option }}</label>
-                      </div>
-                    }
-                  </div>
-                }
+        <!-- Items per page -->
+        @if (showItemsPerPage) {
+          <div class="pagination-per-page">
+            <div class="br-pagination-dropdown">
+              <div class="br-pagination-dropdown-input">
+                <label [for]="perPageSelectId">Exibir</label>
+                <input
+                  [id]="perPageSelectId"
+                  type="text"
+                  [value]="itemsPerPage"
+                  readonly
+                  (click)="togglePerPageDropdown()"
+                  (keydown.enter)="togglePerPageDropdown()"
+                  (keydown.space)="togglePerPageDropdown(); $event.preventDefault()"
+                />
+                <button
+                  type="button"
+                  class="br-pagination-dropdown-trigger"
+                  aria-label="Exibir lista"
+                  tabindex="-1"
+                  (click)="togglePerPageDropdown()"
+                >
+                  <i class="fas fa-angle-down" aria-hidden="true"></i>
+                </button>
               </div>
-            </div>
-          }
-
-          <!-- Divider -->
-          @if (showItemsPerPage && showSummary) {
-            <span class="br-pagination-divider"></span>
-          }
-
-          <!-- Information -->
-          @if (showSummary && totalItems > 0) {
-            <div class="pagination-information">
-              <span class="current">{{ startItem }}</span>–<span class="per-page">{{ endItem }}</span>&nbsp;de&nbsp;<span class="total">{{ totalItems }}</span>&nbsp;itens
-            </div>
-          }
-        </div>
-
-        <!-- RIGHT GROUP: Página + Arrows -->
-        <div class="pagination-right-group">
-          <!-- Go to page -->
-          @if (showGoToPage) {
-            <div class="pagination-go-to-page">
-              <div class="br-pagination-dropdown">
-                <div class="br-pagination-dropdown-input">
-                  <label [for]="goToPageSelectId">Página</label>
-                  <input
-                    [id]="goToPageSelectId"
-                    type="text"
-                    [value]="page"
-                    readonly
-                    (click)="toggleGoToPageDropdown()"
-                    (keydown.enter)="toggleGoToPageDropdown()"
-                    (keydown.space)="toggleGoToPageDropdown(); $event.preventDefault()"
-                  />
-                  <button
-                    type="button"
-                    class="br-pagination-dropdown-trigger"
-                    aria-label="Exibir lista"
-                    tabindex="-1"
-                    (click)="toggleGoToPageDropdown()"
-                  >
-                    <i class="fas fa-angle-down" aria-hidden="true"></i>
-                  </button>
+              @if (perPageDropdownOpen) {
+                <div class="br-pagination-dropdown-list" tabindex="0">
+                  @for (option of itemsPerPageOptions; track option) {
+                    <div
+                      class="br-pagination-dropdown-item"
+                      [class.selected]="option === itemsPerPage"
+                      tabindex="-1"
+                      (click)="selectItemsPerPage(option)"
+                      (keydown.enter)="selectItemsPerPage(option)"
+                    >
+                      <input
+                        type="radio"
+                        [id]="'per-page-' + option + '-' + uniqueId"
+                        [name]="'per-page-' + uniqueId"
+                        [value]="option"
+                        [checked]="option === itemsPerPage"
+                      />
+                      <label [for]="'per-page-' + option + '-' + uniqueId">{{ option }}</label>
+                    </div>
+                  }
                 </div>
-                @if (goToPageDropdownOpen) {
-                  <div class="br-pagination-dropdown-list" tabindex="0">
-                    @for (p of allPages; track p) {
-                      <div
-                        class="br-pagination-dropdown-item"
-                        [class.selected]="p === page"
-                        tabindex="-1"
-                        (click)="selectPage(p)"
-                        (keydown.enter)="selectPage(p)"
-                      >
-                        <input
-                          type="radio"
-                          [id]="'go-to-' + p + '-' + uniqueId"
-                          [name]="'go-to-' + uniqueId"
-                          [value]="p"
-                          [checked]="p === page"
-                        />
-                        <label [for]="'go-to-' + p + '-' + uniqueId">{{ p }}</label>
-                      </div>
-                    }
-                  </div>
-                }
-              </div>
+              }
             </div>
-
-            <!-- Divider -->
-            <span class="br-pagination-divider"></span>
-          }
-
-          <!-- Arrow buttons -->
-          <div class="pagination-arrows">
-            <button
-              type="button"
-              class="br-button-circle"
-              [disabled]="page === 1"
-              aria-label="Voltar página"
-              (click)="goTo(page - 1)"
-            >
-              <i class="fas fa-angle-left" aria-hidden="true"></i>
-            </button>
-            <button
-              type="button"
-              class="br-button-circle"
-              [disabled]="page === totalPages"
-              aria-label="Página seguinte"
-              (click)="goTo(page + 1)"
-            >
-              <i class="fas fa-angle-right" aria-hidden="true"></i>
-            </button>
           </div>
+        }
+
+        <!-- Divider after per-page -->
+        @if (showItemsPerPage && showSummary) {
+          <span class="br-divider"></span>
+        }
+
+        <!-- Information -->
+        @if (showSummary && totalItems > 0) {
+          <div class="pagination-information">
+            {{ startItem }}–{{ endItem }} de {{ totalItems }} itens
+          </div>
+        }
+
+        <!-- Go to page (pushed right with margin-left: auto) -->
+        @if (showGoToPage) {
+          <div class="pagination-go-to-page">
+            <div class="br-pagination-dropdown">
+              <div class="br-pagination-dropdown-input">
+                <label [for]="goToPageSelectId">Página</label>
+                <input
+                  [id]="goToPageSelectId"
+                  type="text"
+                  [value]="page"
+                  readonly
+                  (click)="toggleGoToPageDropdown()"
+                  (keydown.enter)="toggleGoToPageDropdown()"
+                  (keydown.space)="toggleGoToPageDropdown(); $event.preventDefault()"
+                />
+                <button
+                  type="button"
+                  class="br-pagination-dropdown-trigger"
+                  aria-label="Exibir lista"
+                  tabindex="-1"
+                  (click)="toggleGoToPageDropdown()"
+                >
+                  <i class="fas fa-angle-down" aria-hidden="true"></i>
+                </button>
+              </div>
+              @if (goToPageDropdownOpen) {
+                <div class="br-pagination-dropdown-list" tabindex="0">
+                  @for (p of allPages; track p) {
+                    <div
+                      class="br-pagination-dropdown-item"
+                      [class.selected]="p === page"
+                      tabindex="-1"
+                      (click)="selectPage(p)"
+                      (keydown.enter)="selectPage(p)"
+                    >
+                      <input
+                        type="radio"
+                        [id]="'go-to-' + p + '-' + uniqueId"
+                        [name]="'go-to-' + uniqueId"
+                        [value]="p"
+                        [checked]="p === page"
+                      />
+                      <label [for]="'go-to-' + p + '-' + uniqueId">{{ p }}</label>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Divider before arrows -->
+          <span class="br-divider"></span>
+        }
+
+        <!-- Arrow buttons -->
+        <div class="pagination-arrows">
+          <button
+            type="button"
+            class="br-button-circle"
+            [disabled]="page === 1"
+            aria-label="Voltar página"
+            (click)="goTo(page - 1)"
+          >
+            <i class="fas fa-angle-left" aria-hidden="true"></i>
+          </button>
+          <button
+            type="button"
+            class="br-button-circle"
+            [disabled]="page === totalPages"
+            aria-label="Página seguinte"
+            (click)="goTo(page + 1)"
+          >
+            <i class="fas fa-angle-right" aria-hidden="true"></i>
+          </button>
         </div>
       }
     </nav>
@@ -274,6 +271,8 @@ import {
   styles: [`
     .br-pagination {
       --pagination-size: 32px;
+      --gold-vivid-40: #c2850c;
+      --focus-color: var(--gold-vivid-40);
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -306,7 +305,8 @@ import {
       background: #fff;
       border: 1px solid var(--govbr-gray-20, #ccc);
       border-radius: 4px;
-      padding: 8px 32px 8px 12px;
+      height: var(--pagination-size);
+      padding: 0 32px 0 12px;
       font-size: 14px;
       color: var(--govbr-gray-80, #333);
       cursor: pointer;
@@ -320,8 +320,8 @@ import {
 
     .br-pagination-select select:focus {
       outline: none;
-      border-color: var(--govbr-focus-color, #ffbe2e);
-      box-shadow: 0 0 0 3px rgba(255, 190, 46, 0.45);
+      border-color: var(--focus-color, #c2850c);
+      box-shadow: 0 0 0 3px rgba(194, 133, 12, 0.45);
     }
 
     .br-pagination-select i {
@@ -343,13 +343,13 @@ import {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
+      width: var(--pagination-size);
+      height: var(--pagination-size);
       background: transparent;
       border: none;
       border-radius: 50%;
       color: var(--govbr-primary, #1351b4);
-      font-size: 16px;
+      font-size: 14px;
       cursor: pointer;
       transition: background-color 0.2s, color 0.2s;
     }
@@ -360,7 +360,7 @@ import {
 
     .br-pagination-button:focus {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(255, 190, 46, 0.45);
+      box-shadow: 0 0 0 3px rgba(194, 133, 12, 0.45);
     }
 
     .br-pagination-button.disabled,
@@ -378,7 +378,7 @@ import {
 
     .br-pagination-input {
       width: 56px;
-      height: 40px;
+      height: var(--pagination-size);
       text-align: center;
       border: 1px solid var(--govbr-gray-20, #ccc);
       border-radius: 4px;
@@ -396,8 +396,8 @@ import {
 
     .br-pagination-input:focus {
       outline: none;
-      border-color: var(--govbr-focus-color, #ffbe2e);
-      box-shadow: 0 0 0 3px rgba(255, 190, 46, 0.45);
+      border-color: var(--focus-color, #c2850c);
+      box-shadow: 0 0 0 3px rgba(194, 133, 12, 0.45);
     }
 
     .br-pagination-text {
@@ -417,43 +417,50 @@ import {
 
     /* ═══ CONTEXTUAL VARIANT STYLES (Padrão Gov.br) ═══ */
 
-    /* Left and Right groups */
-    .pagination-left-group {
+    .br-pagination.variant-contextual {
       display: flex;
       align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      width: 100%;
+      background: #fff;
+      border-radius: 4px;
     }
 
-    .pagination-right-group {
+    /* Cada grupo não pode esticar */
+    .br-pagination.variant-contextual > .pagination-per-page,
+    .br-pagination.variant-contextual > .pagination-information,
+    .br-pagination.variant-contextual > .pagination-go-to-page,
+    .br-pagination.variant-contextual > .pagination-arrows {
       display: flex;
       align-items: center;
+      flex: 0 0 auto;
+    }
+
+    /* Empurra o bloco "Página" + select para a direita (antes das setas) */
+    .br-pagination.variant-contextual > .pagination-go-to-page {
       margin-left: auto;
     }
 
-    .br-pagination-divider {
-      display: block;
-      width: 1px;
-      height: 24px;
-      background-color: var(--govbr-gray-20, #ccc);
-      margin: 0 12px;
+    /* Setas ficam coladas no lado direito e não esticam */
+    .br-pagination.variant-contextual > .pagination-arrows {
+      gap: 8px;
     }
 
-    .pagination-per-page,
-    .pagination-go-to-page {
-      display: flex;
-      align-items: center;
-    }
-
-    .pagination-information {
-      display: flex;
-      align-items: center;
+    /* Texto "1–20 de 50 itens" não quebra */
+    .br-pagination.variant-contextual .pagination-information {
+      white-space: nowrap;
       font-size: 14px;
       color: var(--govbr-gray-80, #333);
     }
 
-    .pagination-arrows {
-      display: flex;
-      align-items: center;
-      gap: 4px;
+    /* Divisor vertical igual ao Gov.br */
+    .br-pagination.variant-contextual .br-divider {
+      display: block;
+      width: 1px;
+      height: 24px;
+      background: #d1d5db;
+      flex: 0 0 auto;
     }
 
     /* Dropdown styles */
@@ -497,8 +504,8 @@ import {
 
     .br-pagination-dropdown-input input:focus {
       outline: none;
-      border-color: var(--govbr-focus-color, #ffbe2e);
-      box-shadow: 0 0 0 3px rgba(255, 190, 46, 0.45);
+      border-color: var(--focus-color, #c2850c);
+      box-shadow: 0 0 0 3px rgba(194, 133, 12, 0.45);
     }
 
     .br-pagination-dropdown-trigger {
@@ -603,7 +610,7 @@ import {
 
     .br-button-circle:focus {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(255, 190, 46, 0.45);
+      box-shadow: 0 0 0 3px rgba(194, 133, 12, 0.45);
     }
 
     .br-button-circle:disabled {
@@ -662,92 +669,86 @@ import {
       font-size: 16px;
     }
 
-    /* ═══ RESPONSIVE ═══ */
+    /* ═══ RESPONSIVE - Default Variant ═══ */
 
     /* Mobile (< 576px) - Apenas setas centralizadas */
     @media (max-width: 575.98px) {
-      .br-pagination {
+      .br-pagination.variant-default {
         justify-content: center;
         gap: 8px;
       }
 
-      .br-pagination-summary {
+      .br-pagination.variant-default .br-pagination-summary {
         width: 100%;
         text-align: center;
         margin-left: 0;
       }
 
-      .pagination-left-group {
-        display: none !important;
-      }
-
-      .pagination-right-group {
-        margin-left: 0;
-      }
-
-      .pagination-go-to-page,
-      .pagination-right-group > .br-pagination-divider {
-        display: none !important;
-      }
-
-      .br-pagination-navigation {
+      .br-pagination.variant-default .br-pagination-navigation {
         margin-left: 0;
       }
     }
 
-    /* Tablet (576px - 991px) - Info à esquerda, setas à direita */
-    @media (min-width: 576px) and (max-width: 991.98px) {
-      .br-pagination {
-        justify-content: space-between;
+    /* ═══ RESPONSIVE - Contextual Variant ═══ */
+
+    /* Mobile (< 576px) */
+    @media (max-width: 575.98px) {
+      .br-pagination.variant-contextual {
         flex-wrap: wrap;
-        gap: 12px;
+        row-gap: 10px;
       }
 
-      .pagination-left-group {
-        display: flex;
+      /* No mobile, "Página" não precisa empurrar */
+      .br-pagination.variant-contextual > .pagination-go-to-page {
+        margin-left: 0;
       }
 
-      .pagination-per-page,
-      .pagination-left-group > .br-pagination-divider:first-of-type {
-        display: none !important;
+      /* Esconde per-page e go-to-page no mobile */
+      .br-pagination.variant-contextual > .pagination-per-page,
+      .br-pagination.variant-contextual > .pagination-go-to-page {
+        display: none;
       }
 
-      .pagination-information {
-        display: flex;
+      /* Divisor pode sumir no mobile */
+      .br-pagination.variant-contextual .br-divider {
+        display: none;
       }
 
-      .pagination-right-group {
+      /* Centraliza as setas */
+      .br-pagination.variant-contextual > .pagination-arrows {
         margin-left: auto;
+        margin-right: auto;
       }
 
-      .pagination-go-to-page,
-      .pagination-right-group > .br-pagination-divider {
-        display: none !important;
+      /* Information centralizado */
+      .br-pagination.variant-contextual > .pagination-information {
+        width: 100%;
+        justify-content: center;
+        order: 1;
       }
     }
 
-    /* Desktop (>= 992px) - Todos os elementos */
-    @media (min-width: 992px) {
-      .br-pagination {
-        justify-content: space-between;
+    /* Tablet (576px - 991px) */
+    @media (min-width: 576px) and (max-width: 991.98px) {
+      .br-pagination.variant-contextual > .pagination-per-page {
+        display: none;
       }
 
-      .pagination-left-group,
-      .pagination-right-group {
+      .br-pagination.variant-contextual > .pagination-go-to-page {
+        display: none;
+      }
+
+      /* Esconde dividers no tablet */
+      .br-pagination.variant-contextual > .br-divider {
+        display: none;
+      }
+
+      /* Information visível, setas à direita */
+      .br-pagination.variant-contextual > .pagination-information {
         display: flex;
       }
 
-      .pagination-information,
-      .pagination-per-page,
-      .pagination-go-to-page {
-        display: flex;
-      }
-
-      .br-pagination-divider {
-        display: block;
-      }
-
-      .pagination-right-group {
+      .br-pagination.variant-contextual > .pagination-arrows {
         margin-left: auto;
       }
     }

@@ -4,6 +4,9 @@
 /* Gov.br component styles (input borders, focus states, etc.) */
 @import '../../ng-govbr-tw/src/lib/styles/govbr-components.css';
 
+/* Gov.br high contrast mode */
+@import '../../ng-govbr-tw/src/lib/styles/govbr-contrast.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -100,8 +100,8 @@
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
-  .govbr-input:hover:not(:disabled):not(:read-only) {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04));
+  .govbr-input:not(:disabled):not(:read-only):hover {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08));
   }
 
   .govbr-input:focus,

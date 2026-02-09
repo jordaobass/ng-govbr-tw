@@ -218,6 +218,84 @@ export class MyComponent {}
 
 ---
 
+## Tabela com Paginação
+
+A `br-table` possui paginação integrada com suporte a duas variantes:
+
+### Uso Básico
+
+```html
+<!-- Tabela com paginação Contextual (Gov.br) -->
+<br-table
+  [page]="currentPage"
+  [totalPages]="10"
+  [totalItems]="100"
+  [itemsPerPage]="10"
+  [showPagination]="true"
+  [showItemsPerPage]="true"
+  [showSummary]="true"
+  paginationVariant="contextual"
+  (pageChange)="onPageChange($event)"
+  (itemsPerPageChange)="onItemsChange($event)"
+>
+  <thead>
+    <tr>
+      <th>Coluna 1</th>
+      <th>Coluna 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Dado 1</td><td>Dado 2</td></tr>
+  </tbody>
+</br-table>
+```
+
+### Parâmetros da Tabela
+
+| Parâmetro | Tipo | Default | Descrição |
+|-----------|------|---------|-----------|
+| `page` | `number` | `1` | Página atual |
+| `totalPages` | `number` | `1` | Total de páginas |
+| `totalItems` | `number` | `0` | Total de itens |
+| `itemsPerPage` | `number` | `10` | Itens por página |
+| `itemsPerPageOptions` | `number[]` | `[10,25,50,100]` | Opções do dropdown |
+| `showPagination` | `boolean` | `true` | Exibir paginação |
+| `showItemsPerPage` | `boolean` | `false` | Mostrar dropdown "Exibir" |
+| `showSummary` | `boolean` | `false` | Mostrar "X-Y de Z itens" |
+| `showGoToPage` | `boolean` | `true` | Mostrar dropdown "Página" |
+| `showFirstLast` | `boolean` | `true` | Mostrar botões ≪ ≫ |
+| `paginationVariant` | `'default' \| 'contextual'` | `'default'` | Variante da paginação |
+| `paginationDensity` | `'small' \| 'medium' \| 'large'` | `'small'` | Tamanho da paginação |
+| `headerStyle` | `'primary' \| 'secondary' \| 'light'` | `'primary'` | Estilo do header |
+| `responsive` | `'scroll' \| 'cards'` | `'scroll'` | Modo responsivo |
+
+### Variantes de Paginação
+
+- **`default`**: Input numérico para ir para página + setas
+- **`contextual`**: Dropdowns no padrão Gov.br (Exibir X | 1-10 de 100 | Página X | ‹ ›)
+
+---
+
+## Paginação Standalone
+
+Use `br-pagination` separadamente para listas, cards ou layouts customizados:
+
+```html
+<br-pagination
+  variant="contextual"
+  [page]="page"
+  [totalPages]="10"
+  [totalItems]="100"
+  [itemsPerPage]="10"
+  [showItemsPerPage]="true"
+  [showSummary]="true"
+  [showGoToPage]="true"
+  (pageChange)="onPageChange($event)"
+></br-pagination>
+```
+
+---
+
 ## Animações
 
 A biblioteca inclui animações suaves em vários componentes, todas respeitando a preferência do usuário por movimento reduzido (`prefers-reduced-motion`).

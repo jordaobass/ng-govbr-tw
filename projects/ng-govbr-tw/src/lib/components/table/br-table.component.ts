@@ -26,21 +26,24 @@ import { BrPaginationComponent } from '../pagination/br-pagination.component';
         <ng-content></ng-content>
       </table>
 
-      @if (totalPages > 1 || showItemsPerPage) {
-        <div class="px-4 py-3 border-t border-govbr-gray-5">
-          <br-pagination
-            [page]="page"
-            [totalPages]="totalPages"
-            [totalItems]="totalItems"
-            [itemsPerPage]="itemsPerPage"
-            [itemsPerPageOptions]="itemsPerPageOptions"
-            [showItemsPerPage]="showItemsPerPage"
-            [showSummary]="showSummary"
-            density="small"
-            (pageChange)="onPageChange($event)"
-            (itemsPerPageChange)="onItemsPerPageChange($event)"
-          ></br-pagination>
-        </div>
+      @if (showPagination && (totalPages > 1 || showItemsPerPage)) {
+        <br-pagination
+          class="br-table-pagination"
+          [class.contextual]="paginationVariant === 'contextual'"
+          [page]="page"
+          [totalPages]="totalPages"
+          [totalItems]="totalItems"
+          [itemsPerPage]="itemsPerPage"
+          [itemsPerPageOptions]="itemsPerPageOptions"
+          [showItemsPerPage]="showItemsPerPage"
+          [showSummary]="showSummary"
+          [showGoToPage]="showGoToPage"
+          [showFirstLast]="showFirstLast"
+          [variant]="paginationVariant"
+          [density]="paginationDensity"
+          (pageChange)="onPageChange($event)"
+          (itemsPerPageChange)="onItemsPerPageChange($event)"
+        ></br-pagination>
       }
     </div>
     `,
@@ -167,6 +170,22 @@ import { BrPaginationComponent } from '../pagination/br-pagination.component';
         box-shadow: 0 2px 8px rgba(0,0,0,0.12);
       }
     }
+
+    /* ═══ Pagination inside table ═══ */
+    br-table .br-table-pagination {
+      display: block;
+      border-top: 1px solid var(--govbr-gray-10, #e0e0e0);
+    }
+
+    br-table .br-table-pagination.contextual .br-pagination {
+      margin: 0;
+      padding: 12px 16px;
+      border-radius: 0 0 4px 4px;
+    }
+
+    br-table .br-table-pagination:not(.contextual) {
+      padding: 12px 16px;
+    }
   `],
 })
 export class BrTableComponent {
@@ -190,9 +209,20 @@ export class BrTableComponent {
   @Input() totalItems = 0;
   @Input() itemsPerPage = 10;
   @Input() itemsPerPageOptions = [10, 25, 50, 100];
+  /** Exibir paginação (true por padrão) */
+  @Input() showPagination = true;
   @Input() showItemsPerPage = false;
   @Input() showSummary = false;
+  @Input() showGoToPage = true;
+  /** Mostrar botões primeira/última página (apenas variant default) */
+  @Input() showFirstLast = true;
   @Input() selectable = false;
+
+  /** Variante da paginação: 'default' (input) ou 'contextual' (dropdowns Gov.br) */
+  @Input() paginationVariant: 'default' | 'contextual' = 'default';
+
+  /** Densidade da paginação */
+  @Input() paginationDensity: 'small' | 'medium' | 'large' = 'small';
 
   @Output() pageChange = new EventEmitter<number>();
   @Output() itemsPerPageChange = new EventEmitter<number>();
