@@ -91,7 +91,7 @@ import { BrAnimationService } from '../../animations/animation.service';
       <!-- Time panel -->
       @if (panelOpen) {
         <div
-          class="absolute z-50 mt-1 bg-white border border-govbr-gray-10 rounded shadow-lg p-3 w-48"
+          class="absolute z-50 mt-1 bg-govbr-bg border border-govbr-gray-10 rounded shadow-lg p-3 w-48"
           role="listbox"
           aria-label="Selecionar horário"
           [style.animation]="panelAnimation"
@@ -212,7 +212,7 @@ export class BrTimepickerComponent implements ControlValueAccessor {
 
   getTimeOptionClasses(selected: boolean): string {
     const base = 'block w-full text-center py-1 text-sm rounded transition-colors';
-    if (selected) return `${base} bg-govbr-primary text-white font-semibold`;
+    if (selected) return `${base} bg-govbr-primary text-govbr-on-primary font-semibold`;
     return `${base} text-govbr-gray-80 hover:bg-govbr-gray-2 cursor-pointer`;
   }
 

@@ -130,10 +130,10 @@ export class BrStepperComponent {
 
     if (index < this.currentStep) {
       // Completed
-      return `${base} bg-govbr-success text-white`;
+      return `${base} bg-govbr-success text-govbr-on-primary`;
     } else if (index === this.currentStep) {
       // Current
-      return `${base} bg-govbr-primary text-white ring-4 ring-govbr-primary-lightest`;
+      return `${base} bg-govbr-primary text-govbr-on-primary ring-4 ring-govbr-primary-lightest`;
     } else {
       // Pending
       return `${base} bg-govbr-gray-10 text-govbr-gray-40 border-2 border-govbr-gray-20`;

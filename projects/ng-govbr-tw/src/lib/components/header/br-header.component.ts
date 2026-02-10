@@ -7,11 +7,13 @@ import {
   HostListener,
   inject,
   Input,
+  OnInit,
   Output,
   TemplateRef,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { BrContrastService } from '../../services/br-contrast.service';
 
 
 @Component({
@@ -66,7 +68,7 @@ import {
                 </button>
                 @if (linksDropOpen) {
                   <div
-                    class="absolute right-0 top-full mt-1 w-60 bg-white rounded shadow-lg border border-govbr-gray-10 py-1 z-50 font-rawline text-govbr-gray-80"
+                    class="absolute right-0 top-full mt-1 w-60 bg-govbr-bg rounded shadow-lg border border-govbr-gray-10 py-1 z-50 font-rawline text-govbr-gray-80"
                     role="menu"
                     aria-label="Acesso Rápido"
                     >
@@ -96,7 +98,7 @@ import {
                 </button>
                 @if (funcsDropOpen) {
                   <div
-                    class="absolute right-0 top-full mt-1 w-60 bg-white rounded shadow-lg border border-govbr-gray-10 py-1 z-50 font-rawline text-govbr-gray-80"
+                    class="absolute right-0 top-full mt-1 w-60 bg-govbr-bg rounded shadow-lg border border-govbr-gray-10 py-1 z-50 font-rawline text-govbr-gray-80"
                     role="menu"
                     aria-label="Funcionalidades"
                     >
@@ -171,7 +173,7 @@ import {
                 <!-- Avatar dropdown -->
                 @if (avatarMenuOpen) {
                   <div
-                    class="absolute right-0 top-full mt-1 w-64 bg-white rounded shadow-lg border border-govbr-gray-10 py-0 z-50 font-rawline overflow-hidden"
+                    class="absolute right-0 top-full mt-1 w-64 bg-govbr-bg rounded shadow-lg border border-govbr-gray-10 py-0 z-50 font-rawline overflow-hidden"
                     role="menu"
                     aria-label="Menu do usuário"
                     >
@@ -245,7 +247,7 @@ import {
               aria-label="Busca do sistema"
               >
               <label for="header-search-input" class="sr-only">O que você procura?</label>
-              <div class="flex items-center flex-1 bg-white rounded border border-govbr-gray-10 overflow-hidden">
+              <div class="flex items-center flex-1 bg-govbr-bg rounded border border-govbr-gray-10 overflow-hidden">
                 <input
                   id="header-search-input"
                   type="search"
@@ -282,7 +284,7 @@ import {
     </header>
     `,
 })
-export class BrHeaderComponent implements AfterContentInit {
+export class BrHeaderComponent implements AfterContentInit, OnInit {
   @Input() systemTitle = '';
   @Input() systemSubtitle?: string;
   @Input() logoSrc = '';
@@ -328,6 +330,7 @@ export class BrHeaderComponent implements AfterContentInit {
   private headerHeight = 0;
 
   private elementRef = inject(ElementRef);
+  private readonly contraste = inject(BrContrastService);
 
   ngAfterContentInit(): void {
     if (this.sticky) {
@@ -376,10 +379,20 @@ export class BrHeaderComponent implements AfterContentInit {
 
   closeSearch(): void { this.searchOpen = false; }
 
+  ngOnInit(): void {
+    // `contrastActive` segue sendo @Input (API pública inalterada). Se o
+    // consumidor pediu o tema ligado, o pedido manda; senão, adota-se o estado
+    // que o service recuperou do armazenamento.
+    if (this.contrastActive) this.contraste.ligar();
+    else this.contrastActive = this.contraste.ativo();
+  }
+
   toggleContrast(): void {
-    this.contrastActive = !this.contrastActive;
+    // Quem mexe no <html> e persiste é o BrContrastService — um componente
+    // visual não deve ter efeito global, e o estado precisa sobreviver ao F5.
+    this.contraste.alternar();
+    this.contrastActive = this.contraste.ativo();
     this.contrastChange.emit(this.contrastActive);
-    document.documentElement.classList.toggle('govbr-contrast', this.contrastActive);
   }
 
   private closeAllDropdowns(): void {
@@ -427,7 +440,7 @@ export class BrHeaderComponent implements AfterContentInit {
     const base = 'font-rawline relative z-[1000]';
     const stickyClass = this.sticky ? 'sticky top-0' : '';
     const shadow = this.isWhite ? 'border-b border-govbr-gray-10' : 'shadow-md';
-    const bg = this.isWhite ? 'bg-white' : 'bg-govbr-primary text-white';
+    const bg = this.isWhite ? 'bg-govbr-bg' : 'bg-govbr-primary text-govbr-on-primary';
     return `${base} ${stickyClass} ${shadow} ${bg}`.trim();
   }
 
@@ -439,7 +452,7 @@ export class BrHeaderComponent implements AfterContentInit {
   get bottomRowClasses(): string {
     const pyMap = { small: 'py-2', medium: 'py-3', large: 'py-4' } as const;
     const py = this.isCompact ? 'py-2' : pyMap[this.density];
-    const border = this.isWhite ? 'border-t border-govbr-gray-10' : 'border-t border-white/10';
+    const border = this.isWhite ? 'border-t border-govbr-gray-10' : 'border-t border-govbr-on-primary/10';
     return `flex items-center justify-between ${py} ${border}`;
   }
 
@@ -451,13 +464,13 @@ export class BrHeaderComponent implements AfterContentInit {
 
   get dividerClasses(): string {
     const height = this.isCompact || this.density === 'small' ? 'h-4' : 'h-8';
-    const color = this.isWhite ? 'bg-govbr-gray-20' : 'bg-white/30';
+    const color = this.isWhite ? 'bg-govbr-gray-20' : 'bg-govbr-bg/30';
     return `inline-block w-px ${height} mx-3 flex-shrink-0 ${color}`;
   }
 
   get signClasses(): string {
     const size = this.isCompact || this.density === 'small' ? 'text-xs' : 'text-sm';
-    const color = this.isWhite ? 'text-govbr-gray-60' : 'text-white/80';
+    const color = this.isWhite ? 'text-govbr-gray-60' : 'text-govbr-on-primary/80';
     return `${size} font-medium ${color} hidden sm:inline`;
   }
 
@@ -465,24 +478,24 @@ export class BrHeaderComponent implements AfterContentInit {
     const size = this.isCompact || this.density === 'small' ? 'w-8 h-8 text-sm' : 'w-10 h-10';
     const color = this.isWhite
       ? 'text-govbr-primary hover:bg-govbr-primary-lightest'
-      : 'text-white hover:bg-white/10';
+      : 'text-govbr-on-primary hover:bg-govbr-bg/10';
     return `flex items-center justify-center rounded-full transition-colors ${size} ${color}`;
   }
 
   get separatorSmClasses(): string {
-    const color = this.isWhite ? 'bg-govbr-gray-20' : 'bg-white/30';
+    const color = this.isWhite ? 'bg-govbr-gray-20' : 'bg-govbr-bg/30';
     return `inline-block w-px h-4 mx-1 sm:mx-2 flex-shrink-0 ${color}`;
   }
 
   get signInBtnClasses(): string {
     const color = this.isWhite
       ? 'text-govbr-primary hover:bg-govbr-primary-lightest'
-      : 'text-white hover:bg-white/10';
+      : 'text-govbr-on-primary hover:bg-govbr-bg/10';
     return `flex items-center px-3 py-2 rounded-full text-sm font-semibold transition-colors ${color}`;
   }
 
   get avatarBtnClasses(): string {
-    const color = this.isWhite ? 'hover:bg-govbr-gray-2' : 'hover:bg-white/10';
+    const color = this.isWhite ? 'hover:bg-govbr-gray-2' : 'hover:bg-govbr-bg/10';
     return `flex items-center gap-2 rounded-full py-1 pl-1 pr-2 transition-colors cursor-pointer ${color}`;
   }
 
@@ -490,17 +503,17 @@ export class BrHeaderComponent implements AfterContentInit {
     const size = this.isCompact || this.density === 'small' ? 'w-7 h-7' : 'w-9 h-9';
     const color = this.isWhite
       ? 'bg-govbr-primary-lightest text-govbr-primary'
-      : 'bg-white/20 text-white';
+      : 'bg-govbr-bg/20 text-govbr-on-primary';
     return `flex items-center justify-center ${size} rounded-full overflow-hidden flex-shrink-0 ${color}`;
   }
 
   get avatarNameClasses(): string {
-    const color = this.isWhite ? 'text-govbr-gray-80' : 'text-white';
+    const color = this.isWhite ? 'text-govbr-gray-80' : 'text-govbr-on-primary';
     return `text-sm font-semibold max-w-[120px] truncate ${color}`;
   }
 
   get avatarChevronClasses(): string {
-    const color = this.isWhite ? 'text-govbr-gray-40' : 'text-white/60';
+    const color = this.isWhite ? 'text-govbr-gray-40' : 'text-govbr-on-primary/60';
     return `fa-solid fa-chevron-down text-[10px] transition-transform duration-200 ${color}`;
   }
 
@@ -508,7 +521,7 @@ export class BrHeaderComponent implements AfterContentInit {
     const size = this.isCompact || this.density === 'small' ? 'w-8 h-8 text-sm' : 'w-10 h-10';
     const color = this.isWhite
       ? 'text-govbr-primary hover:bg-govbr-primary-lightest'
-      : 'text-white hover:bg-white/10';
+      : 'text-govbr-on-primary hover:bg-govbr-bg/10';
     return `flex items-center justify-center rounded-full transition-colors flex-shrink-0 ${size} ${color}`;
   }
 
@@ -521,7 +534,7 @@ export class BrHeaderComponent implements AfterContentInit {
       large: 'text-lg sm:text-xl lg:text-2xl',
     } as const;
     const size = this.isCompact ? 'text-base sm:text-lg' : sizeMap[this.density];
-    const color = this.isWhite ? 'text-govbr-primary' : 'text-white';
+    const color = this.isWhite ? 'text-govbr-primary' : 'text-govbr-on-primary';
     return `${size} font-bold leading-tight ${color}`;
   }
 
@@ -533,7 +546,7 @@ export class BrHeaderComponent implements AfterContentInit {
       large: 'text-sm lg:text-base',
     } as const;
     const size = this.isCompact ? 'text-xs' : sizeMap[this.density];
-    const color = this.isWhite ? 'text-govbr-gray-60' : 'text-white/80';
+    const color = this.isWhite ? 'text-govbr-gray-60' : 'text-govbr-on-primary/80';
     return `hidden sm:block ${size} font-medium mt-0.5 ${color}`;
   }
 }

@@ -144,7 +144,7 @@ export interface BrTimelineItem {
     /* ═══ Status: Completed ═══ */
     .br-timeline-item-completed .br-timeline-icon {
       background-color: var(--govbr-success);
-      color: #fff;
+      color: var(--govbr-on-primary);
     }
 
     .br-timeline-item-completed .br-timeline-line {
@@ -157,13 +157,13 @@ export interface BrTimelineItem {
 
     /* ═══ Status: Current ═══ */
     .br-timeline-item-current .br-timeline-icon {
-      background-color: #1351b4;
-      color: #fff;
+      background-color: var(--govbr-primary);
+      color: var(--govbr-on-primary);
       box-shadow: 0 0 0 4px rgba(19, 81, 180, 0.2);
     }
 
     .br-timeline-item-current .br-timeline-title {
-      color: #1351b4;
+      color: var(--govbr-primary);
       font-weight: var(--govbr-font-weight-bold);
     }
 

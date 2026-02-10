@@ -153,7 +153,7 @@ export class BrListComponent {
     const variantMap = {
       default: '',
       bordered: 'border border-govbr-gray-10 rounded',
-      card: 'bg-white border border-govbr-gray-5 rounded shadow-sm',
+      card: 'bg-govbr-bg border border-govbr-gray-5 rounded shadow-sm',
     } as const;
     return `${base} ${variantMap[this.variant]}`;
   }

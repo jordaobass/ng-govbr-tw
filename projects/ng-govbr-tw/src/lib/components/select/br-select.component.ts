@@ -68,7 +68,7 @@ import { BrAnimationService } from '../../animations/animation.service';
       <!-- Dropdown -->
       @if (expanded) {
         <div
-          class="absolute left-0 right-0 z-10 mt-1 bg-white border border-govbr-gray-10 shadow-lg max-h-[404px] overflow-y-auto rounded"
+          class="absolute left-0 right-0 z-10 mt-1 bg-govbr-bg border border-govbr-gray-10 shadow-lg max-h-[404px] overflow-y-auto rounded"
           [style.animation]="dropdownAnimation"
           >
           <!-- Search filter -->
@@ -104,7 +104,7 @@ import { BrAnimationService } from '../../animations/animation.service';
                     >
                     @if (isSelected(option.value)) {
                       <svg
-                        class="w-3 h-3 text-white" viewBox="0 0 12 10"
+                        class="w-3 h-3 text-govbr-on-primary" viewBox="0 0 12 10"
                         fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round"
                         >
@@ -262,7 +262,7 @@ export class BrSelectComponent implements ControlValueAccessor {
 
     const disabledCls = this.isDisabled
       ? 'bg-govbr-gray-2 text-govbr-gray-40 cursor-not-allowed'
-      : 'bg-white cursor-pointer hover:bg-[rgba(0,0,0,0.08)]';
+      : 'bg-govbr-bg cursor-pointer hover:bg-[rgba(0,0,0,0.08)]';
 
     return [base, statusCls, disabledCls].filter(Boolean).join(' ');
   }

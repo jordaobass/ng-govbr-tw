@@ -1,13 +1,31 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   HostListener,
   Input,
+  OnChanges,
   Output,
+  PLATFORM_ID,
+  SimpleChanges,
   ViewEncapsulation,
   inject,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { BrAnimationService } from '../../animations/animation.service';
+
+/**
+ * Elementos que recebem foco por teclado. `[tabindex="-1"]` fica de fora de
+ * propósito: é focável por script, não por Tab.
+ */
+const SELETOR_FOCAVEL = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled]):not([type="hidden"])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(',');
 
 
 @Component({
@@ -24,15 +42,17 @@ import { BrAnimationService } from '../../animations/animation.service';
         [attr.aria-modal]="true"
         [attr.aria-labelledby]="titleId"
         >
-        <!-- Backdrop -->
+        <!--
+          Backdrop. Sem role="button"/tabindex: elemento focável aqui poluía a
+          ordem de tabulação e duplicava um fechamento que o Escape e o botão
+          de fechar já oferecem. Clique em div sem papel interativo é aceitável
+          porque NÃO é o único caminho — então não viola a WCAG 2.1.1.
+        -->
         <div
           [class]="backdropClasses"
           [style.animation]="backdropAnimation"
           (click)="onScrimClick()"
-          (keydown.enter)="onScrimClick()"
-          role="button"
-          tabindex="0"
-          aria-label="Fechar modal"
+          aria-hidden="true"
         ></div>
         <!-- Modal container -->
         <div
@@ -86,7 +106,7 @@ import { BrAnimationService } from '../../animations/animation.service';
                 @if (showCancelButton) {
                   <button
                     type="button"
-                    class="px-5 py-2 text-govbr-base font-semibold font-rawline text-govbr-primary bg-transparent border border-govbr-primary rounded-govbr-pill hover:bg-govbr-primary hover:text-white transition-colors govbr-focus-ring"
+                    class="px-5 py-2 text-govbr-base font-semibold font-rawline text-govbr-primary bg-transparent border border-govbr-primary rounded-govbr-pill hover:bg-govbr-primary hover:text-govbr-on-primary transition-colors govbr-focus-ring"
                     (click)="cancel()"
                     >
                     {{ cancelText }}
@@ -127,8 +147,13 @@ import { BrAnimationService } from '../../animations/animation.service';
     }
   `],
 })
-export class BrModalComponent {
+export class BrModalComponent implements OnChanges {
   private readonly animationService = inject(BrAnimationService);
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
+  private readonly ehNavegador = isPlatformBrowser(inject(PLATFORM_ID));
+
+  /** Elemento que tinha o foco quando o modal abriu, para devolver ao fechar. */
+  private gatilhoAnterior: HTMLElement | null = null;
 
   @Input() isOpen = false;
   @Input() title = '';
@@ -183,7 +208,11 @@ export class BrModalComponent {
     const colors = {
       default: '',
       danger: 'text-govbr-danger',
-      warning: 'text-govbr-warning',
+      // Amarelo puro (#ffcd07) sobre o fundo claro do modal dá 1,50:1 e
+      // reprova até o mínimo de 3:1 da WCAG 1.4.11 para gráfico significativo
+      // — o ícone de aviso ficava praticamente invisível. A variante escura
+      // dá 7,40:1. Tom pendente de conferência contra o DS oficial (A1).
+      warning: 'text-govbr-warning-dark',
       success: 'text-govbr-success',
     } as const;
     return colors[this.variant];
@@ -203,10 +232,10 @@ export class BrModalComponent {
   get primaryButtonClasses(): string {
     const base = 'px-5 py-2 text-govbr-base font-semibold font-rawline rounded-govbr-pill transition-colors govbr-focus-ring disabled:opacity-50 disabled:cursor-not-allowed';
     const variantStyles = {
-      default: 'text-white bg-govbr-primary hover:bg-govbr-primary-dark',
-      danger: 'text-white bg-govbr-danger hover:bg-red-700',
-      warning: 'text-govbr-gray-80 bg-govbr-warning hover:bg-yellow-500',
-      success: 'text-white bg-govbr-success hover:bg-green-700',
+      default: 'text-govbr-on-primary bg-govbr-primary hover:bg-govbr-primary-dark',
+      danger: 'text-govbr-on-primary bg-govbr-danger hover:bg-govbr-danger-hover',
+      warning: 'text-govbr-gray-80 bg-govbr-warning hover:bg-govbr-warning-hover',
+      success: 'text-govbr-on-primary bg-govbr-success hover:bg-govbr-success-hover',
     } as const;
     return `${base} ${variantStyles[this.variant]}`;
   }
@@ -221,11 +250,23 @@ export class BrModalComponent {
     } as const;
 
     const base = [
-      'relative flex flex-col bg-white shadow-lg z-10 w-full mx-4 rounded',
+      'relative flex flex-col bg-govbr-bg shadow-lg z-10 w-full mx-4 rounded',
       'max-h-[90vh]',
     ].join(' ');
 
     return [base, sizes[this.size]].filter(Boolean).join(' ');
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes['isOpen'] || !this.ehNavegador) return;
+
+    if (this.isOpen) {
+      this.gatilhoAnterior = document.activeElement as HTMLElement | null;
+      // O diálogo só existe no DOM depois que o @if renderiza.
+      setTimeout(() => this.focarPrimeiroElemento());
+    } else {
+      this.devolverFoco();
+    }
   }
 
   @HostListener('document:keydown.escape')
@@ -235,10 +276,74 @@ export class BrModalComponent {
     }
   }
 
+  /**
+   * Focus trap (WCAG 2.4.3). Sem isto, `role="dialog"` + `aria-modal` anunciam
+   * um contrato que o componente não cumpre: o Tab escapa para a página atrás,
+   * que o leitor de tela considera inacessível.
+   */
+  @HostListener('document:keydown', ['$event'])
+  onTabKey(event: KeyboardEvent): void {
+    if (!this.isOpen || event.key !== 'Tab' || !this.ehNavegador) return;
+
+    const focaveis = this.elementosFocaveis();
+    if (!focaveis.length) {
+      // Diálogo sem nada focável: prender o foco nele mesmo ainda é melhor
+      // que deixar o Tab vazar para o conteúdo de trás.
+      event.preventDefault();
+      this.dialogo()?.focus();
+      return;
+    }
+
+    const primeiro = focaveis[0];
+    const ultimo = focaveis[focaveis.length - 1];
+    const ativo = document.activeElement;
+
+    if (event.shiftKey && (ativo === primeiro || !this.dialogo()?.contains(ativo))) {
+      event.preventDefault();
+      ultimo.focus();
+    } else if (!event.shiftKey && ativo === ultimo) {
+      event.preventDefault();
+      primeiro.focus();
+    }
+  }
+
   onScrimClick(): void {
     if (this.closeOnScrim) {
       this.close();
     }
+  }
+
+  private dialogo(): HTMLElement | null {
+    return this.elementRef.nativeElement.querySelector('[role="dialog"]');
+  }
+
+  private elementosFocaveis(): HTMLElement[] {
+    const alvo = this.dialogo();
+    if (!alvo) return [];
+    return Array.from(
+      alvo.querySelectorAll<HTMLElement>(SELETOR_FOCAVEL)
+    ).filter((el) => el.offsetParent !== null || el === document.activeElement);
+  }
+
+  private focarPrimeiroElemento(): void {
+    const focaveis = this.elementosFocaveis();
+    if (focaveis.length) {
+      focaveis[0].focus();
+      return;
+    }
+    const alvo = this.dialogo();
+    if (alvo) {
+      alvo.setAttribute('tabindex', '-1');
+      alvo.focus();
+    }
+  }
+
+  private devolverFoco(): void {
+    const gatilho = this.gatilhoAnterior;
+    this.gatilhoAnterior = null;
+    // `isConnected` evita tentar focar elemento que saiu do DOM junto com o
+    // fluxo que abriu o modal.
+    if (gatilho?.isConnected) gatilho.focus();
   }
 
   close(): void {

@@ -97,7 +97,7 @@ export class BrSwitchComponent implements ControlValueAccessor {
   }
 
   get thumbClasses(): string {
-    const base = 'pointer-events-none inline-block rounded-full bg-white shadow ring-0';
+    const base = 'pointer-events-none inline-block rounded-full bg-govbr-bg shadow ring-0';
 
     const sizeClass = this.size === 'small'
       ? 'h-4 w-4'

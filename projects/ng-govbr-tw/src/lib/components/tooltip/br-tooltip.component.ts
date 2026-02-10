@@ -72,9 +72,9 @@ export class BrTooltipComponent {
 
   get tooltipClasses(): string {
     const bgMap = {
-      info: 'bg-govbr-info text-white',
-      success: 'bg-govbr-success text-white',
-      danger: 'bg-govbr-danger text-white',
+      info: 'bg-govbr-info text-govbr-on-primary',
+      success: 'bg-govbr-success text-govbr-on-primary',
+      danger: 'bg-govbr-danger text-govbr-on-primary',
       warning: 'bg-govbr-warning text-govbr-gray-80',
     } as const;
 

@@ -62,11 +62,11 @@ import { BrPaginationComponent } from '../pagination/br-pagination.component';
       text-align: left;
     }
 
-    /* Primary style (default): blue-warm-vivid-70 #1351b4 */
+    /* Primary style (default): blue-warm-vivid-70 var(--govbr-primary) */
     br-table [data-header-style="primary"] table thead th {
-      background-color: #1351b4;
-      color: #ffffff;
-      border-bottom: 1px solid #0c326f;
+      background-color: var(--govbr-primary);
+      color: var(--govbr-on-primary);
+      border-bottom: 1px solid var(--govbr-primary-dark);
     }
     br-table [data-header-style="primary"] table thead th:first-child {
       border-radius: 4px 0 0 0;
@@ -75,11 +75,11 @@ import { BrPaginationComponent } from '../pagination/br-pagination.component';
       border-radius: 0 4px 0 0;
     }
 
-    /* Secondary style: blue-warm-vivid-80 #0c326f (darker) */
+    /* Secondary style: blue-warm-vivid-80 var(--govbr-primary-dark) (darker) */
     br-table [data-header-style="secondary"] table thead th {
-      background-color: #0c326f;
-      color: #ffffff;
-      border-bottom: 1px solid #071d41;
+      background-color: var(--govbr-primary-dark);
+      color: var(--govbr-on-primary);
+      border-bottom: 1px solid var(--govbr-primary-darkest);
     }
     br-table [data-header-style="secondary"] table thead th:first-child {
       border-radius: 4px 0 0 0;
@@ -90,9 +90,9 @@ import { BrPaginationComponent } from '../pagination/br-pagination.component';
 
     /* Light style: white background with blue text */
     br-table [data-header-style="light"] table thead th {
-      background-color: #ffffff;
-      color: #1351b4;
-      border-bottom: 2px solid #e0e0e0;
+      background-color: var(--govbr-on-primary);
+      color: var(--govbr-primary);
+      border-bottom: 2px solid var(--govbr-gray-5);
       border-radius: 0;
     }
 
@@ -112,7 +112,7 @@ import { BrPaginationComponent } from '../pagination/br-pagination.component';
       background-color: var(--govbr-table-row-hover-bg);
     }
     br-table table tbody tr.br-table-row-selected td {
-      background-color: #dbeafe !important;
+      background-color: var(--govbr-primary-lightest) !important;
     }
 
     /* ═══ Responsive Cards Mode ═══ */
@@ -128,7 +128,7 @@ import { BrPaginationComponent } from '../pagination/br-pagination.component';
       br-table [data-responsive="cards"] table tbody tr {
         display: block;
         margin-bottom: 16px;
-        background: #fff;
+        background: var(--govbr-bg);
         border: 1px solid var(--govbr-gray-10);
         border-radius: 8px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.08);
@@ -136,7 +136,7 @@ import { BrPaginationComponent } from '../pagination/br-pagination.component';
       }
 
       br-table [data-responsive="cards"] table tbody tr:nth-child(even) {
-        background: #fff;
+        background: var(--govbr-bg);
       }
 
       br-table [data-responsive="cards"] table tbody td {
@@ -174,7 +174,7 @@ import { BrPaginationComponent } from '../pagination/br-pagination.component';
     /* ═══ Pagination inside table ═══ */
     br-table .br-table-pagination {
       display: block;
-      border-top: 1px solid var(--govbr-gray-10, #e0e0e0);
+      border-top: 1px solid var(--govbr-gray-10, var(--govbr-gray-5));
     }
 
     br-table .br-table-pagination.contextual .br-pagination {
@@ -191,8 +191,8 @@ import { BrPaginationComponent } from '../pagination/br-pagination.component';
 export class BrTableComponent {
   /**
    * Estilo do header da tabela:
-   * - 'primary': Azul Gov.br (#1351b4) - blue-warm-vivid-70
-   * - 'secondary': Azul escuro (#0c326f) - blue-warm-vivid-80
+   * - 'primary': Azul Gov.br (var(--govbr-primary)) - blue-warm-vivid-70
+   * - 'secondary': Azul escuro (var(--govbr-primary-dark)) - blue-warm-vivid-80
    * - 'light': Fundo branco com texto azul
    */
   @Input() headerStyle: 'primary' | 'secondary' | 'light' = 'primary';

@@ -85,7 +85,7 @@ export class BrMenuComponent {
     } as const;
 
     const variantMap = {
-      white: 'bg-white border-r border-govbr-gray-10',
+      white: 'bg-govbr-bg border-r border-govbr-gray-10',
       light: 'bg-govbr-gray-2 border-r border-govbr-gray-10',
     } as const;
 

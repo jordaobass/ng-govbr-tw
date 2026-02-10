@@ -125,7 +125,7 @@ export class BrCardComponent {
   @Output() linkClick = new EventEmitter<void>();
 
   get cardClasses(): string {
-    const base = 'bg-white rounded border border-govbr-gray-5 shadow-sm font-rawline overflow-hidden';
+    const base = 'bg-govbr-bg rounded border border-govbr-gray-5 shadow-sm font-rawline overflow-hidden';
     const direction = this.layout === 'horizontal' ? 'flex flex-row' : 'flex flex-col';
     const cursor = this.clickable ? 'cursor-pointer' : '';
     const hoverCls = this.getHoverEffectClass();

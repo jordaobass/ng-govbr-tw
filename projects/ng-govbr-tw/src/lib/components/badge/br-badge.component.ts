@@ -19,9 +19,9 @@ export class BrBadgeComponent {
     const base = 'inline-flex items-center px-2.5 py-0.5 rounded-govbr-pill text-xs font-semibold font-rawline';
 
     const variants = {
-      primary: 'bg-govbr-primary text-white',
-      success: 'bg-govbr-success text-white',
-      danger: 'bg-govbr-danger text-white',
+      primary: 'bg-govbr-primary text-govbr-on-primary',
+      success: 'bg-govbr-success text-govbr-on-primary',
+      danger: 'bg-govbr-danger text-govbr-on-primary',
       warning: 'bg-govbr-warning-bg text-govbr-gray-80',
       neutral: 'bg-govbr-gray-5 text-govbr-gray-80',
     } as const;

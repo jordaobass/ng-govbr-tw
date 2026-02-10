@@ -35,7 +35,7 @@ describe('BrSwitchComponent', () => {
   });
 
   it('should emit checkedChange on toggle', () => {
-    const spy = jest.spyOn(component.checkedChange, 'emit');
+    const spy = spyOn(component.checkedChange, 'emit');
     component.toggle();
     expect(spy).toHaveBeenCalledWith(true);
   });
@@ -44,7 +44,9 @@ describe('BrSwitchComponent', () => {
     component.label = 'Test Label';
     fixture.detectChanges();
 
-    const label = fixture.nativeElement.querySelector('span');
+    // `span` genérico pega o primeiro do DOM, que é o botão do switch (vazio).
+    // O label é o span que carrega o texto.
+    const label = fixture.nativeElement.querySelector('span.select-none');
     expect(label.textContent).toContain('Test Label');
   });
 

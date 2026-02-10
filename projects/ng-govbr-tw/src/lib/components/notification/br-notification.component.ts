@@ -94,11 +94,11 @@ export class BrNotificationComponent {
 
   get badgeClasses(): string {
     const variantStyles = {
-      danger: 'bg-govbr-danger text-white',
+      danger: 'bg-govbr-danger text-govbr-on-primary',
       warning: 'bg-govbr-warning text-govbr-gray-80',
-      success: 'bg-govbr-success text-white',
-      info: 'bg-govbr-info text-white',
-      primary: 'bg-govbr-primary text-white',
+      success: 'bg-govbr-success text-govbr-on-primary',
+      info: 'bg-govbr-info text-govbr-on-primary',
+      primary: 'bg-govbr-primary text-govbr-on-primary',
     } as const;
 
     const sizeStyles: Record<'small' | 'medium' | 'large', string> = this.showDot

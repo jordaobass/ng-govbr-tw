@@ -271,7 +271,7 @@ import {
   styles: [`
     .br-pagination {
       --pagination-size: 32px;
-      --gold-vivid-40: #c2850c;
+      --gold-vivid-40: var(--govbr-warning-dark);
       --focus-color: var(--gold-vivid-40);
       display: flex;
       flex-wrap: wrap;
@@ -279,7 +279,7 @@ import {
       gap: 0;
       padding: 16px 0;
       font-weight: var(--govbr-font-weight-medium, 500);
-      color: var(--govbr-gray-80, #333);
+      color: var(--govbr-gray-80, var(--govbr-gray-80));
     }
 
     /* ═══ DEFAULT VARIANT STYLES ═══ */
@@ -291,7 +291,7 @@ import {
 
     .br-pagination-label {
       font-size: 14px;
-      color: var(--govbr-gray-60, #555);
+      color: var(--govbr-gray-60, var(--govbr-gray-60));
     }
 
     .br-pagination-select {
@@ -302,25 +302,25 @@ import {
 
     .br-pagination-select select {
       appearance: none;
-      background: #fff;
-      border: 1px solid var(--govbr-gray-20, #ccc);
+      background: var(--govbr-bg);
+      border: 1px solid var(--govbr-gray-20, var(--govbr-gray-10));
       border-radius: 4px;
       height: var(--pagination-size);
       padding: 0 32px 0 12px;
       font-size: 14px;
-      color: var(--govbr-gray-80, #333);
+      color: var(--govbr-gray-80, var(--govbr-gray-80));
       cursor: pointer;
       min-width: 64px;
       transition: border-color 0.2s;
     }
 
     .br-pagination-select select:hover {
-      border-color: var(--govbr-gray-40, #888);
+      border-color: var(--govbr-gray-40, var(--govbr-gray-40));
     }
 
     .br-pagination-select select:focus {
       outline: none;
-      border-color: var(--focus-color, #c2850c);
+      border-color: var(--focus-color, var(--govbr-warning-dark));
       box-shadow: 0 0 0 3px rgba(194, 133, 12, 0.45);
     }
 
@@ -328,7 +328,7 @@ import {
       position: absolute;
       right: 10px;
       font-size: 12px;
-      color: var(--govbr-primary, #1351b4);
+      color: var(--govbr-primary, var(--govbr-primary));
       pointer-events: none;
     }
 
@@ -348,14 +348,14 @@ import {
       background: transparent;
       border: none;
       border-radius: 50%;
-      color: var(--govbr-primary, #1351b4);
+      color: var(--govbr-primary, var(--govbr-primary));
       font-size: 14px;
       cursor: pointer;
       transition: background-color 0.2s, color 0.2s;
     }
 
     .br-pagination-button:hover:not(.disabled):not(:disabled) {
-      background-color: var(--govbr-primary-lightest, #dbe8fb);
+      background-color: var(--govbr-primary-lightest, var(--govbr-primary-lightest));
     }
 
     .br-pagination-button:focus {
@@ -365,7 +365,7 @@ import {
 
     .br-pagination-button.disabled,
     .br-pagination-button:disabled {
-      color: var(--govbr-gray-20, #ccc);
+      color: var(--govbr-gray-20, var(--govbr-gray-10));
       cursor: not-allowed;
     }
 
@@ -380,11 +380,11 @@ import {
       width: 56px;
       height: var(--pagination-size);
       text-align: center;
-      border: 1px solid var(--govbr-gray-20, #ccc);
+      border: 1px solid var(--govbr-gray-20, var(--govbr-gray-10));
       border-radius: 4px;
       font-size: 14px;
       font-weight: 600;
-      color: var(--govbr-gray-80, #333);
+      color: var(--govbr-gray-80, var(--govbr-gray-80));
       -moz-appearance: textfield;
     }
 
@@ -396,19 +396,19 @@ import {
 
     .br-pagination-input:focus {
       outline: none;
-      border-color: var(--focus-color, #c2850c);
+      border-color: var(--focus-color, var(--govbr-warning-dark));
       box-shadow: 0 0 0 3px rgba(194, 133, 12, 0.45);
     }
 
     .br-pagination-text {
       font-size: 14px;
-      color: var(--govbr-gray-60, #555);
+      color: var(--govbr-gray-60, var(--govbr-gray-60));
     }
 
     .br-pagination-total {
       font-size: 14px;
       font-weight: 600;
-      color: var(--govbr-gray-80, #333);
+      color: var(--govbr-gray-80, var(--govbr-gray-80));
     }
 
     .br-pagination-summary {
@@ -423,7 +423,7 @@ import {
       gap: 12px;
       padding: 12px 16px;
       width: 100%;
-      background: #fff;
+      background: var(--govbr-bg);
       border-radius: 4px;
     }
 
@@ -451,7 +451,7 @@ import {
     .br-pagination.variant-contextual .pagination-information {
       white-space: nowrap;
       font-size: 14px;
-      color: var(--govbr-gray-80, #333);
+      color: var(--govbr-gray-80, var(--govbr-gray-80));
     }
 
     /* Divisor vertical igual ao Gov.br */
@@ -459,7 +459,7 @@ import {
       display: block;
       width: 1px;
       height: 24px;
-      background: #d1d5db;
+      background: var(--govbr-gray-10);
       flex: 0 0 auto;
     }
 
@@ -477,7 +477,7 @@ import {
     .br-pagination-dropdown-input label {
       font-size: 14px;
       font-weight: 400;
-      color: var(--govbr-gray-80, #333);
+      color: var(--govbr-gray-80, var(--govbr-gray-80));
       margin-right: 8px;
       margin-bottom: 0;
       white-space: nowrap;
@@ -491,8 +491,8 @@ import {
       border-radius: 4px;
       font-size: 14px;
       font-weight: 500;
-      color: var(--govbr-gray-80, #333);
-      background: #fff;
+      color: var(--govbr-gray-80, var(--govbr-gray-80));
+      background: var(--govbr-bg);
       text-align: right;
       cursor: pointer;
       transition: border-color 0.2s;
@@ -504,7 +504,7 @@ import {
 
     .br-pagination-dropdown-input input:focus {
       outline: none;
-      border-color: var(--focus-color, #c2850c);
+      border-color: var(--focus-color, var(--govbr-warning-dark));
       box-shadow: 0 0 0 3px rgba(194, 133, 12, 0.45);
     }
 
@@ -521,13 +521,13 @@ import {
       border: none;
       border-radius: 50%;
       background: transparent;
-      color: var(--govbr-primary, #1351b4);
+      color: var(--govbr-primary, var(--govbr-primary));
       cursor: pointer;
       transition: background-color 0.2s;
     }
 
     .br-pagination-dropdown-trigger:hover {
-      background-color: var(--govbr-primary-lightest, #dbe8fb);
+      background-color: var(--govbr-primary-lightest, var(--govbr-primary-lightest));
     }
 
     .br-pagination-dropdown-list {
@@ -537,8 +537,8 @@ import {
       min-width: 80px;
       max-height: 220px;
       overflow-y: auto;
-      background: #fff;
-      border: 1px solid var(--govbr-gray-20, #ccc);
+      background: var(--govbr-bg);
+      border: 1px solid var(--govbr-gray-20, var(--govbr-gray-10));
       border-radius: 4px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       z-index: 100;
@@ -550,11 +550,11 @@ import {
     }
 
     .br-pagination-dropdown-list::-webkit-scrollbar-track {
-      background: var(--govbr-gray-5, #f0f0f0);
+      background: var(--govbr-gray-5, var(--govbr-bg-alternative));
     }
 
     .br-pagination-dropdown-list::-webkit-scrollbar-thumb {
-      background: var(--govbr-gray-20, #ccc);
+      background: var(--govbr-gray-20, var(--govbr-gray-10));
       border-radius: 4px;
     }
 
@@ -567,11 +567,11 @@ import {
     }
 
     .br-pagination-dropdown-item:hover {
-      background-color: var(--govbr-gray-5, #f0f0f0);
+      background-color: var(--govbr-gray-5, var(--govbr-bg-alternative));
     }
 
     .br-pagination-dropdown-item.selected {
-      background-color: var(--govbr-primary-lightest, #dbe8fb);
+      background-color: var(--govbr-primary-lightest, var(--govbr-primary-lightest));
     }
 
     .br-pagination-dropdown-item input[type="radio"] {
@@ -583,7 +583,7 @@ import {
 
     .br-pagination-dropdown-item label {
       font-size: 14px;
-      color: var(--govbr-gray-80, #333);
+      color: var(--govbr-gray-80, var(--govbr-gray-80));
       cursor: pointer;
       margin: 0;
     }
@@ -598,14 +598,14 @@ import {
       border: none;
       border-radius: 50%;
       background: transparent;
-      color: var(--govbr-primary, #1351b4);
+      color: var(--govbr-primary, var(--govbr-primary));
       font-size: 14px;
       cursor: pointer;
       transition: background-color 0.2s;
     }
 
     .br-button-circle:hover:not(:disabled) {
-      background-color: var(--govbr-primary-lightest, #dbe8fb);
+      background-color: var(--govbr-primary-lightest, var(--govbr-primary-lightest));
     }
 
     .br-button-circle:focus {
@@ -614,7 +614,7 @@ import {
     }
 
     .br-button-circle:disabled {
-      color: var(--govbr-gray-20, #ccc);
+      color: var(--govbr-gray-20, var(--govbr-gray-10));
       cursor: not-allowed;
     }
 

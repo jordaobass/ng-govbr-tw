@@ -31,7 +31,7 @@ import {
       }
 
       @if (helperText && !displayError && !successMessage) {
-        <span class="br-input-helper">{{ helperText }}</span>
+        <span [id]="inputId + '-helper'" class="br-input-helper">{{ helperText }}</span>
       }
 
       <div class="br-input-group">
@@ -53,6 +53,8 @@ import {
             [disabled]="isDisabled"
             [rows]="rows"
             [attr.maxlength]="maxLength || null"
+            [attr.aria-invalid]="!!displayError"
+            [attr.aria-describedby]="descricaoAcessivel"
             [value]="value"
             (input)="onInputChange($event)"
             (blur)="onTouched()"
@@ -67,6 +69,8 @@ import {
             [placeholder]="placeholder"
             [disabled]="isDisabled"
             [attr.maxlength]="maxLength || null"
+            [attr.aria-invalid]="!!displayError"
+            [attr.aria-describedby]="descricaoAcessivel"
             [value]="value"
             (input)="onInputChange($event)"
             (blur)="onTouched()"
@@ -111,28 +115,40 @@ import {
       }
 
       @if (displayError) {
-        <span class="br-input-feedback danger">
+        <span
+          [id]="inputId + '-error'"
+          class="br-input-feedback danger"
+          role="alert"
+        >
           <i class="fas fa-times-circle" aria-hidden="true"></i>
           <span>{{ displayError }}</span>
         </span>
       }
 
       @if (successMessage && !displayError) {
-        <span class="br-input-feedback success">
+        <span
+          [id]="inputId + '-feedback'"
+          class="br-input-feedback success"
+          role="status"
+        >
           <i class="fas fa-check-circle" aria-hidden="true"></i>
           <span>{{ successMessage }}</span>
         </span>
       }
 
       @if (warningMessage && !displayError && !successMessage) {
-        <span class="br-input-feedback warning">
+        <span
+          [id]="inputId + '-feedback'"
+          class="br-input-feedback warning"
+          role="status"
+        >
           <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
           <span>{{ warningMessage }}</span>
         </span>
       }
 
       @if (infoMessage && !displayError && !successMessage && !warningMessage) {
-        <span class="br-input-feedback info">
+        <span [id]="inputId + '-feedback'" class="br-input-feedback info">
           <i class="fas fa-info-circle" aria-hidden="true"></i>
           <span>{{ infoMessage }}</span>
         </span>
@@ -156,13 +172,13 @@ import {
       display: block;
       font-size: 14px;
       font-weight: 600;
-      color: var(--govbr-gray-80, #333);
+      color: var(--govbr-gray-80, var(--govbr-gray-80));
       margin-bottom: 8px;
       line-height: 1.4;
     }
 
     .br-input-required {
-      color: var(--govbr-danger, #e52207);
+      color: var(--govbr-danger, var(--govbr-danger));
       margin-left: 4px;
     }
 
@@ -170,7 +186,7 @@ import {
     .br-input-helper {
       display: block;
       font-size: 12px;
-      color: var(--govbr-gray-60, #555);
+      color: var(--govbr-gray-60, var(--govbr-gray-60));
       margin-bottom: 8px;
     }
 
@@ -190,9 +206,9 @@ import {
       font-family: inherit;
       font-size: 14px;
       font-weight: 500;
-      color: var(--govbr-gray-80, #333);
-      background-color: #fff;
-      border: 1px solid var(--govbr-gray-40, #888);
+      color: var(--govbr-gray-80, var(--govbr-gray-80));
+      background-color: var(--govbr-on-primary);
+      border: 1px solid var(--govbr-gray-40, var(--govbr-gray-40));
       border-radius: 4px;
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
@@ -210,7 +226,7 @@ import {
     }
 
     .br-input-field::placeholder {
-      color: var(--govbr-gray-40, #888);
+      color: var(--govbr-gray-40, var(--govbr-gray-40));
       font-weight: 400;
     }
 
@@ -220,7 +236,7 @@ import {
 
     .br-input-field:focus {
       outline: none;
-      border-color: var(--govbr-focus-color, #ffbe2e);
+      border-color: var(--govbr-focus-color, var(--govbr-focus-color));
       box-shadow: 0 0 0 3px rgba(255, 190, 46, 0.45);
     }
 
@@ -233,8 +249,8 @@ import {
     }
 
     .br-input-field:disabled {
-      background-color: var(--govbr-gray-5, #f8f8f8);
-      color: var(--govbr-gray-40, #888);
+      background-color: var(--govbr-gray-5, var(--govbr-gray-2));
+      color: var(--govbr-gray-40, var(--govbr-gray-40));
       cursor: not-allowed;
       opacity: 0.7;
     }
@@ -246,9 +262,9 @@ import {
       padding: 0 12px;
       font-size: 14px;
       font-weight: 600;
-      color: var(--govbr-gray-80, #333);
-      background-color: var(--govbr-gray-10, #e6e6e6);
-      border: 1px solid var(--govbr-gray-40, #888);
+      color: var(--govbr-gray-80, var(--govbr-gray-80));
+      background-color: var(--govbr-gray-10, var(--govbr-gray-5));
+      border: 1px solid var(--govbr-gray-40, var(--govbr-gray-40));
       white-space: nowrap;
     }
 
@@ -277,7 +293,7 @@ import {
       left: 12px;
       top: 50%;
       transform: translateY(-50%);
-      color: var(--govbr-gray-40, #888);
+      color: var(--govbr-gray-40, var(--govbr-gray-40));
       font-size: 14px;
       pointer-events: none;
       z-index: 1;
@@ -311,13 +327,13 @@ import {
       background: transparent;
       border: none;
       border-radius: 50%;
-      color: var(--govbr-primary, #1351b4);
+      color: var(--govbr-primary, var(--govbr-primary));
       cursor: pointer;
       transition: background-color 0.15s ease;
     }
 
     .br-input-button:hover {
-      background-color: var(--govbr-primary-lightest, #dbe8fb);
+      background-color: var(--govbr-primary-lightest, var(--govbr-primary-lightest));
     }
 
     .br-input-button:focus {
@@ -334,7 +350,7 @@ import {
       display: block;
       text-align: right;
       font-size: 12px;
-      color: var(--govbr-gray-40, #888);
+      color: var(--govbr-gray-40, var(--govbr-gray-40));
       margin-top: 4px;
     }
 
@@ -355,53 +371,53 @@ import {
     }
 
     .br-input-feedback.danger {
-      color: var(--govbr-danger, #e52207);
-      background-color: #fde0dc;
+      color: var(--govbr-danger, var(--govbr-danger));
+      background-color: var(--govbr-danger-bg);
     }
 
     .br-input-feedback.success {
-      color: var(--govbr-success, #168821);
-      background-color: #d4edda;
+      color: var(--govbr-success, var(--govbr-success));
+      background-color: var(--govbr-success-bg);
     }
 
     .br-input-feedback.warning {
-      color: var(--govbr-warning-alt, #c27800);
-      background-color: #fff3cd;
+      color: var(--govbr-warning-alt, var(--govbr-warning-dark));
+      background-color: var(--govbr-warning-bg);
     }
 
     .br-input-feedback.info {
-      color: var(--govbr-info, #155bcb);
-      background-color: #d4e5ff;
+      color: var(--govbr-info, var(--govbr-info));
+      background-color: var(--govbr-info-bg);
     }
 
     /* States */
     .br-input.invalid .br-input-field {
-      border-color: var(--govbr-danger, #e52207);
+      border-color: var(--govbr-danger, var(--govbr-danger));
       border-width: 2px;
     }
 
     .br-input.invalid .br-input-addon {
-      border-color: var(--govbr-danger, #e52207);
+      border-color: var(--govbr-danger, var(--govbr-danger));
       border-width: 2px;
     }
 
     .br-input.invalid .br-input-field:focus {
-      border-color: var(--govbr-danger, #e52207);
+      border-color: var(--govbr-danger, var(--govbr-danger));
       box-shadow: 0 0 0 3px rgba(229, 34, 7, 0.25);
     }
 
     .br-input.valid .br-input-field {
-      border-color: var(--govbr-success, #168821);
+      border-color: var(--govbr-success, var(--govbr-success));
       border-width: 2px;
     }
 
     .br-input.valid .br-input-addon {
-      border-color: var(--govbr-success, #168821);
+      border-color: var(--govbr-success, var(--govbr-success));
       border-width: 2px;
     }
 
     .br-input.valid .br-input-field:focus {
-      border-color: var(--govbr-success, #168821);
+      border-color: var(--govbr-success, var(--govbr-success));
       box-shadow: 0 0 0 3px rgba(22, 136, 33, 0.25);
     }
 
@@ -460,14 +476,14 @@ import {
       height: 56px;
       font-size: 18px;
       font-weight: 600;
-      background-color: var(--govbr-gray-2, #f8f8f8);
+      background-color: var(--govbr-gray-2, var(--govbr-gray-2));
       border-color: transparent;
       padding: 0 24px;
     }
 
     .br-input.highlight .br-input-field:focus {
-      background-color: #fff;
-      border-color: var(--govbr-focus-color, #ffbe2e);
+      background-color: var(--govbr-on-primary);
+      border-color: var(--govbr-focus-color, var(--govbr-focus-color));
     }
 
     /* Inline */
@@ -607,6 +623,21 @@ export class BrInputComponent implements ControlValueAccessor {
     }
 
     return classes.join(' ');
+  }
+
+  /**
+   * Ids que descrevem o campo para o leitor de tela, na mesma precedência que
+   * o template usa para escolher qual mensagem exibir. Devolve `null` quando
+   * não há nada a descrever — `aria-describedby` apontando para elemento
+   * ausente faz o leitor anunciar vazio e esconde o defeito.
+   */
+  get descricaoAcessivel(): string | null {
+    if (this.displayError) return `${this.inputId}-error`;
+    if (this.successMessage || this.warningMessage || this.infoMessage) {
+      return `${this.inputId}-feedback`;
+    }
+    if (this.helperText) return `${this.inputId}-helper`;
+    return null;
   }
 
   get displayError(): string | undefined {

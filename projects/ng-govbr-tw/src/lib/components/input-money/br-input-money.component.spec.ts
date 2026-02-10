@@ -86,8 +86,22 @@ describe('BrInputMoneyComponent', () => {
   });
 
   it('should convert float input to cents', () => {
-    component.writeValue(50.5); // Should be interpreted as reais
+    // A unidade é declarada, não adivinhada: 100 centavos e 100 reais são o
+    // mesmo número, então só quem usa o componente sabe qual é qual.
+    component.valueUnit = 'reais';
+    component.writeValue(50.5);
     expect(component.value).toBe(5050);
+  });
+
+  it('should warn when a fractional value arrives declared as cents', () => {
+    const warn = spyOn(console, 'warn');
+    component.valueUnit = 'cents';
+    component.writeValue(50.5);
+
+    // Não existe meio centavo em BRL: valor fracionário em centavos é sinal
+    // confiável de que o formulário está entregando reais.
+    expect(warn).toHaveBeenCalled();
+    expect(component.value).toBe(51);
   });
 
   it('should handle null value', () => {

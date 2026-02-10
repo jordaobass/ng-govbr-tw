@@ -65,9 +65,9 @@ export class BrSigninComponent {
 
   get buttonClasses(): string {
     const variantStyles = {
-      primary: 'bg-[#1351b4] hover:bg-[#0c326f] text-white border-2 border-[#1351b4] hover:border-[#0c326f]',
-      secondary: 'bg-white border-2 border-[#1351b4] text-[#1351b4] hover:bg-[#dbe8fb]',
-      dark: 'bg-[#071d41] hover:bg-[#0c326f] text-white border-2 border-[#071d41] hover:border-[#0c326f]',
+      primary: 'bg-govbr-primary hover:bg-govbr-primary-dark text-govbr-on-primary border-2 border-govbr-primary hover:border-govbr-primary-dark',
+      secondary: 'bg-govbr-bg border-2 border-govbr-primary text-govbr-primary hover:bg-govbr-primary-lightest',
+      dark: 'bg-govbr-primary-darkest hover:bg-govbr-primary-dark text-govbr-on-primary border-2 border-govbr-primary-darkest hover:border-govbr-primary-dark',
     } as const;
 
     const sizeStyles = {

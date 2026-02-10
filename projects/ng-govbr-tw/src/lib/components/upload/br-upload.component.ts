@@ -67,15 +67,15 @@ export interface BrUploadFile {
         >
         <i class="fa-solid fa-cloud-arrow-up text-2xl mb-2"
           [class.text-govbr-primary]="!dragging"
-          [class.text-white]="dragging"
+          [class.text-govbr-on-primary]="dragging"
         ></i>
         <p class="text-govbr-sm font-semibold"
           [class.text-govbr-gray-80]="!dragging"
-          [class.text-white]="dragging"
+          [class.text-govbr-on-primary]="dragging"
         >
           Arraste arquivos aqui ou clique para selecionar
         </p>
-        <p [class]="'text-govbr-xs mt-1 ' + (dragging ? 'text-white opacity-80' : 'text-govbr-gray-40')">
+        <p [class]="'text-govbr-xs mt-1 ' + (dragging ? 'text-govbr-on-primary opacity-80' : 'text-govbr-gray-40')">
           @if (accept) {
             Formatos: {{ accept }}
           }
@@ -200,9 +200,9 @@ export class BrUploadComponent implements ControlValueAccessor {
       return `${base} border-govbr-primary bg-govbr-primary`;
     }
     if (this.error) {
-      return `${base} border-govbr-danger bg-white hover:bg-red-50`;
+      return `${base} border-govbr-danger bg-govbr-bg hover:bg-govbr-danger-bg`;
     }
-    return `${base} border-govbr-gray-20 bg-white hover:bg-govbr-gray-2 hover:border-govbr-primary`;
+    return `${base} border-govbr-gray-20 bg-govbr-bg hover:bg-govbr-gray-2 hover:border-govbr-primary`;
   }
 
   onDragOver(event: DragEvent): void {

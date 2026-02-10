@@ -73,7 +73,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       font-family: var(--govbr-font-family, 'Rawline', sans-serif);
       font-weight: 500;
       font-size: 14px;
-      color: var(--govbr-gray-80, #333);
+      color: var(--govbr-gray-80, var(--govbr-gray-80));
       margin-bottom: 0;
       min-height: var(--checkbox-size);
       min-width: var(--checkbox-size);
@@ -85,7 +85,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     /* Checkbox box (::before) */
     .br-checkbox input + label::before {
       background: var(--govbr-bg, #fff);
-      border: 1px solid var(--govbr-gray-40, #888);
+      border: 1px solid var(--govbr-gray-40, var(--govbr-gray-40));
       border-radius: 4px;
       content: "";
       height: var(--checkbox-size);
@@ -98,7 +98,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
     /* Checkmark (::after) - Traço azul no fundo branco */
     .br-checkbox input:checked + label::after {
-      border: solid var(--govbr-primary, #1351b4);
+      border: solid var(--govbr-primary, var(--govbr-primary));
       border-width: 0 3px 3px 0;
       content: "";
       height: 12px;
@@ -111,17 +111,17 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
     /* Checked - mantém fundo branco com borda azul */
     .br-checkbox input:checked + label::before {
-      border-color: var(--govbr-primary, #1351b4);
+      border-color: var(--govbr-primary, var(--govbr-primary));
     }
 
     /* Indeterminate state - fundo azul com traço branco */
     .br-checkbox input:indeterminate + label::before {
-      background: var(--govbr-primary, #1351b4);
-      border-color: var(--govbr-primary, #1351b4);
+      background: var(--govbr-primary, var(--govbr-primary));
+      border-color: var(--govbr-primary, var(--govbr-primary));
     }
 
     .br-checkbox input:indeterminate + label::after {
-      border-color: #fff;
+      border-color: var(--govbr-on-primary);
       border-width: 0 0 3px;
       height: 0;
       left: 6px;
@@ -140,7 +140,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     /* Focus state */
     .br-checkbox input:focus-visible + label::before,
     .br-checkbox input:focus + label::before {
-      border-color: var(--govbr-focus-color, #ffbe2e) !important;
+      border-color: var(--govbr-focus-color, var(--govbr-focus-color)) !important;
       box-shadow: 0 0 0 3px rgba(255, 190, 46, 0.45);
       outline: none;
     }
@@ -159,23 +159,23 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     /* Invalid state */
     .br-checkbox.invalid input + label::before,
     .br-checkbox.is-invalid input + label::before {
-      border-color: var(--govbr-danger, #e52207);
+      border-color: var(--govbr-danger, var(--govbr-danger));
     }
 
     .br-checkbox.invalid input:checked + label::after,
     .br-checkbox.is-invalid input:checked + label::after {
-      border-color: var(--govbr-danger, #e52207);
+      border-color: var(--govbr-danger, var(--govbr-danger));
     }
 
     /* Valid state */
     .br-checkbox.valid input + label::before,
     .br-checkbox.is-valid input + label::before {
-      border-color: var(--govbr-success, #168821);
+      border-color: var(--govbr-success, var(--govbr-success));
     }
 
     .br-checkbox.valid input:checked + label::after,
     .br-checkbox.is-valid input:checked + label::after {
-      border-color: var(--govbr-success, #168821);
+      border-color: var(--govbr-success, var(--govbr-success));
     }
 
     /* Small size */
@@ -217,7 +217,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     .br-checkbox.inverted label,
     .br-checkbox.dark-mode,
     .br-checkbox.dark-mode label {
-      color: #fff;
+      color: var(--govbr-on-primary);
     }
 
     /* Feedback message */
@@ -238,23 +238,23 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     }
 
     .br-checkbox-feedback.danger {
-      color: var(--govbr-danger, #e52207);
-      background-color: #fde0dc;
+      color: var(--govbr-danger, var(--govbr-danger));
+      background-color: var(--govbr-danger-bg);
     }
 
     .br-checkbox-feedback.success {
-      color: var(--govbr-success, #168821);
-      background-color: #d4edda;
+      color: var(--govbr-success, var(--govbr-success));
+      background-color: var(--govbr-success-bg);
     }
 
     .br-checkbox-feedback.warning {
-      color: var(--govbr-warning-alt, #c27800);
-      background-color: #fff3cd;
+      color: var(--govbr-warning-alt, var(--govbr-warning-dark));
+      background-color: var(--govbr-warning-bg);
     }
 
     .br-checkbox-feedback.info {
-      color: var(--govbr-info, #155bcb);
-      background-color: #d4e5ff;
+      color: var(--govbr-info, var(--govbr-info));
+      background-color: var(--govbr-info-bg);
     }
   `],
 })

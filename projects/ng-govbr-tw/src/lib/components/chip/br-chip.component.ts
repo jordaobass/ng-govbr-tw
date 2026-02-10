@@ -61,15 +61,15 @@ export class BrChipComponent {
 
     const variantStyles = {
       default: this.selected
-        ? 'bg-govbr-primary text-white'
+        ? 'bg-govbr-primary text-govbr-on-primary'
         : 'bg-govbr-gray-5 text-govbr-gray-80 hover:bg-govbr-gray-10',
       primary: this.selected
-        ? 'bg-govbr-primary text-white'
-        : 'bg-govbr-primary-lightest text-govbr-primary hover:bg-govbr-primary-light hover:text-white',
-      success: 'bg-green-100 text-green-800',
-      warning: 'bg-amber-100 text-amber-800',
-      danger: 'bg-red-100 text-red-800',
-      info: 'bg-blue-100 text-blue-800',
+        ? 'bg-govbr-primary text-govbr-on-primary'
+        : 'bg-govbr-primary-lightest text-govbr-primary hover:bg-govbr-primary-light hover:text-govbr-on-primary',
+      success: 'bg-govbr-success-bg text-govbr-success-dark',
+      warning: 'bg-govbr-warning-bg text-govbr-warning-dark',
+      danger: 'bg-govbr-danger-bg text-govbr-danger-dark',
+      info: 'bg-govbr-info-bg text-govbr-primary-dark',
     } as const;
 
     let cursorClass = '';

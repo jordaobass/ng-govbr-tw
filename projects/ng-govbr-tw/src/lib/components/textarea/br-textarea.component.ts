@@ -27,17 +27,22 @@ import { ControlValueAccessor, NgControl, ValidationErrors } from '@angular/form
       }
     
       @if (helperText && !error && !successMessage) {
-        <span class="block text-govbr-xs text-govbr-gray-60 mb-1">
+        <span
+          [id]="textareaId + '-helper'"
+          class="block text-govbr-xs text-govbr-gray-60 mb-1"
+        >
           {{ helperText }}
         </span>
       }
-    
+
       <textarea
         [id]="textareaId"
         [placeholder]="placeholder"
         [disabled]="isDisabled"
         [rows]="rows"
         [attr.maxlength]="maxLength || null"
+        [attr.aria-invalid]="!!displayError"
+        [attr.aria-describedby]="descricaoAcessivel"
         [class]="textareaClasses"
         [value]="value"
         (input)="onInput($event)"
@@ -59,26 +64,41 @@ import { ControlValueAccessor, NgControl, ValidationErrors } from '@angular/form
     
       <!-- Feedback -->
       @if (displayError) {
-        <span class="flex items-center mt-1 text-govbr-sm text-govbr-danger">
-          <i class="fa-solid fa-times-circle mr-1"></i>{{ displayError }}
+        <span
+          [id]="textareaId + '-error'"
+          class="flex items-center mt-1 text-govbr-sm text-govbr-danger"
+          role="alert"
+        >
+          <i class="fa-solid fa-times-circle mr-1" aria-hidden="true"></i>{{ displayError }}
         </span>
       }
 
       @if (successMessage && !displayError) {
-        <span class="flex items-center mt-1 text-govbr-sm text-govbr-success">
-          <i class="fa-solid fa-check-circle mr-1"></i>{{ successMessage }}
+        <span
+          [id]="textareaId + '-feedback'"
+          class="flex items-center mt-1 text-govbr-sm text-govbr-success-dark"
+          role="status"
+        >
+          <i class="fa-solid fa-check-circle mr-1" aria-hidden="true"></i>{{ successMessage }}
         </span>
       }
 
       @if (warningMessage && !displayError && !successMessage) {
-        <span class="flex items-center mt-1 text-govbr-sm text-govbr-warning">
-          <i class="fa-solid fa-exclamation-triangle mr-1"></i>{{ warningMessage }}
+        <span
+          [id]="textareaId + '-feedback'"
+          class="flex items-center mt-1 text-govbr-sm text-govbr-warning-dark"
+          role="status"
+        >
+          <i class="fa-solid fa-exclamation-triangle mr-1" aria-hidden="true"></i>{{ warningMessage }}
         </span>
       }
 
       @if (infoMessage && !displayError && !successMessage && !warningMessage) {
-        <span class="flex items-center mt-1 text-govbr-sm text-govbr-info">
-          <i class="fa-solid fa-info-circle mr-1"></i>{{ infoMessage }}
+        <span
+          [id]="textareaId + '-feedback'"
+          class="flex items-center mt-1 text-govbr-sm text-govbr-info"
+        >
+          <i class="fa-solid fa-info-circle mr-1" aria-hidden="true"></i>{{ infoMessage }}
         </span>
       }
     </div>
@@ -138,6 +158,20 @@ export class BrTextareaComponent implements ControlValueAccessor {
   /**
    * Retorna a mensagem de erro a ser exibida.
    */
+  /**
+   * Ids que descrevem o campo para o leitor de tela, na mesma precedência que
+   * o template usa para escolher a mensagem. `null` quando não há nada a
+   * descrever — apontar para elemento ausente faz o leitor anunciar vazio.
+   */
+  get descricaoAcessivel(): string | null {
+    if (this.displayError) return `${this.textareaId}-error`;
+    if (this.successMessage || this.warningMessage || this.infoMessage) {
+      return `${this.textareaId}-feedback`;
+    }
+    if (this.helperText) return `${this.textareaId}-helper`;
+    return null;
+  }
+
   get displayError(): string | undefined {
     if (this.error) {
       return this.error;
@@ -198,7 +232,7 @@ export class BrTextareaComponent implements ControlValueAccessor {
 
     const disabledCls = this.isDisabled
       ? 'bg-govbr-gray-2 text-govbr-gray-40 cursor-not-allowed'
-      : 'bg-white text-govbr-gray-80';
+      : 'bg-govbr-bg text-govbr-gray-80';
 
     return [base, statusCls, disabledCls].filter(Boolean).join(' ');
   }

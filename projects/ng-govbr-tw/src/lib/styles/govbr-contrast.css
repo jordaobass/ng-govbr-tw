@@ -6,10 +6,27 @@ html.govbr-contrast {
   --govbr-primary-light: #333;
   --govbr-primary-lightest: #222;
   --govbr-success: #00ff5f;
+  --govbr-success-bg: #002b10;
   --govbr-danger: #ff5f5f;
+  --govbr-danger-bg: #330000;
   --govbr-warning: #ffff00;
+  --govbr-warning-bg: #332b00;
   --govbr-info: #5fc8ff;
+  --govbr-info-bg: #002233;
   --govbr-focus-color: #ffff00;
+
+  /* As variantes escuras servem de TEXTO sobre `-bg`. No alto contraste o
+     `-bg` virou quase preto, então o texto tem de clarear, não escurecer. */
+  --govbr-danger-dark: #ff5f5f;
+  --govbr-success-dark: #00ff5f;
+  --govbr-warning-dark: #ffff00;
+
+  /* No alto contraste o hover de botão sólido vira BRANCO — máximo contraste
+     contra o fundo preto, e o texto preto (--govbr-on-primary) continua legível.
+     Escurecer como no tema claro não serve: aqui a base já é clara. */
+  --govbr-danger-hover: #fff;
+  --govbr-success-hover: #fff;
+  --govbr-warning-hover: #fff;
   --govbr-gray-2: #111;
   --govbr-gray-5: #1a1a1a;
   --govbr-gray-10: #444;
@@ -20,6 +37,50 @@ html.govbr-contrast {
   --govbr-bg: #000;
   --govbr-bg-alternative: #111;
   --govbr-border-color: #666;
+
+  /*
+   * `pure-0` é branco por definição do DS e continua branco.
+   * `on-primary` é "o que se escreve sobre a superfície primária": no tema
+   * claro a primária é azul e o texto é branco; aqui a primária virou BRANCA,
+   * então o texto tem de virar preto — senão o item ativo fica branco no branco.
+   */
+  --govbr-on-primary: #000;
+
+  /*
+   * Os canais RGB precisam acompanhar cada cor acima. O preset gera
+   * `rgb(var(--govbr-X-rgb) / <alpha-value>)`; sem redefinir o canal, a classe
+   * Tailwind continua na cor do tema claro mesmo com a var hex trocada.
+   */
+  --govbr-primary-rgb: 255 255 255;
+  --govbr-primary-dark-rgb: 255 255 255;
+  --govbr-primary-darkest-rgb: 255 255 255;
+  --govbr-primary-light-rgb: 51 51 51;
+  --govbr-primary-lightest-rgb: 34 34 34;
+  --govbr-success-rgb: 0 255 95;
+  --govbr-success-bg-rgb: 0 43 16;
+  --govbr-danger-rgb: 255 95 95;
+  --govbr-danger-bg-rgb: 51 0 0;
+  --govbr-warning-rgb: 255 255 0;
+  --govbr-warning-bg-rgb: 51 43 0;
+  --govbr-info-rgb: 95 200 255;
+  --govbr-info-bg-rgb: 0 34 51;
+  --govbr-danger-dark-rgb: 255 95 95;
+  --govbr-success-dark-rgb: 0 255 95;
+  --govbr-warning-dark-rgb: 255 255 0;
+  --govbr-danger-hover-rgb: 255 255 255;
+  --govbr-success-hover-rgb: 255 255 255;
+  --govbr-warning-hover-rgb: 255 255 255;
+  --govbr-focus-color-rgb: 255 255 0;
+  --govbr-on-primary-rgb: 0 0 0;
+  --govbr-bg-rgb: 0 0 0;
+  --govbr-bg-alternative-rgb: 17 17 17;
+  --govbr-gray-2-rgb: 17 17 17;
+  --govbr-gray-5-rgb: 26 26 26;
+  --govbr-gray-10-rgb: 68 68 68;
+  --govbr-gray-20-rgb: 102 102 102;
+  --govbr-gray-40-rgb: 170 170 170;
+  --govbr-gray-60-rgb: 204 204 204;
+  --govbr-gray-80-rgb: 255 255 255;
 }
 
 html.govbr-contrast body {
@@ -488,12 +549,6 @@ html.govbr-contrast br-notification .bg-govbr-primary {
 /* ═══ Sign-in Gov.br (br-signin) ═══ */
 html.govbr-contrast br-signin button {
   border: 2px solid #fff !important;
-}
-
-html.govbr-contrast br-signin button.bg-\[#1351b4\],
-html.govbr-contrast br-signin button.bg-\[#071d41\] {
-  background-color: #000 !important;
-  color: #ffff00 !important;
 }
 
 html.govbr-contrast br-signin button.bg-white {
@@ -992,49 +1047,6 @@ html.govbr-contrast br-badge .bg-govbr-warning {
 html.govbr-contrast br-badge .bg-govbr-info {
   background-color: #5fc8ff !important;
   color: #000 !important;
-}
-
-/* ═══ Showcase Topbar ═══ */
-html.govbr-contrast .showcase-topbar {
-  background: #000 !important;
-  border-bottom: 1px solid #444 !important;
-}
-
-html.govbr-contrast .showcase-topbar-title {
-  color: #fff !important;
-}
-
-html.govbr-contrast .showcase-topbar-link {
-  color: #ffff00 !important;
-}
-
-html.govbr-contrast .showcase-topbar-link:hover,
-html.govbr-contrast .showcase-topbar-link.active {
-  background: #333 !important;
-  color: #fff !important;
-}
-
-html.govbr-contrast .showcase-sidebar {
-  background: #111 !important;
-  border-color: #444 !important;
-}
-
-html.govbr-contrast .showcase-nav-item {
-  color: #fff !important;
-}
-
-html.govbr-contrast .showcase-nav-item:hover {
-  background: #333 !important;
-}
-
-html.govbr-contrast .showcase-nav-item.active {
-  background: #fff !important;
-  color: #000 !important;
-}
-
-html.govbr-contrast .showcase-section-title h2,
-html.govbr-contrast .showcase-section-title p {
-  color: #fff !important;
 }
 
 html.govbr-contrast .bg-white {
