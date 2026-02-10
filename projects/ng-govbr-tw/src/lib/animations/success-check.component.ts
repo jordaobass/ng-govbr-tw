@@ -100,9 +100,9 @@ export class BrSuccessCheckComponent implements OnInit {
     } as const;
 
     const variantStyles = {
-      success: 'bg-govbr-success text-white',
-      primary: 'bg-govbr-primary text-white',
-      white: 'bg-white text-govbr-success border-2 border-govbr-success',
+      success: 'bg-govbr-success text-govbr-on-primary',
+      primary: 'bg-govbr-primary text-govbr-on-primary',
+      white: 'bg-govbr-bg text-govbr-success border-2 border-govbr-success',
     } as const;
 
     return `${sizeStyles[this.size]} ${variantStyles[this.variant]}`;

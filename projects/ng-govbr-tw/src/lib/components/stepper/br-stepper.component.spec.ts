@@ -38,7 +38,9 @@ describe('BrStepperComponent', () => {
   });
 
   it('should show optional indicator', () => {
-    const optional = fixture.nativeElement.querySelector('span.text-xs');
+    // `span.text-xs` casava primeiro com a descrição do passo 1.
+    // O marcador de opcional é o único com `.ml-1`.
+    const optional = fixture.nativeElement.querySelector('span.text-xs.ml-1');
     expect(optional.textContent).toContain('opcional');
   });
 
@@ -63,7 +65,7 @@ describe('BrStepperComponent', () => {
     component.currentStep = 2;
     fixture.detectChanges();
 
-    const spy = jest.spyOn(component.stepChange, 'emit');
+    const spy = spyOn(component.stepChange, 'emit');
     component.onStepClick(0);
 
     expect(spy).toHaveBeenCalledWith(0);
@@ -74,7 +76,7 @@ describe('BrStepperComponent', () => {
     component.currentStep = 0;
     fixture.detectChanges();
 
-    const spy = jest.spyOn(component.stepChange, 'emit');
+    const spy = spyOn(component.stepChange, 'emit');
     component.onStepClick(2);
 
     expect(spy).not.toHaveBeenCalled();

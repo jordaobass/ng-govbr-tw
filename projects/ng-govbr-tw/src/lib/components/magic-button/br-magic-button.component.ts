@@ -46,7 +46,7 @@ export interface BrMagicAction {
               >
               @if (showLabels) {
                 <span
-                  class="bg-govbr-gray-80 text-white text-xs font-medium px-2 py-1 rounded shadow whitespace-nowrap"
+                  class="bg-govbr-gray-80 text-govbr-on-primary text-xs font-medium px-2 py-1 rounded shadow whitespace-nowrap"
                   >
                   {{ action.label }}
                 </span>
@@ -135,9 +135,9 @@ export class BrMagicButtonComponent {
     } as const;
 
     const variantMap = {
-      primary: 'bg-govbr-primary text-white hover:bg-govbr-primary-dark shadow-lg hover:shadow-xl',
-      secondary: 'bg-white text-govbr-primary border-2 border-govbr-primary hover:bg-govbr-primary-lightest shadow-lg',
-      danger: 'bg-govbr-danger text-white hover:bg-red-700 shadow-lg hover:shadow-xl',
+      primary: 'bg-govbr-primary text-govbr-on-primary hover:bg-govbr-primary-dark shadow-lg hover:shadow-xl',
+      secondary: 'bg-govbr-bg text-govbr-primary border-2 border-govbr-primary hover:bg-govbr-primary-lightest shadow-lg',
+      danger: 'bg-govbr-danger text-govbr-on-primary hover:bg-govbr-danger-hover shadow-lg hover:shadow-xl',
     } as const;
 
     return [
@@ -151,7 +151,7 @@ export class BrMagicButtonComponent {
   get miniButtonClasses(): string {
     return [
       'inline-flex items-center justify-center w-10 h-10 rounded-full',
-      'bg-white text-govbr-primary border border-govbr-gray-10 shadow-md',
+      'bg-govbr-bg text-govbr-primary border border-govbr-gray-10 shadow-md',
       'hover:bg-govbr-primary-lightest hover:shadow-lg transition-all',
       'govbr-focus-ring',
     ].join(' ');

@@ -182,20 +182,20 @@ export class BrButtonComponent {
     }
 
     const map = {
-      primary: 'bg-govbr-primary text-white hover:bg-govbr-primary-dark',
-      secondary: 'bg-transparent text-govbr-primary border border-govbr-primary hover:bg-govbr-primary hover:text-white',
+      primary: 'bg-govbr-primary text-govbr-on-primary hover:bg-govbr-primary-dark',
+      secondary: 'bg-transparent text-govbr-primary border border-govbr-primary hover:bg-govbr-primary hover:text-govbr-on-primary',
       tertiary: 'bg-transparent text-govbr-primary hover:bg-govbr-primary-lightest',
-      danger: 'bg-govbr-danger text-white hover:bg-red-700',
+      danger: 'bg-govbr-danger text-govbr-on-primary hover:bg-govbr-danger-hover',
     } as const;
     return map[this.emphasis] || map['primary'];
   }
 
   private getDarkEmphasisClasses(): string {
     const map = {
-      primary: 'bg-white text-govbr-primary-dark hover:bg-govbr-gray-5',
-      secondary: 'bg-transparent text-white border border-white hover:bg-white/10',
-      tertiary: 'bg-transparent text-white hover:bg-white/10',
-      danger: 'bg-govbr-danger text-white hover:bg-red-700',
+      primary: 'bg-govbr-bg text-govbr-primary-dark hover:bg-govbr-gray-5',
+      secondary: 'bg-transparent text-govbr-on-primary border border-govbr-on-primary hover:bg-govbr-bg/10',
+      tertiary: 'bg-transparent text-govbr-on-primary hover:bg-govbr-bg/10',
+      danger: 'bg-govbr-danger text-govbr-on-primary hover:bg-govbr-danger-hover',
     } as const;
     return map[this.emphasis] || map['primary'];
   }

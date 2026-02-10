@@ -3,6 +3,7 @@ import {
   ElementRef,
   forwardRef,
   Input,
+  isDevMode,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -101,6 +102,14 @@ export class BrInputMoneyComponent implements ControlValueAccessor, Validator {
   @Input() max: number | null = null;
   @Input() allowNegative = false;
 
+  /**
+   * Unidade do valor que o formulário entrega e recebe neste controle.
+   * `cents` (padrão) é a unidade interna do componente — `value` guarda
+   * centavos e `valueInReais` divide por 100. Use `reais` quando o
+   * formulário trabalha com o valor fracionário (ex.: 1.5 para R$ 1,50).
+   */
+  @Input() valueUnit: 'cents' | 'reais' = 'cents';
+
   private static idCounter = 0;
   inputId = `br-input-money-${++BrInputMoneyComponent.idCounter}`;
 
@@ -120,12 +129,12 @@ export class BrInputMoneyComponent implements ControlValueAccessor, Validator {
 
   get inputClasses(): string {
     if (this.hasError) {
-      return 'border-govbr-danger bg-red-50';
+      return 'border-govbr-danger bg-govbr-danger-bg';
     }
     if (this.disabled) {
       return 'border-govbr-gray-10 bg-govbr-gray-2 cursor-not-allowed';
     }
-    return 'border-govbr-gray-20 bg-white hover:border-govbr-gray-40';
+    return 'border-govbr-gray-20 bg-govbr-bg hover:border-govbr-gray-40';
   }
 
   onInput(event: Event): void {
@@ -228,20 +237,31 @@ export class BrInputMoneyComponent implements ControlValueAccessor, Validator {
   }
 
   writeValue(value: number | null): void {
-    // Value can be in cents (integer) or reais (float)
     if (value === null || value === undefined) {
       this.value = null;
       this.displayValue = '';
-    } else {
-      // If value looks like cents (integer or large number), use directly
-      // Otherwise, convert from reais to cents
-      if (Number.isInteger(value) && Math.abs(value) > 100) {
-        this.value = value;
-      } else {
-        this.value = Math.round(value * 100);
-      }
-      this.displayValue = this.formatMoney(this.value);
+      return;
     }
+
+    // A unidade é declarada por quem usa, nunca adivinhada pela grandeza do
+    // número: 100 centavos e 100 reais são o mesmo 100. A heurística anterior
+    // multiplicava por 100 todo valor <= 100, então R$ 1,00 virava R$ 100,00.
+    if (this.valueUnit === 'reais') {
+      this.value = Math.round(value * 100);
+    } else {
+      if (!Number.isInteger(value) && isDevMode()) {
+        // Não existe meio centavo em BRL — valor fracionário aqui é quase
+        // sempre reais entregue com a unidade errada. Avisar alto é melhor
+        // que converter calado e errar por 100x.
+        console.warn(
+          `[br-input-money] Recebeu ${value} com valueUnit="cents". ` +
+            'Centavos são inteiros; se o formulário trabalha com reais, ' +
+            'declare valueUnit="reais".'
+        );
+      }
+      this.value = Math.round(value);
+    }
+    this.displayValue = this.formatMoney(this.value);
   }
 
   registerOnChange(fn: (value: number | null) => void): void {

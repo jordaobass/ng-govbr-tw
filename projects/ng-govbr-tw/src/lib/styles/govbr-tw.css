@@ -1,169 +1,260 @@
 /* Gov.br Design System — Base CSS */
-/* Fonte Rawline via CDN SERPRO */
-@import url('https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css');
+/*
+ * Valores de token conferidos contra @govbr-ds/core v3.7.0
+ * (MIT License, Copyright (c) 2022 SERPRO).
+ */
+/*
+ * Rawline e Font Awesome NÃO são importados aqui de propósito.
+ *
+ * Havia dois `@import url(...)` para CDN externo neste arquivo. Em intranet de
+ * órgão público sem saída para a internet, ou com CSP restritiva, a fonte e os
+ * ícones morriam EM SILÊNCIO: a tela carregava e só a tipografia deixava de ser
+ * a do Gov.br. Além disso o schematic `ng-add` já injeta os mesmos `<link>` no
+ * index.html, então a instalação padrão baixava tudo em dobro.
+ *
+ * Quem oferece as fontes agora é só o `ng-add` (com `--skipFonts` para optar
+ * por fora). Para ambiente sem internet, auto-hospede os arquivos e aponte o
+ * `@font-face` — ver a seção "Ambiente sem acesso à internet" no README.
+ * A cadeia de fallback de `--govbr-font-family` degrada com elegância.
+ */
 
-/* Font Awesome 6 — icons Gov.br DS */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
+/*
+ * As diretivas `@tailwind` NÃO moram aqui.
+ *
+ * CSS de biblioteca que embarca `@tailwind base/components/utilities` faz todo
+ * consumidor que já as tem (ou seja, qualquer projeto Tailwind) gerar o
+ * conjunto de utilitários DUAS vezes no bundle. Quem declara as diretivas é a
+ * aplicação, no styles global dela — o `ng-add` conta com isso.
+ *
+ * Como consequência, este arquivo é CSS puro: sem `@layer`, importável por
+ * qualquer pipeline, com ou sem Tailwind.
+ */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+:root {
+  /* === Gov.br DS Tokens — Cores === */
+  --govbr-primary: #1351b4;
+  --govbr-primary-dark: #0c326f;
+  --govbr-primary-darkest: #071d41;
+  --govbr-primary-light: #c5d4eb;
+  --govbr-primary-lightest: #dbe8fb;
+  --govbr-success: #168821;
+  --govbr-success-bg: #e3f5e1;
+  --govbr-danger: #e52207;
+  --govbr-danger-bg: #fde0db;
+  --govbr-warning: #ffcd07;
+  --govbr-warning-bg: #fff5c2;
+  --govbr-info: #155bcb;
+  --govbr-info-bg: #d4e5ff;
 
-@layer base {
-  :root {
-    /* === Gov.br DS Tokens — Cores === */
-    --govbr-primary: #1351b4;
-    --govbr-primary-dark: #0c326f;
-    --govbr-primary-darkest: #071d41;
-    --govbr-primary-light: #c5d4eb;
-    --govbr-primary-lightest: #dbe8fb;
-    --govbr-success: #168821;
-    --govbr-danger: #e52207;
-    --govbr-warning: #ffcd07;
-    --govbr-info: #155bcb;
+  /*
+   * Variantes escuras — para TEXTO sobre as superfícies `-bg` claras.
+   * Não são enfeite: a cor sólida (`--govbr-danger`) sobre `--govbr-danger-bg`
+   * dá 3,70:1 e reprova WCAG AA (precisa 4,5:1). Os valores abaixo foram
+   * medidos sobre o respectivo `-bg`: danger 8,61:1 · success 8,38:1 ·
+   * warning 6,73:1. Para texto informativo use `--govbr-primary-dark` (9,67:1).
+   *
+   * Conferido em 10/10/2026 contra @govbr-ds/core v3.7.0: o DS oficial NÃO
+   * tem equivalentes — ele resolve estados com overlay rgba. Estes tons são
+   * nossos, escolhidos por contraste, e é de propósito.
+   */
+  --govbr-danger-dark: #7d1204;
+  --govbr-success-dark: #0b4a12;
+  --govbr-warning-dark: #6b5200;
 
-    /* === Gov.br DS Tokens — Escala de cinza === */
-    --govbr-gray-2: #f8f8f8;
-    --govbr-gray-5: #ededed;
-    --govbr-gray-10: #cccccc;
-    --govbr-gray-20: #a8a8a8;
-    --govbr-gray-40: #888888;
-    --govbr-gray-60: #555555;
-    --govbr-gray-80: #333333;
+  /*
+   * Variantes de HOVER para botão sólido de feedback. Escurecem o suficiente
+   * para dar retorno visível sem derrubar o contraste do texto que fica em
+   * cima: danger/success levam texto branco (6,83:1 e 6,69:1) e warning leva
+   * texto gray-80 (6,44:1) — todos acima do 4,5:1 exigido pela WCAG AA.
+   */
+  --govbr-danger-hover: #b31b05;
+  --govbr-success-hover: #0f6b1a;
+  --govbr-warning-hover: #e0b406;
 
-    /* === Gov.br DS Tokens — Superficies === */
-    --govbr-bg: #ffffff;
-    --govbr-bg-alternative: #f0f0f0;
+  /* === Gov.br DS Tokens — Escala de cinza === */
+  --govbr-gray-2: #f8f8f8;
+  --govbr-gray-5: #ededed;
+  --govbr-gray-10: #cccccc;
+  --govbr-gray-20: #a8a8a8;
+  --govbr-gray-40: #888888;
+  --govbr-gray-60: #555555;
+  --govbr-gray-80: #333333;
 
-    /* === Gov.br DS Tokens — Tipografia === */
-    --govbr-font-family: 'Rawline', 'Raleway', sans-serif;
-    --govbr-font-weight-semi-bold: 600;
-    --govbr-font-size-sm: 14px;
-    --govbr-line-height-medium: 1.45;
+  /* === Gov.br DS Tokens — Superficies === */
+  --govbr-bg: #ffffff;
+  --govbr-bg-alternative: #f0f0f0;
+  --govbr-pure-0: #ffffff;
 
-    /* === Gov.br DS Tokens — Espacamento === */
-    --govbr-spacing-4: 16px;
-    --govbr-spacing-3: 12px;
+  /* Texto/ícone sobre a superfície primária. Vira preto no alto contraste,
+     onde a primária passa a ser branca. */
+  --govbr-on-primary: #ffffff;
 
-    /* === Gov.br DS Tokens — Focus (acessibilidade) === */
-    --govbr-focus-color: #ffbe2e;
-    --govbr-focus-width: 3px;
-    --govbr-focus-offset: 2px;
-    --govbr-focus-style: solid;
+  /*
+   * === Canais RGB — consumidos pelo tailwind.preset.js ===
+   *
+   * O preset gera `rgb(var(--govbr-X-rgb) / <alpha-value>)` para que o
+   * modificador de opacidade do Tailwind (`bg-govbr-primary/60`) continue
+   * funcionando. Toda cor acima precisa do canal correspondente aqui, e
+   * TODO tema (ver govbr-contrast.css) precisa redefinir os dois.
+   */
+  --govbr-primary-rgb: 19 81 180;
+  --govbr-primary-dark-rgb: 12 50 111;
+  --govbr-primary-darkest-rgb: 7 29 65;
+  --govbr-primary-light-rgb: 197 212 235;
+  --govbr-primary-lightest-rgb: 219 232 251;
+  --govbr-success-rgb: 22 136 33;
+  --govbr-success-bg-rgb: 227 245 225;
+  --govbr-danger-rgb: 229 34 7;
+  --govbr-danger-bg-rgb: 253 224 219;
+  --govbr-warning-rgb: 255 205 7;
+  --govbr-warning-bg-rgb: 255 245 194;
+  --govbr-info-rgb: 21 91 203;
+  --govbr-info-bg-rgb: 212 229 255;
+  --govbr-danger-dark-rgb: 125 18 4;
+  --govbr-success-dark-rgb: 11 74 18;
+  --govbr-warning-dark-rgb: 107 82 0;
+  --govbr-danger-hover-rgb: 179 27 5;
+  --govbr-success-hover-rgb: 15 107 26;
+  --govbr-warning-hover-rgb: 224 180 6;
+  --govbr-focus-color-rgb: 255 190 46;
+  --govbr-pure-0-rgb: 255 255 255;
+  --govbr-on-primary-rgb: 255 255 255;
+  --govbr-bg-rgb: 255 255 255;
+  --govbr-bg-alternative-rgb: 240 240 240;
+  --govbr-gray-2-rgb: 248 248 248;
+  --govbr-gray-5-rgb: 237 237 237;
+  --govbr-gray-10-rgb: 204 204 204;
+  --govbr-gray-20-rgb: 168 168 168;
+  --govbr-gray-40-rgb: 136 136 136;
+  --govbr-gray-60-rgb: 85 85 85;
+  --govbr-gray-80-rgb: 51 51 51;
 
-    /* === Gov.br DS Tokens — Bordas === */
-    --govbr-border-color: #888888;
-    --govbr-border-radius-sm: 4px;
+  /* === Gov.br DS Tokens — Tipografia === */
+  --govbr-font-family: 'Rawline', 'Raleway', sans-serif;
+  --govbr-font-weight-semi-bold: 600;
+  --govbr-font-size-sm: 14px;
+  --govbr-line-height-medium: 1.45;
 
-    /* === Gov.br DS Tokens — Input === */
-    --govbr-input-small: 32px;
-    --govbr-input-medium: 40px;
-    --govbr-input-large: 48px;
-    --govbr-input-highlight: 56px;
+  /* === Gov.br DS Tokens — Espacamento === */
+  --govbr-spacing-4: 16px;
+  --govbr-spacing-3: 12px;
 
-    /* === Table — Header Blue (padrao) === */
-    --govbr-table-header-bg: var(--govbr-primary);
-    --govbr-table-header-color: var(--govbr-bg);
-    --govbr-table-header-border: none;
-    --govbr-table-header-radius: var(--govbr-border-radius-sm);
+  /* === Gov.br DS Tokens — Focus (acessibilidade) === */
+  --govbr-focus-color: #ffbe2e;
+  --govbr-focus-width: 3px;
+  --govbr-focus-offset: 2px;
+  --govbr-focus-style: solid;
 
-    /* === Table — Body === */
-    --govbr-table-row-bg: var(--govbr-bg);
-    --govbr-table-row-alt-bg: var(--govbr-bg-alternative);
-    --govbr-table-row-hover-bg: rgba(0, 0, 0, 0.04);
-    --govbr-table-cell-color: var(--govbr-gray-80);
-    --govbr-table-cell-border: 1px solid var(--govbr-border-color);
-  }
+  /* === Gov.br DS Tokens — Bordas === */
+  --govbr-border-color: #888888;
+  --govbr-border-radius-sm: 4px;
 
-  body {
-    font-family: var(--govbr-font-family);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+  /* === Gov.br DS Tokens — Input === */
+  --govbr-input-small: 32px;
+  --govbr-input-medium: 40px;
+  --govbr-input-large: 48px;
+  --govbr-input-highlight: 56px;
+
+  /* === Table — Header Blue (padrao) === */
+  --govbr-table-header-bg: var(--govbr-primary);
+  --govbr-table-header-color: var(--govbr-bg);
+  --govbr-table-header-border: none;
+  --govbr-table-header-radius: var(--govbr-border-radius-sm);
+
+  /* === Table — Body === */
+  --govbr-table-row-bg: var(--govbr-bg);
+  --govbr-table-row-alt-bg: var(--govbr-bg-alternative);
+  --govbr-table-row-hover-bg: rgba(0, 0, 0, 0.04);
+  --govbr-table-cell-color: var(--govbr-gray-80);
+  --govbr-table-cell-border: 1px solid var(--govbr-border-color);
 }
 
-@layer components {
-  /* Gov.br DS — Padrão de focus para botões e elementos interativos */
-  .govbr-focus-ring:focus,
-  .govbr-focus-ring:focus-visible {
-    outline: var(--govbr-focus-width) var(--govbr-focus-style) var(--govbr-focus-color);
-    outline-offset: var(--govbr-focus-offset);
-  }
+body {
+  font-family: var(--govbr-font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  /* Gov.br DS — Input base styles (conforme core.css oficial) */
-  .govbr-input {
-    background-color: var(--govbr-bg);
-    border: 1px solid var(--govbr-border-color);
-    border-radius: var(--govbr-border-radius-sm);
-    color: var(--govbr-gray-80);
-    font-weight: 500;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  }
+/* Gov.br DS — Padrão de focus para botões e elementos interativos */
+.govbr-focus-ring:focus,
+.govbr-focus-ring:focus-visible {
+  outline: var(--govbr-focus-width) var(--govbr-focus-style) var(--govbr-focus-color);
+  outline-offset: var(--govbr-focus-offset);
+}
 
-  .govbr-input:not(:disabled):not(:read-only):hover {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08));
-  }
+/* Gov.br DS — Input base styles (conforme core.css oficial) */
+.govbr-input {
+  background-color: var(--govbr-bg);
+  border: 1px solid var(--govbr-border-color);
+  border-radius: var(--govbr-border-radius-sm);
+  color: var(--govbr-gray-80);
+  font-weight: 500;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
 
-  .govbr-input:focus,
-  .govbr-input:focus-visible {
-    border-color: var(--govbr-focus-color);
-    box-shadow: 0 0 0 var(--govbr-focus-width) rgba(255, 190, 46, 0.45);
-    outline: none;
-  }
+.govbr-input:not(:disabled):not(:read-only):hover {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08));
+}
 
-  .govbr-input:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-    background-color: var(--govbr-gray-2);
-  }
+.govbr-input:focus,
+.govbr-input:focus-visible {
+  border-color: var(--govbr-focus-color);
+  box-shadow: 0 0 0 var(--govbr-focus-width) rgba(255, 190, 46, 0.45);
+  outline: none;
+}
 
-  /* Estados de validação — borda 2px como no DS oficial */
-  .govbr-input--danger {
-    border-color: var(--govbr-danger);
-    border-width: 2px;
-  }
-  .govbr-input--danger:focus,
-  .govbr-input--danger:focus-visible {
-    border-color: var(--govbr-danger);
-    box-shadow: 0 0 0 var(--govbr-focus-width) rgba(229, 34, 7, 0.3);
-  }
+.govbr-input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background-color: var(--govbr-gray-2);
+}
 
-  .govbr-input--success {
-    border-color: var(--govbr-success);
-    border-width: 2px;
-  }
-  .govbr-input--success:focus,
-  .govbr-input--success:focus-visible {
-    border-color: var(--govbr-success);
-    box-shadow: 0 0 0 var(--govbr-focus-width) rgba(22, 136, 33, 0.3);
-  }
+/* Estados de validação — borda 2px como no DS oficial */
+.govbr-input--danger {
+  border-color: var(--govbr-danger);
+  border-width: 2px;
+}
+.govbr-input--danger:focus,
+.govbr-input--danger:focus-visible {
+  border-color: var(--govbr-danger);
+  box-shadow: 0 0 0 var(--govbr-focus-width) rgba(229, 34, 7, 0.3);
+}
 
-  .govbr-input--warning {
-    border-color: var(--govbr-warning);
-    border-width: 2px;
-  }
-  .govbr-input--warning:focus,
-  .govbr-input--warning:focus-visible {
-    border-color: var(--govbr-warning);
-    box-shadow: 0 0 0 var(--govbr-focus-width) rgba(255, 205, 7, 0.3);
-  }
+.govbr-input--success {
+  border-color: var(--govbr-success);
+  border-width: 2px;
+}
+.govbr-input--success:focus,
+.govbr-input--success:focus-visible {
+  border-color: var(--govbr-success);
+  box-shadow: 0 0 0 var(--govbr-focus-width) rgba(22, 136, 33, 0.3);
+}
 
-  .govbr-input--info {
-    border-color: var(--govbr-info);
-    border-width: 2px;
-  }
-  .govbr-input--info:focus,
-  .govbr-input--info:focus-visible {
-    border-color: var(--govbr-info);
-    box-shadow: 0 0 0 var(--govbr-focus-width) rgba(21, 91, 203, 0.3);
-  }
+.govbr-input--warning {
+  border-color: var(--govbr-warning);
+  border-width: 2px;
+}
+.govbr-input--warning:focus,
+.govbr-input--warning:focus-visible {
+  border-color: var(--govbr-warning);
+  box-shadow: 0 0 0 var(--govbr-focus-width) rgba(255, 205, 7, 0.3);
+}
 
-  /* Gov.br DS — Focus para checkbox/radio (via peer) */
-  .govbr-focus-checkbox:focus + span,
-  .govbr-focus-checkbox:focus-visible + span {
-    outline: var(--govbr-focus-width) var(--govbr-focus-style) var(--govbr-focus-color);
-    outline-offset: var(--govbr-focus-offset);
-  }
+.govbr-input--info {
+  border-color: var(--govbr-info);
+  border-width: 2px;
+}
+.govbr-input--info:focus,
+.govbr-input--info:focus-visible {
+  border-color: var(--govbr-info);
+  box-shadow: 0 0 0 var(--govbr-focus-width) rgba(21, 91, 203, 0.3);
+}
+
+/* Gov.br DS — Focus para checkbox/radio (via peer) */
+.govbr-focus-checkbox:focus + span,
+.govbr-focus-checkbox:focus-visible + span {
+  outline: var(--govbr-focus-width) var(--govbr-focus-style) var(--govbr-focus-color);
+  outline-offset: var(--govbr-focus-offset);
 }
 
 /* ═══ Alto Contraste (GovBR DS) ═══ */

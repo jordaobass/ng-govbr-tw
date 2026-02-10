@@ -51,7 +51,7 @@ describe('BrChipComponent', () => {
 
   it('should emit selectedChange on selection', () => {
     component.selectable = true;
-    const spy = jest.spyOn(component.selectedChange, 'emit');
+    const spy = spyOn(component.selectedChange, 'emit');
 
     component.handleClick();
     expect(spy).toHaveBeenCalledWith(true);
@@ -61,7 +61,7 @@ describe('BrChipComponent', () => {
     component.removable = true;
     fixture.detectChanges();
 
-    const spy = jest.spyOn(component.remove, 'emit');
+    const spy = spyOn(component.remove, 'emit');
     const event = new Event('click');
     component.handleRemove(event);
 

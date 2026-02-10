@@ -63,7 +63,7 @@ export class BrSidebarGroupLabelComponent {}
         <span [class]="collapsed ? 'sr-only' : 'truncate'">{{ label }}</span>
         @if (badge && !collapsed) {
           <span
-            class="ml-auto px-1.5 py-0.5 text-govbr-xs font-semibold rounded-govbr-pill bg-govbr-danger text-white"
+            class="ml-auto px-1.5 py-0.5 text-govbr-xs font-semibold rounded-govbr-pill bg-govbr-danger text-govbr-on-primary"
             >
             {{ badge }}
           </span>
@@ -82,7 +82,7 @@ export class BrSidebarGroupLabelComponent {}
         <span [class]="collapsed ? 'sr-only' : 'truncate'">{{ label }}</span>
         @if (badge && !collapsed) {
           <span
-            class="ml-auto px-1.5 py-0.5 text-govbr-xs font-semibold rounded-govbr-pill bg-govbr-danger text-white"
+            class="ml-auto px-1.5 py-0.5 text-govbr-xs font-semibold rounded-govbr-pill bg-govbr-danger text-govbr-on-primary"
             >
             {{ badge }}
           </span>
@@ -92,11 +92,11 @@ export class BrSidebarGroupLabelComponent {}
     `,
   styles: [`
     .br-sidebar-item-active {
-      background-color: #1351b4 !important;
-      color: #ffffff !important;
+      background-color: var(--govbr-primary) !important;
+      color: var(--govbr-on-primary) !important;
     }
     .br-sidebar-item-active i {
-      color: #ffffff !important;
+      color: var(--govbr-on-primary) !important;
     }
   `],
 })
@@ -227,7 +227,7 @@ export class BrSidebarSubComponent {
       @if (collapsible) {
         <button
           type="button"
-          class="hidden md:flex absolute -right-3 top-6 w-6 h-6 items-center justify-center rounded-full bg-white border border-govbr-gray-10 shadow-sm text-govbr-gray-40 hover:text-govbr-primary hover:border-govbr-primary transition-colors z-10"
+          class="hidden md:flex absolute -right-3 top-6 w-6 h-6 items-center justify-center rounded-full bg-govbr-bg border border-govbr-gray-10 shadow-sm text-govbr-gray-40 hover:text-govbr-primary hover:border-govbr-primary transition-colors z-10"
           [attr.aria-label]="collapsed ? 'Expandir menu' : 'Recolher menu'"
           (click)="toggleCollapse()"
           >
@@ -256,7 +256,7 @@ export class BrSidebarSubComponent {
     <!-- Mobile drawer -->
     @if (mobileOpen) {
       <aside
-        class="md:hidden fixed top-0 left-0 z-[999] w-72 h-full bg-white border-r border-govbr-gray-10 shadow-xl overflow-y-auto font-rawline flex flex-col"
+        class="md:hidden fixed top-0 left-0 z-[999] w-72 h-full bg-govbr-bg border-r border-govbr-gray-10 shadow-xl overflow-y-auto font-rawline flex flex-col"
         [style.animation]="drawerAnimation"
         role="navigation"
         aria-label="Menu lateral"
@@ -329,7 +329,7 @@ export class BrSidebarComponent {
     } as const;
 
     return [
-      'hidden md:flex flex-col bg-white font-rawline min-h-full relative transition-all duration-200',
+      'hidden md:flex flex-col bg-govbr-bg font-rawline min-h-full relative transition-all duration-200',
       widthCls,
       variantMap[this.variant],
     ].join(' ');

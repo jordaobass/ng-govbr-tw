@@ -133,8 +133,8 @@ export class BrMessageComponent implements OnInit, OnDestroy, OnChanges {
   get messageClasses(): string {
     const base = 'p-4 rounded font-rawline border-l-4 relative overflow-hidden';
     const styles = {
-      success: 'bg-green-50 border-govbr-success text-govbr-success',
-      danger: 'bg-red-50 border-govbr-danger text-govbr-danger',
+      success: 'bg-govbr-success-bg border-govbr-success text-govbr-success',
+      danger: 'bg-govbr-danger-bg border-govbr-danger text-govbr-danger',
       warning: 'bg-govbr-warning-bg border-govbr-warning text-govbr-gray-80',
       info: 'bg-govbr-info-bg border-govbr-info text-govbr-primary-dark',
     } as const;

@@ -107,12 +107,12 @@ export class BrInputTelefoneComponent implements ControlValueAccessor, Validator
 
   get inputClasses(): string {
     if (this.hasError) {
-      return 'border-govbr-danger bg-red-50';
+      return 'border-govbr-danger bg-govbr-danger-bg';
     }
     if (this.disabled) {
       return 'border-govbr-gray-10 bg-govbr-gray-2 cursor-not-allowed';
     }
-    return 'border-govbr-gray-20 bg-white hover:border-govbr-gray-40';
+    return 'border-govbr-gray-20 bg-govbr-bg hover:border-govbr-gray-40';
   }
 
   onInput(event: Event): void {

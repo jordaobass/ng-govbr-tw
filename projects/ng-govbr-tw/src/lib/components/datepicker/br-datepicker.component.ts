@@ -93,7 +93,7 @@ import { BrAnimationService } from '../../animations/animation.service';
       <!-- Calendar dropdown -->
       @if (calendarOpen) {
         <div
-          class="absolute z-50 mt-1 bg-white border border-govbr-gray-10 rounded shadow-lg p-3 w-72"
+          class="absolute z-50 mt-1 bg-govbr-bg border border-govbr-gray-10 rounded shadow-lg p-3 w-72"
           role="dialog"
           aria-label="Selecionar data"
           [style.animation]="calendarAnimation"
@@ -255,7 +255,7 @@ export class BrDatepickerComponent implements ControlValueAccessor {
   getDayClasses(day: { day: number; current: boolean; selected: boolean; today: boolean }): string {
     const base = 'w-9 h-9 text-xs rounded-full flex items-center justify-center transition-colors';
     if (!day.current) return `${base} text-govbr-gray-20 cursor-default`;
-    if (day.selected) return `${base} bg-govbr-primary text-white font-semibold`;
+    if (day.selected) return `${base} bg-govbr-primary text-govbr-on-primary font-semibold`;
     if (day.today) return `${base} border border-govbr-primary text-govbr-primary font-semibold hover:bg-govbr-primary-lightest cursor-pointer`;
     return `${base} text-govbr-gray-80 hover:bg-govbr-gray-2 cursor-pointer`;
   }

@@ -1,5 +1,5 @@
 /*
- * Public API Surface of @aspect-br/ng-govbr-tw
+ * Public API Surface of @schenkerjon/ng-govbr-tw
  */
 
 // Animation System
@@ -89,3 +89,10 @@ export type { BrCepAddress } from './lib/components/input-cep/br-input-cep.compo
 export { BrInputMoneyComponent } from './lib/components/input-money/br-input-money.component';
 export { BrNotificationComponent } from './lib/components/notification/br-notification.component';
 export { BrSigninComponent } from './lib/components/signin/br-signin.component';
+
+// Skiplink — atalhos de navegação exigidos pelo Gov.br DS / eMAG
+export { BrSkiplinkComponent } from './lib/components/skiplink/br-skiplink.component';
+export type { BrSkiplinkItem } from './lib/components/skiplink/br-skiplink.component';
+
+// Services
+export { BrContrastService } from './lib/services/br-contrast.service';

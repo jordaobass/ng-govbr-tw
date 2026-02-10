@@ -26,7 +26,10 @@ import { ControlValueAccessor, NgControl, ValidationErrors, Validator, AbstractC
       }
 
       @if (helperText && !displayError) {
-        <span class="block text-govbr-xs text-govbr-gray-60 mb-1">
+        <span
+          [id]="inputId + '-helper'"
+          class="block text-govbr-xs text-govbr-gray-60 mb-1"
+        >
           {{ helperText }}
         </span>
       }
@@ -38,18 +41,27 @@ import { ControlValueAccessor, NgControl, ValidationErrors, Validator, AbstractC
           inputmode="numeric"
           [placeholder]="placeholder"
           [disabled]="isDisabled"
+          [attr.aria-invalid]="!!displayError"
+          [attr.aria-describedby]="descricaoAcessivel"
           [class]="inputClasses"
           [value]="displayValue"
           (input)="onInput($event)"
           (blur)="onBlur()"
           maxlength="14"
         />
-        <i class="fa-solid fa-id-card absolute right-3 top-1/2 -translate-y-1/2 text-govbr-gray-40 pointer-events-none"></i>
+        <i
+          class="fa-solid fa-id-card absolute right-3 top-1/2 -translate-y-1/2 text-govbr-gray-40 pointer-events-none"
+          aria-hidden="true"
+        ></i>
       </div>
 
       @if (displayError) {
-        <span class="flex items-center mt-1 text-govbr-sm text-govbr-danger">
-          <i class="fa-solid fa-times-circle mr-1"></i>{{ displayError }}
+        <span
+          [id]="inputId + '-error'"
+          class="flex items-center mt-1 text-govbr-sm text-govbr-danger"
+          role="alert"
+        >
+          <i class="fa-solid fa-times-circle mr-1" aria-hidden="true"></i>{{ displayError }}
         </span>
       }
     </div>
@@ -102,6 +114,18 @@ export class BrInputCpfComponent implements ControlValueAccessor, Validator {
     return this.getFirstErrorMessage(control.errors);
   }
 
+  /**
+   * Ids que descrevem o campo para o leitor de tela. O erro só entra quando
+   * existe — `aria-describedby` apontando para elemento ausente faz o leitor
+   * anunciar nada e mascara o problema.
+   */
+  get descricaoAcessivel(): string | null {
+    const ids: string[] = [];
+    if (this.displayError) ids.push(`${this.inputId}-error`);
+    else if (this.helperText) ids.push(`${this.inputId}-helper`);
+    return ids.length ? ids.join(' ') : null;
+  }
+
   private getFirstErrorMessage(errors: ValidationErrors): string {
     for (const key of Object.keys(errors)) {
       if (this.errorMessages[key]) return this.errorMessages[key];
@@ -122,7 +146,7 @@ export class BrInputCpfComponent implements ControlValueAccessor, Validator {
     const statusCls = this.displayError ? 'govbr-input--danger' : '';
     const disabledCls = this.isDisabled
       ? 'bg-govbr-gray-2 text-govbr-gray-40 cursor-not-allowed'
-      : 'bg-white text-govbr-gray-80';
+      : 'bg-govbr-bg text-govbr-gray-80';
 
     return [base, statusCls, disabledCls].filter(Boolean).join(' ');
   }

@@ -102,7 +102,7 @@ export class BrMenuItemComponent {
   get activeClasses(): string {
     return [
       'flex items-center gap-3 px-4 py-3 text-sm w-full',
-      'bg-govbr-primary text-white font-semibold',
+      'bg-govbr-primary text-govbr-on-primary font-semibold',
       'govbr-focus-ring',
       'cursor-pointer',
     ].join(' ');
@@ -113,10 +113,10 @@ export class BrMenuItemComponent {
   }
 
   get activeIconClasses(): string {
-    return `fa-solid fa-${this.icon} w-5 text-center flex-shrink-0 leading-none text-white`;
+    return `fa-solid fa-${this.icon} w-5 text-center flex-shrink-0 leading-none text-govbr-on-primary`;
   }
 
   get badgeClasses(): string {
-    return 'ml-auto px-1.5 py-0.5 text-xs font-semibold leading-none rounded-govbr-pill bg-govbr-danger text-white self-center';
+    return 'ml-auto px-1.5 py-0.5 text-xs font-semibold leading-none rounded-govbr-pill bg-govbr-danger text-govbr-on-primary self-center';
   }
 }

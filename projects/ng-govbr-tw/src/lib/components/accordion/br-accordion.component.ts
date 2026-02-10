@@ -45,7 +45,7 @@ import { BrAnimationService } from '../../animations/animation.service';
         <!-- Badge -->
         @if (badge) {
           <span
-            class="mx-2 px-1.5 py-0.5 text-govbr-xs font-semibold rounded-govbr-pill bg-govbr-primary text-white flex-shrink-0"
+            class="mx-2 px-1.5 py-0.5 text-govbr-xs font-semibold rounded-govbr-pill bg-govbr-primary text-govbr-on-primary flex-shrink-0"
             >
             {{ badge }}
           </span>
@@ -151,7 +151,7 @@ export class BrAccordionItemComponent implements AfterViewInit {
   get containerClasses(): string {
     const base = 'border-b font-rawline';
     return this.variant === 'negative'
-      ? `${base} border-white/20`
+      ? `${base} border-govbr-on-primary/20`
       : `${base} border-govbr-gray-10`;
   }
 
@@ -169,7 +169,7 @@ export class BrAccordionItemComponent implements AfterViewInit {
     ].join(' ');
 
     const variantCls = this.variant === 'negative'
-      ? 'text-white hover:bg-white/10'
+      ? 'text-govbr-on-primary hover:bg-govbr-bg/10'
       : 'text-govbr-gray-80 hover:bg-govbr-gray-2';
 
     const disabledCls = this.disabled
@@ -192,7 +192,7 @@ export class BrAccordionItemComponent implements AfterViewInit {
       : '';
 
     const colorCls = this.variant === 'negative'
-      ? 'text-white/80'
+      ? 'text-govbr-on-primary/80'
       : 'text-govbr-gray-60';
 
     return `${base} ${transition} ${colorCls}`;
@@ -224,13 +224,13 @@ export class BrAccordionComponent {
 
     const borderCls = this.bordered
       ? this.variant === 'negative'
-        ? 'border border-white/20 rounded'
+        ? 'border border-govbr-on-primary/20 rounded'
         : 'border border-govbr-gray-10 rounded'
       : '';
 
     const bgCls = this.variant === 'negative'
       ? 'bg-govbr-primary-darkest'
-      : 'bg-white';
+      : 'bg-govbr-bg';
 
     return [base, borderCls, bgCls].filter(Boolean).join(' ');
   }

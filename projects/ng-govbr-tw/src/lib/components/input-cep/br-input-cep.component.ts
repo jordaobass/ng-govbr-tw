@@ -132,12 +132,12 @@ export class BrInputCepComponent implements ControlValueAccessor, Validator {
 
   get inputClasses(): string {
     if (this.hasError) {
-      return 'border-govbr-danger bg-red-50';
+      return 'border-govbr-danger bg-govbr-danger-bg';
     }
     if (this.disabled) {
       return 'border-govbr-gray-10 bg-govbr-gray-2 cursor-not-allowed';
     }
-    return 'border-govbr-gray-20 bg-white hover:border-govbr-gray-40';
+    return 'border-govbr-gray-20 bg-govbr-bg hover:border-govbr-gray-40';
   }
 
   onInput(event: Event): void {
@@ -232,7 +232,9 @@ export class BrInputCepComponent implements ControlValueAccessor, Validator {
   }
 
   writeValue(value: string): void {
-    this.value = value?.replace(/\D/g, '') || '';
+    // Mesma normalização do onInput: CEP tem 8 dígitos, valor vindo do
+    // formulário não pode escapar do limite que a digitação respeita.
+    this.value = (value?.replace(/\D/g, '') || '').slice(0, 8);
     this.displayValue = this.formatCep(this.value);
   }
 

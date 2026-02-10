@@ -7,7 +7,7 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `
-    <footer class="bg-govbr-primary-darkest text-white font-rawline mt-auto">
+    <footer class="bg-govbr-primary-darkest text-govbr-on-primary font-rawline mt-auto">
       <div class="max-w-screen-xl mx-auto px-4 py-6">
         <div class="flex flex-col md:flex-row items-center justify-between gap-4">
           @if (logoSrc) {

@@ -35,9 +35,9 @@ export class BrMenuBarComponent {
 
   get barClasses(): string {
     const variants = {
-      primary: 'bg-govbr-primary text-white font-rawline',
-      dark: 'bg-govbr-primary-darkest text-white font-rawline',
-      white: 'bg-white text-govbr-gray-80 border-b border-govbr-gray-10 font-rawline',
+      primary: 'bg-govbr-primary text-govbr-on-primary font-rawline',
+      dark: 'bg-govbr-primary-darkest text-govbr-on-primary font-rawline',
+      white: 'bg-govbr-bg text-govbr-gray-80 border-b border-govbr-gray-10 font-rawline',
     } as const;
     return variants[this.variant];
   }
@@ -94,7 +94,7 @@ export class BrMenuBarComponent {
       <!-- Submenu dropdown -->
       @if (hasSubmenu && showSub) {
         <ul
-          class="absolute left-0 top-full z-50 min-w-[220px] bg-white border border-govbr-gray-10 shadow-lg rounded-b py-1 font-rawline"
+          class="absolute left-0 top-full z-50 min-w-[220px] bg-govbr-bg border border-govbr-gray-10 shadow-lg rounded-b py-1 font-rawline"
           role="menu"
           >
           <ng-content></ng-content>
@@ -133,8 +133,8 @@ export class BrMenuBarItemComponent {
 
   get itemClasses(): string {
     const variantMap = {
-      primary: 'text-white hover:bg-white/15',
-      dark: 'text-white hover:bg-white/15',
+      primary: 'text-govbr-on-primary hover:bg-govbr-bg/15',
+      dark: 'text-govbr-on-primary hover:bg-govbr-bg/15',
       white: 'text-govbr-gray-80 hover:bg-govbr-primary-lightest hover:text-govbr-primary',
     } as const;
     return [

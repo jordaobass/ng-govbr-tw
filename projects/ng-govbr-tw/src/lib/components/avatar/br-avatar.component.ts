@@ -60,10 +60,10 @@ export class BrAvatarComponent {
     } as const;
 
     const variantMap = {
-      primary: 'bg-govbr-primary text-white',
+      primary: 'bg-govbr-primary text-govbr-on-primary',
       neutral: 'bg-govbr-gray-20 text-govbr-gray-80',
-      success: 'bg-govbr-success text-white',
-      danger: 'bg-govbr-danger text-white',
+      success: 'bg-govbr-success text-govbr-on-primary',
+      danger: 'bg-govbr-danger text-govbr-on-primary',
       warning: 'bg-govbr-warning text-govbr-gray-80',
     } as const;
 
@@ -103,7 +103,7 @@ export class BrAvatarComponent {
     } as const;
 
     return [
-      'absolute bottom-0 right-0 rounded-full border-white',
+      'absolute bottom-0 right-0 rounded-full border-govbr-on-primary',
       dotSize[this.size],
       colorMap[this.status!],
     ].join(' ');

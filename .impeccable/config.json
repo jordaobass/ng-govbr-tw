@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "projects/ng-govbr-tw/src/lib/components/mega-menu/br-mega-menu.component.ts"
+        ],
+        "createdAt": "2026-10-10T06:53:36.020Z",
+        "reason": "Claude: <img> em L132 esta dentro de @if (logoSrc) e usa binding [src]/[alt]; logo e fornecido pelo consumidor da lib, nao ha src vazio nem placeholder"
+      }
+    ]
+  }
+}

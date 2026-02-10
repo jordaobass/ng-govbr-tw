@@ -1,21 +1,80 @@
-@import url('https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
+/*
+ * O `govbr-tw.css` define TODOS os tokens `:root` (`--govbr-*`). Ele estava
+ * faltando aqui: o demo importava só `govbr-components.css` e
+ * `govbr-contrast.css`, então nenhuma variável de token existia na página.
+ * O defeito ficou invisível enquanto os componentes usavam hex literal, e
+ * apareceu assim que passaram a usar `var(--govbr-*)`.
+ *
+ * Vem PRIMEIRO: define as variáveis que os outros dois consomem.
+ *
+ * As fontes (Rawline / Font Awesome) agora são `<link>` no index.html, como o
+ * schematic `ng-add` faz no projeto de quem instala a lib.
+ */
+@import '../../ng-govbr-tw/src/lib/styles/govbr-tw.css';
 
-/* Gov.br component styles (input borders, focus states, etc.) */
+/* Estilos de componente (bordas de input, estados de foco, ...) */
 @import '../../ng-govbr-tw/src/lib/styles/govbr-components.css';
 
-/* Gov.br high contrast mode */
+/* Alto contraste */
 @import '../../ng-govbr-tw/src/lib/styles/govbr-contrast.css';
 
+/* As diretivas são declaradas pela APLICAÇÃO, não pelo CSS da biblioteca —
+   é o que evita gerar os utilitários do Tailwind duas vezes no bundle. */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    font-family: 'Rawline', 'Raleway', sans-serif;
+    font-family: var(--govbr-font-family);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     margin: 0;
   }
+}
+
+/* ═══ Alto contraste do SHOWCASE ═══
+   Estava dentro de styles/govbr-contrast.css, que é EXPORTADO no
+   package.json — todo consumidor da lib baixava o CSS desta vitrine.
+   Estilo de demo mora no demo. */
+html.govbr-contrast .showcase-topbar {
+  background: #000 !important;
+  border-bottom: 1px solid #444 !important;
+}
+
+html.govbr-contrast .showcase-topbar-title {
+  color: #fff !important;
+}
+
+html.govbr-contrast .showcase-topbar-link {
+  color: #ffff00 !important;
+}
+
+html.govbr-contrast .showcase-topbar-link:hover,
+html.govbr-contrast .showcase-topbar-link.active {
+  background: #333 !important;
+  color: #fff !important;
+}
+
+html.govbr-contrast .showcase-sidebar {
+  background: #111 !important;
+  border-color: #444 !important;
+}
+
+html.govbr-contrast .showcase-nav-item {
+  color: #fff !important;
+}
+
+html.govbr-contrast .showcase-nav-item:hover {
+  background: #333 !important;
+}
+
+html.govbr-contrast .showcase-nav-item.active {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+html.govbr-contrast .showcase-section-title h2,
+html.govbr-contrast .showcase-section-title p {
+  color: #fff !important;
 }

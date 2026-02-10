@@ -98,7 +98,7 @@ export interface BrCookieGroup {
             <div class="flex flex-col sm:flex-row gap-2 flex-shrink-0">
               <button
                 type="button"
-                class="px-4 py-2 text-sm font-semibold text-white bg-govbr-primary rounded-govbr-pill hover:bg-govbr-primary-dark transition-colors"
+                class="px-4 py-2 text-sm font-semibold text-govbr-on-primary bg-govbr-primary rounded-govbr-pill hover:bg-govbr-primary-dark transition-colors"
                 (click)="onAcceptAll()"
                 >
                 Aceitar todos
@@ -106,7 +106,7 @@ export interface BrCookieGroup {
               @if (cookieGroups.length > 0) {
                 <button
                   type="button"
-                  class="px-4 py-2 text-sm font-semibold text-govbr-primary border border-govbr-primary rounded-govbr-pill hover:bg-govbr-primary hover:text-white transition-colors"
+                  class="px-4 py-2 text-sm font-semibold text-govbr-primary border border-govbr-primary rounded-govbr-pill hover:bg-govbr-primary hover:text-govbr-on-primary transition-colors"
                   (click)="onAcceptSelected()"
                   >
                   Aceitar selecionados
@@ -142,7 +142,7 @@ export interface BrCookieGroup {
                     (click)="toggleGroup(group)"
                     >
                     <span
-                      class="inline-block w-4 h-4 bg-white rounded-full shadow transition-transform"
+                      class="inline-block w-4 h-4 bg-govbr-bg rounded-full shadow transition-transform"
                       [class.translate-x-5]="group.enabled || group.required"
                       [class.translate-x-0.5]="!(group.enabled || group.required)"
                     ></span>
@@ -231,6 +231,6 @@ export class BrCookiebarComponent {
   }
 
   get barClasses(): string {
-    return 'relative z-50 bg-white border-t border-govbr-gray-10 shadow-lg px-4 sm:px-6 py-4 sm:py-5 max-h-[80vh] overflow-y-auto';
+    return 'relative z-50 bg-govbr-bg border-t border-govbr-gray-10 shadow-lg px-4 sm:px-6 py-4 sm:py-5 max-h-[80vh] overflow-y-auto';
   }
 }

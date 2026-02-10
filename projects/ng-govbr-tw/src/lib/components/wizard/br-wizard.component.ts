@@ -135,7 +135,7 @@ export class BrWizardStepComponent {
             type="button"
             [disabled]="currentStep === 0"
             (click)="previous()"
-            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-govbr-primary border border-govbr-primary rounded-govbr-pill hover:bg-govbr-primary hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-govbr-primary border border-govbr-primary rounded-govbr-pill hover:bg-govbr-primary hover:text-govbr-on-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
             <i class="fa-solid fa-chevron-left text-xs"></i>
             Voltar
@@ -147,7 +147,7 @@ export class BrWizardStepComponent {
             <button
               type="button"
               (click)="next()"
-              class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-govbr-primary rounded-govbr-pill hover:bg-govbr-primary-dark transition-colors"
+              class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-govbr-on-primary bg-govbr-primary rounded-govbr-pill hover:bg-govbr-primary-dark transition-colors"
               >
               Avançar
               <i class="fa-solid fa-chevron-right text-xs"></i>
@@ -157,7 +157,7 @@ export class BrWizardStepComponent {
             <button
               type="button"
               (click)="complete.emit()"
-              class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-govbr-success rounded-govbr-pill hover:bg-green-700 transition-colors"
+              class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-govbr-on-primary bg-govbr-success rounded-govbr-pill hover:bg-govbr-success-hover transition-colors"
               >
               Concluir
               <i class="fa-solid fa-check text-xs"></i>
@@ -225,10 +225,10 @@ export class BrWizardComponent implements AfterContentInit, OnChanges {
   getStepCircleClasses(index: number): string {
     const base = 'flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold flex-shrink-0 transition-colors';
     if (index < this.currentStep) {
-      return `${base} bg-govbr-primary text-white`;
+      return `${base} bg-govbr-primary text-govbr-on-primary`;
     }
     if (index === this.currentStep) {
-      return `${base} bg-govbr-primary text-white ring-2 ring-govbr-primary ring-offset-2`;
+      return `${base} bg-govbr-primary text-govbr-on-primary ring-2 ring-govbr-primary ring-offset-2`;
     }
     return `${base} bg-govbr-gray-10 text-govbr-gray-60`;
   }

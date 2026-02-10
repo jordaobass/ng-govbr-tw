@@ -19,9 +19,17 @@ describe('BrDividerComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  // `div > div` contava qualquer div aninhada, incluindo o container.
+  // O que importa é quantas LINHAS o container tem como filhas diretas.
+  function contarLinhas(): number {
+    const container = fixture.nativeElement.querySelector('div');
+    return Array.from(container.children).filter(
+      (el) => (el as HTMLElement).tagName === 'DIV'
+    ).length;
+  }
+
   it('should render simple divider without text', () => {
-    const lines = fixture.nativeElement.querySelectorAll('div > div');
-    expect(lines.length).toBe(1);
+    expect(contarLinhas()).toBe(1);
   });
 
   it('should render text when provided', () => {
@@ -36,8 +44,7 @@ describe('BrDividerComponent', () => {
     component.text = 'OR';
     fixture.detectChanges();
 
-    const lines = fixture.nativeElement.querySelectorAll('div > div');
-    expect(lines.length).toBe(2);
+    expect(contarLinhas()).toBe(2);
   });
 
   it('should apply spacing classes', () => {

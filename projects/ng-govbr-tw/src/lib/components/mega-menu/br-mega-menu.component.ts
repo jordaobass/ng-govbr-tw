@@ -83,7 +83,7 @@ export interface BrSocialLink {
       <!-- Mega panel (full-width dropdown) -->
       @if (activePanel) {
         <div
-          class="absolute left-0 right-0 z-50 bg-white border-b border-govbr-gray-10 shadow-lg"
+          class="absolute left-0 right-0 z-50 bg-govbr-bg border-b border-govbr-gray-10 shadow-lg"
           role="region"
           [attr.aria-label]="'Painel ' + activePanel"
           [style.animation]="panelAnimation"
@@ -107,7 +107,7 @@ export interface BrSocialLink {
 
       <!-- Drawer -->
       <nav
-        class="md:hidden fixed left-0 top-0 bottom-0 z-[999] w-[85vw] max-w-[360px] bg-[#F3F4F6] flex flex-col shadow-xl"
+        class="md:hidden fixed left-0 top-0 bottom-0 z-[999] w-[85vw] max-w-[360px] bg-govbr-gray-2 flex flex-col shadow-xl"
         [style.animation]="drawerAnimation"
         role="navigation"
         aria-label="Menu principal"
@@ -115,7 +115,7 @@ export interface BrSocialLink {
         #drawerEl
       >
         <!-- Drawer Header -->
-        <div class="flex items-center justify-between px-4 py-3 bg-white border-b border-[#E5E7EB]">
+        <div class="flex items-center justify-between px-4 py-3 bg-govbr-bg border-b border-govbr-gray-5">
           @if (navigationStack.length > 0) {
             <button
               type="button"
@@ -150,7 +150,7 @@ export interface BrSocialLink {
         <div class="flex-1 overflow-y-auto">
           <!-- Current level title -->
           @if (navigationStack.length > 0) {
-            <div class="px-4 py-3 bg-white border-b border-[#E5E7EB]">
+            <div class="px-4 py-3 bg-govbr-bg border-b border-govbr-gray-5">
               <span class="text-sm font-semibold text-govbr-gray-80">{{ currentLevelTitle }}</span>
             </div>
           }
@@ -190,7 +190,7 @@ export interface BrSocialLink {
 
           <!-- Social Links Section -->
           @if (socialLinks.length > 0 && navigationStack.length === 0) {
-            <div class="mt-6 px-4 py-4 border-t border-[#E5E7EB]">
+            <div class="mt-6 px-4 py-4 border-t border-govbr-gray-5">
               <span class="block text-xs font-semibold text-govbr-gray-40 uppercase tracking-wider mb-3">
                 Redes sociais
               </span>
@@ -201,7 +201,7 @@ export interface BrSocialLink {
                     target="_blank"
                     rel="noopener noreferrer"
                     [attr.aria-label]="social.label"
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-[#E5E7EB] text-govbr-gray-60 hover:text-govbr-primary hover:border-govbr-primary transition-colors focus:outline-none focus:ring-2 focus:ring-govbr-focus-color"
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-govbr-bg border border-govbr-gray-5 text-govbr-gray-60 hover:text-govbr-primary hover:border-govbr-primary transition-colors focus:outline-none focus:ring-2 focus:ring-govbr-focus-color"
                   >
                     <ng-container *ngTemplateOutlet="socialIconTemplate || defaultSocialIcon; context: { $implicit: social }"></ng-container>
                     <ng-template #defaultSocialIcon>
@@ -333,14 +333,14 @@ export class BrMegaMenuComponent {
     const isActive = this.focusedIndex === index;
     const base = [
       'w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors',
-      'border-b border-[#E5E7EB] last:border-b-0',
+      'border-b border-govbr-gray-5 last:border-b-0',
       'focus:outline-none focus:ring-2 focus:ring-inset focus:ring-govbr-focus-color focus:ring-dashed',
     ];
 
     if (isActive) {
-      base.push('bg-govbr-primary-darkest text-white');
+      base.push('bg-govbr-primary-darkest text-govbr-on-primary');
     } else {
-      base.push('bg-white text-govbr-gray-80 hover:bg-govbr-gray-2');
+      base.push('bg-govbr-bg text-govbr-gray-80 hover:bg-govbr-gray-2');
     }
 
     return base.join(' ');
@@ -374,13 +374,14 @@ export class BrMegaMenuComponent {
           this.navigateBack();
         }
         break;
-      case 'ArrowRight':
+      case 'ArrowRight': {
         const currentItem = items[this.focusedIndex];
         if (currentItem?.children?.length) {
           event.preventDefault();
           this.onItemClick(currentItem);
         }
         break;
+      }
     }
   }
 
@@ -412,9 +413,9 @@ export class BrMegaMenuComponent {
 
   get barClasses(): string {
     const variants = {
-      primary: 'bg-govbr-primary text-white',
-      dark: 'bg-govbr-primary-darkest text-white',
-      white: 'bg-white text-govbr-gray-80 border-b border-govbr-gray-10',
+      primary: 'bg-govbr-primary text-govbr-on-primary',
+      dark: 'bg-govbr-primary-darkest text-govbr-on-primary',
+      white: 'bg-govbr-bg text-govbr-gray-80 border-b border-govbr-gray-10',
     } as const;
     return variants[this.variant];
   }
@@ -469,13 +470,13 @@ export class BrMegaMenuTriggerComponent {
 
   get triggerClasses(): string {
     const variantMap = {
-      primary: 'text-white hover:bg-white/15',
-      dark: 'text-white hover:bg-white/15',
+      primary: 'text-govbr-on-primary hover:bg-govbr-bg/15',
+      dark: 'text-govbr-on-primary hover:bg-govbr-bg/15',
       white: 'text-govbr-gray-80 hover:bg-govbr-primary-lightest hover:text-govbr-primary',
     } as const;
 
     const activeBg = this.isActive
-      ? (this.variant === 'white' ? 'bg-govbr-primary-lightest text-govbr-primary' : 'bg-white/15')
+      ? (this.variant === 'white' ? 'bg-govbr-primary-lightest text-govbr-primary' : 'bg-govbr-bg/15')
       : '';
 
     return [

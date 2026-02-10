@@ -70,7 +70,7 @@ export class BrTabPanelComponent {
             <span>{{ tab.label }}</span>
             @if (tab.counter !== undefined) {
               <span
-                class="ml-2 px-1.5 py-0.5 text-govbr-xs rounded-govbr-pill bg-govbr-primary text-white font-semibold"
+                class="ml-2 px-1.5 py-0.5 text-govbr-xs rounded-govbr-pill bg-govbr-primary text-govbr-on-primary font-semibold"
                 >
                 {{ tab.counter }}
               </span>
@@ -141,11 +141,11 @@ export class BrTabComponent {
       stateCls = 'border-transparent text-govbr-gray-20 cursor-not-allowed';
     } else if (isActive) {
       stateCls = this.inverted
-        ? 'border-white text-white'
+        ? 'border-govbr-on-primary text-govbr-on-primary'
         : 'border-govbr-primary text-govbr-primary';
     } else {
       stateCls = this.inverted
-        ? 'border-transparent text-white/60 hover:text-white hover:border-white/40'
+        ? 'border-transparent text-govbr-on-primary/60 hover:text-govbr-on-primary hover:border-govbr-on-primary/40'
         : 'border-transparent text-govbr-gray-60 hover:text-govbr-primary hover:border-govbr-gray-20';
     }
 
