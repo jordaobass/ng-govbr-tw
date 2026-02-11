@@ -1,0 +1,32 @@
+# Testes ponta a ponta do showcase.
+#
+# Pré-requisito: o demo precisa estar BUILDADO antes de subir isto.
+#   cd .. && npx ng build ng-govbr-tw && npx ng build demo --base-href /
+#
+# Rodar:
+#   docker compose run --rm e2e
+#
+# ⚠️ Sempre a partir desta pasta. De outro diretório, o compose falha com
+# "no configuration file provided", a mensagem se perde no log e você acaba
+# testando o container antigo.
+
+services:
+  e2e:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      # O build do demo que a suíte vai exercitar.
+      - ../dist:/app/dist:ro
+      # O código-fonte da lib: o teste de cobertura DERIVA a lista de
+      # componentes do fonte, em vez de manter uma cópia que envelhece.
+      - ../projects/ng-govbr-tw/src:/app/projects/ng-govbr-tw/src:ro
+      # Relatório e traces saem para o host.
+      - ./playwright-report:/app/testes/playwright-report
+      - ./test-results:/app/testes/test-results
+    environment:
+      PORTA_DEMO: 14731
+    # O Chromium precisa de mais que os 64MB padrão de /dev/shm, senão
+    # trava em páginas grandes sem erro que aponte a causa.
+    shm_size: 1gb
+    init: true

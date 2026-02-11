@@ -54,7 +54,7 @@ export class BrMenuBarComponent {
     <li
       class="relative"
       role="none"
-      (mouseenter)="openSub()"
+      (mouseenter)="openSub(true)"
       (mouseleave)="closeSub()"
       >
       @if (route && !hasSubmenu) {
@@ -119,16 +119,37 @@ export class BrMenuBarItemComponent {
 
   showSub = false;
 
-  openSub(): void {
-    if (this.hasSubmenu) this.showSub = true;
+  /**
+   * Marca que o submenu foi aberto pelo ponteiro, e não por clique/teclado.
+   *
+   * Sem isso, quem usa mouse não conseguia abrir o submenu pelo clique: o
+   * ponteiro SEMPRE passa por cima antes, o `mouseenter` abria, e o clique
+   * seguinte alternava para fechado. Resultado observado — hover: abre;
+   * hover + clique: fecha.
+   */
+  private abertoPorPonteiro = false;
+
+  openSub(porPonteiro = false): void {
+    if (!this.hasSubmenu) return;
+    this.showSub = true;
+    this.abertoPorPonteiro = porPonteiro;
   }
 
   closeSub(): void {
     this.showSub = false;
+    this.abertoPorPonteiro = false;
   }
 
   toggleSub(): void {
+    // O primeiro clique depois de o hover ter aberto apenas confirma a
+    // abertura. Do segundo em diante o clique volta a alternar normalmente,
+    // o que preserva o comportamento em toque, onde não existe hover.
+    if (this.showSub && this.abertoPorPonteiro) {
+      this.abertoPorPonteiro = false;
+      return;
+    }
     this.showSub = !this.showSub;
+    this.abertoPorPonteiro = false;
   }
 
   get itemClasses(): string {

@@ -4,6 +4,36 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 ## [1.4.0] - 2026-02-10
 
+### Adicionado — suíte ponta a ponta (`testes/`)
+
+- Playwright sobre o showcase **buildado**, com Dockerfile e docker-compose
+  próprios. 13 testes que cobrem o que build verde e unitário não pegam.
+- `cobertura.spec.ts` deriva a lista de componentes **do código-fonte**: todo
+  seletor declarado precisa aparecer renderizado no demo. Componente novo entra
+  no teste sozinho.
+- O teste do toast é o **canário do `OnPush`**: o toast muda estado por
+  `setTimeout`, fora de evento de template — exatamente o que `OnPush` quebra
+  em silêncio.
+
+### Corrigido — encontrado pela suíte nova
+
+- **`br-menu-bar-item`: o submenu não abria por clique para quem usa mouse.**
+  O ponteiro passa por cima antes do clique, o `mouseenter` abria e o clique
+  alternava de volta para fechado. Medido: hover → aberto; hover + clique →
+  fechado; teclado → aberto. O clique logo após o hover agora confirma a
+  abertura; do segundo em diante volta a alternar, preservando o toque.
+
+### Adicionado — showcase
+
+- Seções para os componentes que nunca eram renderizados: `toast`, `menu`,
+  `menu-bar`, `success-check`, `skiplink` e `layout`; `br-sidebar-group` entrou
+  no exemplo de sidebar. Dos 64 seletores da lib, os 64 agora aparecem no demo.
+- `br-toast-container` e `br-skiplink` montados na casca da aplicação, que é
+  onde eles realmente vivem.
+- O toggle de contraste do showcase passa a usar o `BrContrastService` da
+  biblioteca. Antes o demo tinha a própria cópia: a vitrine provava código que
+  não vai para ninguém, enquanto o do pacote nunca era exercitado.
+
 > A tag `v1.3.0` marca o commit `7f74029`, que trouxe o tema de alto contraste
 > e nunca chegou ao npm — o `latest` parou na 1.2.7, de 08/02. Esta 1.4.0 vai
 > publicada junto.

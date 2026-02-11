@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -54,6 +54,20 @@ import {
   BrMegaMenuColumnComponent,
   BrMegaMenuLinkComponent,
   BrHeaderComponent,
+  BrToastContainerComponent,
+  BrToastService,
+  BrMenuComponent,
+  BrMenuItemComponent,
+  BrMenuBarComponent,
+  BrMenuBarItemComponent,
+  BrMenuBarSubItemComponent,
+  BrSuccessCheckComponent,
+  BrSkiplinkComponent,
+  BrLayoutComponent,
+  BrSidebarGroupComponent,
+  BrSidebarGroupLabelComponent,
+  BrContrastService,
+  type BrSkiplinkItem,
 } from 'ng-govbr-tw';
 import type { BrRadioOption, BrSelectOption, BrBreadcrumbItem, BrTabItem, BrStepperStep, BrCookieGroup } from 'ng-govbr-tw';
 
@@ -121,6 +135,17 @@ interface ComponentSection {
     BrMegaMenuColumnComponent,
     BrMegaMenuLinkComponent,
     BrHeaderComponent,
+    BrToastContainerComponent,
+    BrMenuComponent,
+    BrMenuItemComponent,
+    BrMenuBarComponent,
+    BrMenuBarItemComponent,
+    BrMenuBarSubItemComponent,
+    BrSuccessCheckComponent,
+    BrSkiplinkComponent,
+    BrLayoutComponent,
+    BrSidebarGroupComponent,
+    BrSidebarGroupLabelComponent,
   ],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -1379,6 +1404,135 @@ interface ComponentSection {
             </div>
           </section>
 
+          <!-- ─── TOAST ─────────────────────────────────────────────────────
+               Esta seção existe porque o sistema de toast tinha 13 testes
+               unitários e NUNCA era montado em lugar nenhum: o container não
+               era renderizado e nada disparava um toast. Era a peça testada
+               isoladamente que nunca rodava junto — e é também o canário do
+               OnPush, porque muda estado por setTimeout, fora de evento de
+               template. -->
+          <section id="toast" class="scroll-mt-8">
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-govbr-gray-80 mb-1">Toast</h2>
+              <p class="text-govbr-sm text-govbr-gray-40">Avisos temporários, empilhados por um service</p>
+            </div>
+            <div class="bg-white rounded-lg border border-govbr-gray-10 overflow-hidden">
+              <div class="p-6 flex flex-wrap gap-3">
+                <button data-testid="toast-success" class="px-4 py-2 rounded-govbr-pill bg-govbr-success text-govbr-on-primary text-govbr-sm font-semibold govbr-focus-ring" (click)="dispararToast('success')">Sucesso</button>
+                <button data-testid="toast-danger" class="px-4 py-2 rounded-govbr-pill bg-govbr-danger text-govbr-on-primary text-govbr-sm font-semibold govbr-focus-ring" (click)="dispararToast('danger')">Erro</button>
+                <button data-testid="toast-warning" class="px-4 py-2 rounded-govbr-pill bg-govbr-warning text-govbr-gray-80 text-govbr-sm font-semibold govbr-focus-ring" (click)="dispararToast('warning')">Aviso</button>
+                <button data-testid="toast-info" class="px-4 py-2 rounded-govbr-pill bg-govbr-info text-govbr-on-primary text-govbr-sm font-semibold govbr-focus-ring" (click)="dispararToast('info')">Informação</button>
+              </div>
+              <div class="border-t border-govbr-gray-10 bg-govbr-gray-2">
+                <button class="w-full px-4 py-2 text-left text-govbr-sm font-semibold text-govbr-gray-60 flex items-center gap-2" (click)="toggleCode('toast')">
+                  <i class="fa-solid fa-code"></i>
+                  {{ showCode['toast'] ? 'Ocultar código' : 'Ver código' }}
+                </button>
+                @if (showCode['toast']) {
+                  <pre class="p-4 text-govbr-xs overflow-x-auto bg-govbr-gray-80 text-white"><code>{{ codeExamples['toast'] }}</code></pre>
+                }
+              </div>
+            </div>
+          </section>
+
+          <!-- ─── MENU LATERAL ──────────────────────────────────────────── -->
+          <section id="menu" class="scroll-mt-8">
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-govbr-gray-80 mb-1">Menu</h2>
+              <p class="text-govbr-sm text-govbr-gray-40">Menu lateral de navegação</p>
+            </div>
+            <div class="bg-white rounded-lg border border-govbr-gray-10 overflow-hidden">
+              <div class="p-6">
+                <div class="relative h-72 overflow-hidden border border-govbr-gray-10 rounded">
+                  <br-menu [open]="true" ariaLabel="Menu de exemplo">
+                    <br-menu-item icon="home" label="Início"></br-menu-item>
+                    <br-menu-item icon="file-lines" label="Meus documentos" badge="3"></br-menu-item>
+                    <br-menu-item icon="folder" label="Processos" [hasChildren]="true"></br-menu-item>
+                    <br-menu-item icon="gear" label="Configurações"></br-menu-item>
+                  </br-menu>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─── BARRA DE MENU ─────────────────────────────────────────── -->
+          <section id="menu-bar" class="scroll-mt-8">
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-govbr-gray-80 mb-1">Menu Bar</h2>
+              <p class="text-govbr-sm text-govbr-gray-40">Barra de navegação horizontal</p>
+            </div>
+            <div class="bg-white rounded-lg border border-govbr-gray-10 overflow-hidden">
+              <div class="p-6">
+                <br-menu-bar variant="primary">
+                  <br-menu-bar-item label="Início" icon="home"></br-menu-bar-item>
+                  <br-menu-bar-item label="Serviços" icon="list" [hasSubmenu]="true">
+                    <br-menu-bar-sub-item label="Agendamento"></br-menu-bar-sub-item>
+                    <br-menu-bar-sub-item label="Protocolo"></br-menu-bar-sub-item>
+                  </br-menu-bar-item>
+                  <br-menu-bar-item label="Contato" icon="envelope"></br-menu-bar-item>
+                </br-menu-bar>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─── SUCCESS CHECK ─────────────────────────────────────────── -->
+          <section id="success-check" class="scroll-mt-8">
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-govbr-gray-80 mb-1">Success Check</h2>
+              <p class="text-govbr-sm text-govbr-gray-40">Confirmação animada de conclusão</p>
+            </div>
+            <div class="bg-white rounded-lg border border-govbr-gray-10 overflow-hidden">
+              <div class="p-6 flex items-center gap-8">
+                <br-success-check size="small"></br-success-check>
+                <br-success-check size="medium"></br-success-check>
+                <br-success-check size="large" variant="primary"></br-success-check>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─── SKIPLINK ──────────────────────────────────────────────────
+               Fica visualmente oculto e aparece ao receber foco: é por isso
+               que o teste confere display/visibility e não aparência. -->
+          <section id="skiplink" class="scroll-mt-8">
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-govbr-gray-80 mb-1">Skiplink</h2>
+              <p class="text-govbr-sm text-govbr-gray-40">Atalho "ir para o conteúdo" — exigido pelo Gov.br DS / eMAG</p>
+            </div>
+            <div class="bg-white rounded-lg border border-govbr-gray-10 overflow-hidden">
+              <div class="p-6">
+                <p class="text-govbr-sm text-govbr-gray-60 mb-3">
+                  Pressione <kbd class="px-1.5 py-0.5 border border-govbr-gray-20 rounded text-govbr-xs">Tab</kbd>
+                  a partir do topo da página: o atalho aparece antes de qualquer outro foco.
+                </p>
+                <div class="border border-dashed border-govbr-gray-20 rounded p-4">
+                  <br-skiplink [itens]="atalhosDemo"></br-skiplink>
+                  <span class="text-govbr-xs text-govbr-gray-40">
+                    (os links acima só ficam visíveis quando recebem foco)
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─── LAYOUT ────────────────────────────────────────────────── -->
+          <section id="layout" class="scroll-mt-8">
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-govbr-gray-80 mb-1">Layout</h2>
+              <p class="text-govbr-sm text-govbr-gray-40">Casca de página: header, barra, menu, conteúdo e rodapé</p>
+            </div>
+            <div class="bg-white rounded-lg border border-govbr-gray-10 overflow-hidden">
+              <div class="p-6">
+                <div class="border border-govbr-gray-10 rounded overflow-hidden">
+                  <br-layout>
+                    <div class="p-6 text-govbr-sm text-govbr-gray-60">
+                      Conteúdo projetado no slot padrão do <code>br-layout</code>.
+                    </div>
+                  </br-layout>
+                </div>
+              </div>
+            </div>
+          </section>
+
         </div>
       </main>
     </div>
@@ -1410,8 +1564,11 @@ interface ComponentSection {
 
     <!-- Sidebar Demo -->
     <br-sidebar [(mobileOpen)]="sidebarDemoOpen">
-      <br-sidebar-item icon="home" label="Início" route="/"></br-sidebar-item>
-      <br-sidebar-item icon="user" label="Meu Perfil"></br-sidebar-item>
+      <br-sidebar-group>
+        <br-sidebar-group-label>Principal</br-sidebar-group-label>
+        <br-sidebar-item icon="home" label="Início" route="/"></br-sidebar-item>
+        <br-sidebar-item icon="user" label="Meu Perfil"></br-sidebar-item>
+      </br-sidebar-group>
       <br-sidebar-sub icon="file-alt" label="Documentos" [open]="true">
         <br-sidebar-item label="Enviados"></br-sidebar-item>
         <br-sidebar-item label="Recebidos"></br-sidebar-item>
@@ -2313,8 +2470,29 @@ export class ShowcaseComponent {
   contrastActive = false;
 
   toggleContrast(): void {
-    this.contrastActive = !this.contrastActive;
-    document.documentElement.classList.toggle('govbr-contrast', this.contrastActive);
+    // Usa o service da BIBLIOTECA, não uma cópia local. Antes o demo tinha a
+    // própria implementação, então a vitrine provava código que não vai para
+    // ninguém enquanto a do pacote nunca era exercitada.
+    this.contraste.alternar();
+    this.contrastActive = this.contraste.ativo();
+  }
+
+  private readonly toast = inject(BrToastService);
+  private readonly contraste = inject(BrContrastService);
+
+  atalhosDemo: BrSkiplinkItem[] = [
+    { href: '#conteudo', label: 'Ir para o conteúdo' },
+    { href: '#menu', label: 'Ir para o menu' },
+  ];
+
+  dispararToast(tipo: 'success' | 'danger' | 'warning' | 'info'): void {
+    const mensagens = {
+      success: 'Operação concluída com sucesso.',
+      danger: 'Não foi possível concluir a operação.',
+      warning: 'Confira os dados antes de continuar.',
+      info: 'Seu protocolo foi registrado.',
+    } as const;
+    this.toast.show(tipo, mensagens[tipo]);
   }
 
   activeSection = 'buttons';
@@ -2357,9 +2535,24 @@ export class ShowcaseComponent {
     { id: 'sidebar-demo', name: 'Sidebar', icon: 'bars' },
     { id: 'mega-menu', name: 'Mega Menu', icon: 'th-large' },
     { id: 'cookiebar', name: 'Cookie Bar', icon: 'cookie-bite' },
+    { id: 'toast', name: 'Toast', icon: 'bell-concierge' },
+    { id: 'menu', name: 'Menu', icon: 'bars-staggered' },
+    { id: 'menu-bar', name: 'Menu Bar', icon: 'grip-lines' },
+    { id: 'success-check', name: 'Success Check', icon: 'circle-check' },
+    { id: 'skiplink', name: 'Skiplink', icon: 'person-walking-arrow-right' },
+    { id: 'layout', name: 'Layout', icon: 'table-columns' },
   ];
 
   codeExamples: Record<string, string> = {
+    toast: `// injete o service e dispare de qualquer lugar
+private readonly toast = inject(BrToastService);
+
+this.toast.success('Operação concluída com sucesso.');
+this.toast.danger('Não foi possível concluir a operação.');
+
+// monte o container UMA vez, na casca da aplicação:
+// <br-toast-container position="top-right" />`,
+
     buttons: `<br-button emphasis="primary">Primário</br-button>
 <br-button emphasis="secondary">Secundário</br-button>
 <br-button emphasis="primary" icon="plus">Com Ícone</br-button>
