@@ -1,0 +1,16 @@
+{
+  "name": "ng-govbr-tw-testes",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Testes ponta a ponta do showcase de @schenkerjon/ng-govbr-tw",
+  "scripts": {
+    "e2e": "playwright test",
+    "e2e:headed": "playwright test --headed",
+    "e2e:report": "playwright show-report",
+    "e2e:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@playwright/test": "^1.49.0"
+  }
+}
