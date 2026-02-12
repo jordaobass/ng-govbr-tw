@@ -4,6 +4,27 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 ## [1.4.0] - 2026-02-10
 
+### Alterado — `peerDependencies` ampliadas para Angular 17 a 22
+
+Eram `^17 || ^18 || ^19`. Com o Angular 22 como `latest`, isso impedia a
+instalação em projeto moderno: `npm install` falhava com `ERESOLVE` em um app
+Angular 21 — verificado.
+
+Agora: `^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0`.
+
+A biblioteca continua **compilada no Angular 17**. A compatibilidade para
+frente é garantia do *partial compilation*: pacote compilado no major X roda em
+app ≥ X. Mas garantia de design não substitui medição — cada major novo foi
+provado num app descartável, instalando o tarball, usando
+`br-input-cpf` com Reactive Forms, `br-button`, `br-modal`, `br-skiplink` e
+`br-toast-container`, e abrindo no navegador:
+
+| Angular | instala | compila | renderiza | toast | focus trap | contraste | erros |
+|---|---|---|---|---|---|---|---|
+| 20.3.33 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | nenhum |
+| 21.2.25 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | nenhum |
+| 22.2.2  | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | nenhum |
+
 ### Adicionado — suíte ponta a ponta (`testes/`)
 
 - Playwright sobre o showcase **buildado**, com Dockerfile e docker-compose
