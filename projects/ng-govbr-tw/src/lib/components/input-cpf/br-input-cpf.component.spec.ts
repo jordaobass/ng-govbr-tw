@@ -82,14 +82,14 @@ describe('BrInputCpfComponent', () => {
     });
 
     it('should return required error when empty and required', () => {
-      component.required = true;
+      fixture.componentRef.setInput('required', true);
       const control = new FormControl('');
       const result = component.validate(control);
       expect(result).toEqual({ required: true });
     });
 
     it('should return null when empty and not required', () => {
-      component.required = false;
+      fixture.componentRef.setInput('required', false);
       const control = new FormControl('');
       const result = component.validate(control);
       expect(result).toBeNull();

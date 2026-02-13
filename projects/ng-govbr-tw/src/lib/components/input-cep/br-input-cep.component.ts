@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
@@ -32,6 +33,7 @@ export interface BrCepAddress {
 @Component({
   selector: 'br-input-cep',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   providers: [

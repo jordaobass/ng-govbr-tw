@@ -33,7 +33,7 @@ describe('BrDividerComponent', () => {
   });
 
   it('should render text when provided', () => {
-    component.text = 'OR';
+    fixture.componentRef.setInput('text', 'OR');
     fixture.detectChanges();
 
     const text = fixture.nativeElement.querySelector('span');
@@ -41,14 +41,14 @@ describe('BrDividerComponent', () => {
   });
 
   it('should render two lines when text is provided', () => {
-    component.text = 'OR';
+    fixture.componentRef.setInput('text', 'OR');
     fixture.detectChanges();
 
     expect(contarLinhas()).toBe(2);
   });
 
   it('should apply spacing classes', () => {
-    component.spacing = 'large';
+    fixture.componentRef.setInput('spacing', 'large');
     fixture.detectChanges();
 
     const container = fixture.nativeElement.querySelector('div');
@@ -56,7 +56,7 @@ describe('BrDividerComponent', () => {
   });
 
   it('should apply vertical orientation', () => {
-    component.orientation = 'vertical';
+    fixture.componentRef.setInput('orientation', 'vertical');
     fixture.detectChanges();
 
     const container = fixture.nativeElement.querySelector('div');
@@ -64,7 +64,7 @@ describe('BrDividerComponent', () => {
   });
 
   it('should have proper role when text is present', () => {
-    component.text = 'OR';
+    fixture.componentRef.setInput('text', 'OR');
     fixture.detectChanges();
 
     const container = fixture.nativeElement.querySelector('div');

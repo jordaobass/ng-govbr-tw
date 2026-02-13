@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   AfterContentInit,
   Component,
   ContentChild,
@@ -19,6 +20,7 @@ import { BrContrastService } from '../../services/br-contrast.service';
 @Component({
   selector: 'br-header',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `

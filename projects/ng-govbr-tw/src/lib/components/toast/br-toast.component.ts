@@ -1,9 +1,10 @@
-import { Component, inject, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, ViewEncapsulation } from '@angular/core';
 import { BrToastService } from './br-toast.service';
 
 @Component({
   selector: 'br-toast-container',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
     <div [class]="containerClasses" role="region" aria-label="Notificações">

@@ -1,4 +1,8 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  OnDestroy,
+  OnInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -10,17 +14,30 @@ import {
 } from '@angular/core';
 
 import { ControlValueAccessor, FormsModule, NgControl, ValidationErrors } from '@angular/forms';
+import { merge, Subscription } from 'rxjs';
 import { BrAnimationService } from '../../animations/animation.service';
 
 @Component({
   selector: 'br-select',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormsModule],
   encapsulation: ViewEncapsulation.None,
   styles: [`
     @keyframes br-select-dropdown {
       from { opacity: 0; transform: translateY(-8px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    /*
+     * Opção ativa no teclado. Precisa de marca VISÍVEL: no padrão combobox o
+     * foco do DOM fica no gatilho, então sem esta pista quem navega por
+     * teclado move o aria-activedescendant sem ver nada acontecer na tela.
+     * Barra lateral além do fundo, para não depender só de cor.
+     */
+    br-select .br-select-option-ativa {
+      background-color: var(--govbr-primary-lightest);
+      box-shadow: inset 3px 0 0 0 var(--govbr-primary);
     }
   `],
   template: `
@@ -38,7 +55,10 @@ import { BrAnimationService } from '../../animations/animation.service';
       }
     
       @if (helperText && !error) {
-        <span class="block text-govbr-xs text-govbr-gray-60 mb-1">
+        <span
+          [id]="selectId + '-helper'"
+          class="block text-govbr-xs text-govbr-gray-60 mb-1"
+        >
           {{ helperText }}
         </span>
       }
@@ -49,8 +69,16 @@ import { BrAnimationService } from '../../animations/animation.service';
         [id]="selectId"
         [disabled]="isDisabled"
         [class]="triggerClasses"
+        role="combobox"
+        aria-haspopup="listbox"
+        [attr.aria-expanded]="expanded"
+        [attr.aria-controls]="expanded ? listboxId : null"
+        [attr.aria-activedescendant]="idOpcaoAtiva"
+        [attr.aria-invalid]="!!displayError"
+        [attr.aria-describedby]="descricaoAcessivel"
         (click)="toggle()"
         (blur)="onBlur()"
+        (keydown)="onTriggerKeydown($event)"
         >
         <span
           class="truncate min-w-0 flex-1 text-left"
@@ -84,15 +112,24 @@ import { BrAnimationService } from '../../animations/animation.service';
             </div>
           }
           <!-- Options -->
-          <ul role="listbox" class="py-1">
+          <ul
+            [id]="listboxId"
+            role="listbox"
+            class="py-1"
+            [attr.aria-multiselectable]="multiple || null"
+            [attr.aria-label]="label || placeholder"
+          >
             @for (option of filteredOptions; track option) {
+              <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events -->
               <li
+                [id]="selectId + '-opt-' + $index"
                 role="option"
-                tabindex="0"
+                tabindex="-1"
                 [attr.aria-selected]="isSelected(option.value)"
                 [class]="getOptionClasses(option)"
+                [class.br-select-option-ativa]="$index === indiceAtivo"
                 (click)="selectOption(option); $event.stopPropagation()"
-                (keydown.enter)="selectOption(option); $event.stopPropagation()"
+                (mouseenter)="indiceAtivo = $index"
                 >
                 <!-- Multiple: checkbox -->
                 @if (multiple) {
@@ -127,14 +164,18 @@ import { BrAnimationService } from '../../animations/animation.service';
     
       <!-- Error -->
       @if (displayError) {
-        <span class="flex items-center mt-1 text-govbr-sm text-govbr-danger">
-          <i class="fa-solid fa-times-circle mr-1"></i>{{ displayError }}
+        <span
+          [id]="selectId + '-error'"
+          class="flex items-center mt-1 text-govbr-sm text-govbr-danger"
+          role="alert"
+        >
+          <i class="fa-solid fa-times-circle mr-1" aria-hidden="true"></i>{{ displayError }}
         </span>
       }
     </div>
     `,
 })
-export class BrSelectComponent implements ControlValueAccessor {
+export class BrSelectComponent implements ControlValueAccessor, OnDestroy, OnInit {
   @Input() label?: string;
   @Input() placeholder = 'Selecione';
   @Input() helperText?: string;
@@ -179,11 +220,14 @@ export class BrSelectComponent implements ControlValueAccessor {
   };
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly cdr = inject(ChangeDetectorRef);
+  private inscricaoEstado?: Subscription;
 
   constructor() {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
-    }
+    
+  }
   }
 
   /**
@@ -283,13 +327,136 @@ export class BrSelectComponent implements ControlValueAccessor {
     return this.singleValue === value;
   }
 
+  /** Id do `<ul role="listbox">`, referenciado por `aria-controls`. */
+  readonly listboxId = `${this.selectId}-listbox`;
+
+  /**
+   * Opção ativa no teclado. É o cursor do combobox — o foco do DOM NÃO se
+   * move para as opções, quem anda é o `aria-activedescendant`. Era por isso
+   * que as opções tinham `tabindex="0"`: sem o padrão de combobox, só sobrava
+   * fazer o Tab atravessar a lista inteira.
+   */
+  indiceAtivo = -1;
+
+  get idOpcaoAtiva(): string | null {
+    if (!this.expanded || this.indiceAtivo < 0) return null;
+    return `${this.selectId}-opt-${this.indiceAtivo}`;
+  }
+
+  /** Ids que descrevem o campo: erro tem precedência sobre o texto de apoio. */
+  get descricaoAcessivel(): string | null {
+    if (this.displayError) return `${this.selectId}-error`;
+    if (this.helperText) return `${this.selectId}-helper`;
+    return null;
+  }
+
   toggle(): void {
     if (!this.isDisabled) {
       this.expanded = !this.expanded;
-      if (!this.expanded) {
+      if (this.expanded) {
+        // Abre já apontando para a opção escolhida, não para o topo.
+        this.indiceAtivo = this.filteredOptions.findIndex((o) =>
+          this.isSelected(o.value)
+        );
+      } else {
         this.searchTerm = '';
+        this.indiceAtivo = -1;
       }
     }
+  }
+
+  /**
+   * Teclado do padrão combobox (WAI-ARIA). Sem isto, o componente anunciava
+   * uma lista que só podia ser operada com o mouse.
+   */
+  onTriggerKeydown(evento: KeyboardEvent): void {
+    if (this.isDisabled) return;
+
+    const total = this.filteredOptions.length;
+
+    switch (evento.key) {
+      case 'ArrowDown':
+      case 'ArrowUp': {
+        evento.preventDefault();
+        if (!this.expanded) {
+          this.toggle();
+          if (this.indiceAtivo < 0) this.indiceAtivo = 0;
+        } else if (total) {
+          const passo = evento.key === 'ArrowDown' ? 1 : -1;
+          this.indiceAtivo = this.proximoHabilitado(this.indiceAtivo, passo);
+        }
+        this.rolarAteOpcaoAtiva();
+        break;
+      }
+
+      case 'Home':
+      case 'End': {
+        if (!this.expanded || !total) break;
+        evento.preventDefault();
+        this.indiceAtivo =
+          evento.key === 'Home'
+            ? this.proximoHabilitado(-1, 1)
+            : this.proximoHabilitado(total, -1);
+        this.rolarAteOpcaoAtiva();
+        break;
+      }
+
+      case 'Enter':
+      case ' ': {
+        if (!this.expanded) {
+          evento.preventDefault();
+          this.toggle();
+          break;
+        }
+        const opcao = this.filteredOptions[this.indiceAtivo];
+        if (opcao) {
+          evento.preventDefault();
+          this.selectOption(opcao);
+        }
+        break;
+      }
+
+      case 'Escape': {
+        if (!this.expanded) break;
+        evento.preventDefault();
+        // Fecha sem escolher e mantém o foco no gatilho: o usuário de teclado
+        // não pode ser largado no início da página.
+        this.expanded = false;
+        this.searchTerm = '';
+        this.indiceAtivo = -1;
+        break;
+      }
+
+      case 'Tab': {
+        // Tab sai do campo — fechar evita deixar a lista aberta sobre o
+        // conteúdo seguinte.
+        if (this.expanded) this.toggle();
+        break;
+      }
+    }
+  }
+
+  /** Avança pulando opções desabilitadas, sem dar a volta infinita. */
+  private proximoHabilitado(partindoDe: number, passo: number): number {
+    const total = this.filteredOptions.length;
+    if (!total) return -1;
+
+    for (let i = 1; i <= total; i++) {
+      const alvo = (partindoDe + passo * i + total * i) % total;
+      if (!this.filteredOptions[alvo]?.disabled) return alvo;
+    }
+    return partindoDe;
+  }
+
+  private rolarAteOpcaoAtiva(): void {
+    const id = this.idOpcaoAtiva;
+    if (!id) return;
+    // Esperar o render: a opção pode ter acabado de entrar no DOM.
+    setTimeout(() => {
+      this.elementRef.nativeElement
+        .querySelector(`#${CSS.escape(id)}`)
+        ?.scrollIntoView({ block: 'nearest' });
+    });
   }
 
   selectOption(option: BrSelectOption): void {
@@ -350,6 +517,35 @@ export class BrSelectComponent implements ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
+  }
+
+  /**
+   * Com `OnPush`, o estado de validação precisa avisar a view.
+   *
+   * O erro exibido vem de `ngControl.control.errors`, lido num getter. Nada
+   * nesse caminho passa por `@Input` nem por evento do template, então quando
+   * o formulário fica inválido (um `markAllAsTouched()` no submit, por
+   * exemplo) a mensagem simplesmente não aparecia: compilava, passava no
+   * unitário e falhava na tela.
+   */
+  ngOnInit(): void {
+    // No construtor, `ngControl.control` ainda é null: a diretiva só o
+    // publica depois. Assinar ali deixava a inscrição sem efeito.
+    this.observarEstadoDoControle();
+  }
+
+  private observarEstadoDoControle(): void {
+    const control = this.ngControl?.control;
+    if (!control) return;
+
+    this.inscricaoEstado = merge(
+      control.statusChanges,
+      control.valueChanges
+    ).subscribe(() => this.cdr.markForCheck());
+  }
+
+  ngOnDestroy(): void {
+    this.inscricaoEstado?.unsubscribe();
   }
 }
 

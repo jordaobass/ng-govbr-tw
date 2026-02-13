@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   inject,
@@ -36,6 +37,7 @@ export interface BrCookieGroup {
 @Component({
   selector: 'br-cookiebar',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   styles: [`

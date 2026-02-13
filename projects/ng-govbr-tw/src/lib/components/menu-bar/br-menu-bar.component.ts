@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -13,6 +14,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'br-menu-bar',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -48,6 +50,7 @@ export class BrMenuBarComponent {
 @Component({
   selector: 'br-menu-bar-item',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -171,6 +174,7 @@ export class BrMenuBarItemComponent {
 @Component({
   selector: 'br-menu-bar-sub-item',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule],
   encapsulation: ViewEncapsulation.None,
   template: `

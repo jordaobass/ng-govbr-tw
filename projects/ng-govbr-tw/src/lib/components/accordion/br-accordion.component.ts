@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -17,6 +18,7 @@ import { BrAnimationService } from '../../animations/animation.service';
 @Component({
   selector: 'br-accordion-item',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -204,6 +206,7 @@ export class BrAccordionItemComponent implements AfterViewInit {
 @Component({
   selector: 'br-accordion',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `

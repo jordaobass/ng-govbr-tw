@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   forwardRef,
@@ -28,6 +29,7 @@ import { BrTimepickerComponent } from '../timepicker/br-timepicker.component';
 @Component({
   selector: 'br-datetimepicker',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormsModule, BrDatepickerComponent, BrTimepickerComponent],
   encapsulation: ViewEncapsulation.None,
   providers: [

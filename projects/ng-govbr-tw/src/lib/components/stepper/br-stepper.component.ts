@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface BrStepperStep {
@@ -11,6 +11,7 @@ export interface BrStepperStep {
 @Component({
   selector: 'br-stepper',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   encapsulation: ViewEncapsulation.None,
   template: `

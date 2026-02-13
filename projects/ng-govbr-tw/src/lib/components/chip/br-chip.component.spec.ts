@@ -12,7 +12,7 @@ describe('BrChipComponent', () => {
 
     fixture = TestBed.createComponent(BrChipComponent);
     component = fixture.componentInstance;
-    component.label = 'Test Chip';
+    fixture.componentRef.setInput('label', 'Test Chip');
     fixture.detectChanges();
   });
 
@@ -26,7 +26,7 @@ describe('BrChipComponent', () => {
   });
 
   it('should toggle selection when selectable', () => {
-    component.selectable = true;
+    fixture.componentRef.setInput('selectable', true);
     expect(component.selected).toBe(false);
 
     component.handleClick();
@@ -37,20 +37,20 @@ describe('BrChipComponent', () => {
   });
 
   it('should not toggle when not selectable', () => {
-    component.selectable = false;
+    fixture.componentRef.setInput('selectable', false);
     component.handleClick();
     expect(component.selected).toBe(false);
   });
 
   it('should not toggle when disabled', () => {
-    component.selectable = true;
-    component.disabled = true;
+    fixture.componentRef.setInput('selectable', true);
+    fixture.componentRef.setInput('disabled', true);
     component.handleClick();
     expect(component.selected).toBe(false);
   });
 
   it('should emit selectedChange on selection', () => {
-    component.selectable = true;
+    fixture.componentRef.setInput('selectable', true);
     const spy = spyOn(component.selectedChange, 'emit');
 
     component.handleClick();
@@ -58,7 +58,7 @@ describe('BrChipComponent', () => {
   });
 
   it('should emit remove event', () => {
-    component.removable = true;
+    fixture.componentRef.setInput('removable', true);
     fixture.detectChanges();
 
     const spy = spyOn(component.remove, 'emit');
@@ -69,7 +69,7 @@ describe('BrChipComponent', () => {
   });
 
   it('should render icon when provided', () => {
-    component.icon = 'fas fa-star';
+    fixture.componentRef.setInput('icon', 'fas fa-star');
     fixture.detectChanges();
 
     const icon = fixture.nativeElement.querySelector('i.fas.fa-star');
@@ -77,7 +77,7 @@ describe('BrChipComponent', () => {
   });
 
   it('should render remove button when removable', () => {
-    component.removable = true;
+    fixture.componentRef.setInput('removable', true);
     fixture.detectChanges();
 
     const removeButton = fixture.nativeElement.querySelector('button');
@@ -85,7 +85,7 @@ describe('BrChipComponent', () => {
   });
 
   it('should have proper aria attributes when selectable', () => {
-    component.selectable = true;
+    fixture.componentRef.setInput('selectable', true);
     fixture.detectChanges();
 
     const chip = fixture.nativeElement.querySelector('span');

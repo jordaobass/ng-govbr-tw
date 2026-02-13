@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   HostListener,
@@ -29,6 +30,7 @@ export interface BrMagicAction {
 @Component({
   selector: 'br-magic-button',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `

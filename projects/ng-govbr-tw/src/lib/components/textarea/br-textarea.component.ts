@@ -1,4 +1,8 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  OnDestroy,
+  OnInit,
   Component,
   Input,
   ViewEncapsulation,
@@ -6,10 +10,12 @@ import {
 } from '@angular/core';
 
 import { ControlValueAccessor, NgControl, ValidationErrors } from '@angular/forms';
+import { merge, Subscription } from 'rxjs';
 
 @Component({
   selector: 'br-textarea',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -104,7 +110,7 @@ import { ControlValueAccessor, NgControl, ValidationErrors } from '@angular/form
     </div>
     `,
 })
-export class BrTextareaComponent implements ControlValueAccessor {
+export class BrTextareaComponent implements ControlValueAccessor, OnDestroy, OnInit {
   @Input() label?: string;
   @Input() placeholder = '';
   @Input() required = false;
@@ -144,11 +150,14 @@ export class BrTextareaComponent implements ControlValueAccessor {
   };
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly cdr = inject(ChangeDetectorRef);
+  private inscricaoEstado?: Subscription;
 
   constructor() {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
-    }
+    
+  }
   }
 
   get isOverLimit(): boolean {
@@ -257,5 +266,34 @@ export class BrTextareaComponent implements ControlValueAccessor {
     const val = (event.target as HTMLTextAreaElement).value;
     this.value = val;
     this.onChange(val);
+  }
+
+  /**
+   * Com `OnPush`, o estado de validação precisa avisar a view.
+   *
+   * O erro exibido vem de `ngControl.control.errors`, lido num getter. Nada
+   * nesse caminho passa por `@Input` nem por evento do template, então quando
+   * o formulário fica inválido (um `markAllAsTouched()` no submit, por
+   * exemplo) a mensagem simplesmente não aparecia: compilava, passava no
+   * unitário e falhava na tela.
+   */
+  ngOnInit(): void {
+    // No construtor, `ngControl.control` ainda é null: a diretiva só o
+    // publica depois. Assinar ali deixava a inscrição sem efeito.
+    this.observarEstadoDoControle();
+  }
+
+  private observarEstadoDoControle(): void {
+    const control = this.ngControl?.control;
+    if (!control) return;
+
+    this.inscricaoEstado = merge(
+      control.statusChanges,
+      control.valueChanges
+    ).subscribe(() => this.cdr.markForCheck());
+  }
+
+  ngOnDestroy(): void {
+    this.inscricaoEstado?.unsubscribe();
   }
 }

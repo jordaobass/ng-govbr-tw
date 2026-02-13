@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface BrTimelineItem {
@@ -12,6 +12,7 @@ export interface BrTimelineItem {
 @Component({
   selector: 'br-timeline',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   encapsulation: ViewEncapsulation.None,
   template: `

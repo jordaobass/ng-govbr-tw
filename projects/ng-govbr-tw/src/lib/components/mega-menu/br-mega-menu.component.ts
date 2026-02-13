@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ContentChild,
   ElementRef,
@@ -37,6 +38,7 @@ export interface BrSocialLink {
 @Component({
   selector: 'br-mega-menu',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   encapsulation: ViewEncapsulation.None,
   styles: [`
@@ -426,6 +428,7 @@ export class BrMegaMenuComponent {
 @Component({
   selector: 'br-mega-menu-trigger',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -493,6 +496,7 @@ export class BrMegaMenuTriggerComponent {
 @Component({
   selector: 'br-mega-menu-panel',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -513,6 +517,7 @@ export class BrMegaMenuPanelComponent {
 @Component({
   selector: 'br-mega-menu-column',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -535,6 +540,7 @@ export class BrMegaMenuColumnComponent {
 @Component({
   selector: 'br-mega-menu-link',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule],
   encapsulation: ViewEncapsulation.None,
   template: `

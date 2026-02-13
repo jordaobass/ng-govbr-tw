@@ -18,7 +18,7 @@ describe('BrStepperComponent', () => {
 
     fixture = TestBed.createComponent(BrStepperComponent);
     component = fixture.componentInstance;
-    component.steps = mockSteps;
+    fixture.componentRef.setInput('steps', mockSteps);
     fixture.detectChanges();
   });
 
@@ -45,7 +45,7 @@ describe('BrStepperComponent', () => {
   });
 
   it('should apply completed styles to previous steps', () => {
-    component.currentStep = 2;
+    fixture.componentRef.setInput('currentStep', 2);
     fixture.detectChanges();
 
     const completedIndicator = fixture.nativeElement.querySelector('.bg-govbr-success');
@@ -53,7 +53,7 @@ describe('BrStepperComponent', () => {
   });
 
   it('should apply current styles to active step', () => {
-    component.currentStep = 1;
+    fixture.componentRef.setInput('currentStep', 1);
     fixture.detectChanges();
 
     const currentItem = fixture.nativeElement.querySelector('[aria-current="step"]');
@@ -61,8 +61,8 @@ describe('BrStepperComponent', () => {
   });
 
   it('should emit stepChange when clicking previous step', () => {
-    component.clickable = true;
-    component.currentStep = 2;
+    fixture.componentRef.setInput('clickable', true);
+    fixture.componentRef.setInput('currentStep', 2);
     fixture.detectChanges();
 
     const spy = spyOn(component.stepChange, 'emit');
@@ -72,8 +72,8 @@ describe('BrStepperComponent', () => {
   });
 
   it('should not emit stepChange when clicking future step', () => {
-    component.clickable = true;
-    component.currentStep = 0;
+    fixture.componentRef.setInput('clickable', true);
+    fixture.componentRef.setInput('currentStep', 0);
     fixture.detectChanges();
 
     const spy = spyOn(component.stepChange, 'emit');
@@ -83,7 +83,7 @@ describe('BrStepperComponent', () => {
   });
 
   it('should apply vertical orientation class', () => {
-    component.orientation = 'vertical';
+    fixture.componentRef.setInput('orientation', 'vertical');
     fixture.detectChanges();
 
     const stepper = fixture.nativeElement.querySelector('.br-stepper-vertical');

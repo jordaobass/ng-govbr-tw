@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 
 export interface BrSkiplinkItem {
   /** Alvo da âncora, com `#` (ex.: `#conteudo`). */
@@ -17,6 +17,7 @@ export interface BrSkiplinkItem {
 @Component({
   selector: 'br-skiplink',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `

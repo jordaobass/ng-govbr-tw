@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ContentChildren,
   EventEmitter,
@@ -15,6 +16,7 @@ import { BrAnimationService } from '../../animations/animation.service';
 @Component({
   selector: 'br-tab-panel',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -39,6 +41,7 @@ export class BrTabPanelComponent {
 @Component({
   selector: 'br-tab',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   styles: [`

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewEncapsulation, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation, inject } from '@angular/core';
 import { BrAnimationService } from '../../animations/animation.service';
 
 
@@ -28,6 +28,7 @@ import { BrAnimationService } from '../../animations/animation.service';
 @Component({
   selector: 'br-button',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `

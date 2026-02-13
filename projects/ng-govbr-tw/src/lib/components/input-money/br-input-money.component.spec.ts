@@ -31,37 +31,37 @@ describe('BrInputMoneyComponent', () => {
   });
 
   it('should validate minimum value', () => {
-    component.min = 10;
+    fixture.componentRef.setInput('min', 10);
     component.writeValue(500); // 5.00 reais
     const errors = component.validate();
     expect(errors?.['min']).toBeTruthy();
   });
 
   it('should validate maximum value', () => {
-    component.max = 100;
+    fixture.componentRef.setInput('max', 100);
     component.writeValue(15000); // 150.00 reais
     const errors = component.validate();
     expect(errors?.['max']).toBeTruthy();
   });
 
   it('should accept valid value within range', () => {
-    component.min = 10;
-    component.max = 100;
+    fixture.componentRef.setInput('min', 10);
+    fixture.componentRef.setInput('max', 100);
     component.writeValue(5000); // 50.00 reais
     const errors = component.validate();
     expect(errors).toBeNull();
   });
 
   it('should require field when required is true', () => {
-    component.required = true;
+    fixture.componentRef.setInput('required', true);
     component.writeValue(null);
     const errors = component.validate();
     expect(errors?.['required']).toBe(true);
   });
 
   it('should render prefix', () => {
-    component.showPrefix = true;
-    component.prefix = 'R$';
+    fixture.componentRef.setInput('showPrefix', true);
+    fixture.componentRef.setInput('prefix', 'R$');
     fixture.detectChanges();
 
     const prefix = fixture.nativeElement.querySelector('span');
@@ -69,7 +69,7 @@ describe('BrInputMoneyComponent', () => {
   });
 
   it('should render label when provided', () => {
-    component.label = 'Valor';
+    fixture.componentRef.setInput('label', 'Valor');
     fixture.detectChanges();
 
     const label = fixture.nativeElement.querySelector('label');
@@ -77,8 +77,8 @@ describe('BrInputMoneyComponent', () => {
   });
 
   it('should show required indicator', () => {
-    component.label = 'Valor';
-    component.required = true;
+    fixture.componentRef.setInput('label', 'Valor');
+    fixture.componentRef.setInput('required', true);
     fixture.detectChanges();
 
     const required = fixture.nativeElement.querySelector('.text-govbr-danger');
@@ -88,14 +88,14 @@ describe('BrInputMoneyComponent', () => {
   it('should convert float input to cents', () => {
     // A unidade é declarada, não adivinhada: 100 centavos e 100 reais são o
     // mesmo número, então só quem usa o componente sabe qual é qual.
-    component.valueUnit = 'reais';
+    fixture.componentRef.setInput('valueUnit', 'reais');
     component.writeValue(50.5);
     expect(component.value).toBe(5050);
   });
 
   it('should warn when a fractional value arrives declared as cents', () => {
     const warn = spyOn(console, 'warn');
-    component.valueUnit = 'cents';
+    fixture.componentRef.setInput('valueUnit', 'cents');
     component.writeValue(50.5);
 
     // Não existe meio centavo em BRL: valor fracionário em centavos é sinal

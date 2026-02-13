@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   forwardRef,
@@ -13,6 +14,7 @@ import { BrAnimationService } from '../../animations/animation.service';
 @Component({
   selector: 'br-switch',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   providers: [

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   HostListener,
@@ -16,6 +17,7 @@ import { BrAnimationService } from '../../animations/animation.service';
 @Component({
   selector: 'br-sidebar-group',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -31,6 +33,7 @@ export class BrSidebarGroupComponent {}
 @Component({
   selector: 'br-sidebar-group-label',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -46,6 +49,7 @@ export class BrSidebarGroupLabelComponent {}
 @Component({
   selector: 'br-sidebar-item',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -134,6 +138,7 @@ export class BrSidebarItemComponent {
 @Component({
   selector: 'br-sidebar-sub',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -185,6 +190,7 @@ export class BrSidebarSubComponent {
 @Component({
   selector: 'br-sidebar',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   styles: [`

@@ -1,14 +1,27 @@
-import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 
 import { BrPaginationComponent } from '../pagination/br-pagination.component';
 
 @Component({
   selector: 'br-table',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [BrPaginationComponent],
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div class="overflow-x-auto font-rawline" [attr.data-header-style]="headerStyle" [attr.data-responsive]="responsive">
+    <!--
+      O overflow-x-auto cria uma região rolável. Região rolável precisa ser
+      alcançável por teclado (WCAG 2.1.1) e anunciada — daí role=region,
+      tabindex=0 e um nome acessível.
+    -->
+    <div
+      class="overflow-x-auto font-rawline govbr-focus-ring"
+      role="region"
+      tabindex="0"
+      [attr.aria-label]="rotuloRegiao"
+      [attr.data-header-style]="headerStyle"
+      [attr.data-responsive]="responsive"
+    >
       @if (selectable && selectedRows.size > 0) {
         <div class="flex items-center gap-3 px-4 py-2 bg-govbr-primary-lightest border-b border-govbr-gray-10 text-govbr-sm text-govbr-primary font-medium">
           <span>{{ selectedRows.size }} {{ selectedRows.size === 1 ? 'item selecionado' : 'itens selecionados' }}</span>
@@ -22,7 +35,10 @@ import { BrPaginationComponent } from '../pagination/br-pagination.component';
         </div>
       }
 
-      <table class="w-full text-sm text-left text-govbr-gray-80">
+      <table class="w-full text-sm text-left text-govbr-gray-80" [attr.aria-label]="ariaLabel || null">
+        @if (caption) {
+          <caption class="sr-only">{{ caption }}</caption>
+        }
         <ng-content></ng-content>
       </table>
 
@@ -195,6 +211,19 @@ export class BrTableComponent {
    * - 'secondary': Azul escuro (var(--govbr-primary-dark)) - blue-warm-vivid-80
    * - 'light': Fundo branco com texto azul
    */
+  /**
+   * Nome acessível da tabela.
+   *
+   * ⚠️ A lib **não consegue** colocar `scope` nos `<th>`: o `<table>` inteiro
+   * é projetado por `<ng-content>`, ou seja, escrito por quem usa. Garantir
+   * `<th scope="col">` é responsabilidade do consumidor — ver a seção Table
+   * no README. O que a lib oferece é o rótulo e a região rolável.
+   */
+  @Input() ariaLabel?: string;
+
+  /** Legenda da tabela. Renderizada só para leitores de tela. */
+  @Input() caption?: string;
+
   @Input() headerStyle: 'primary' | 'secondary' | 'light' = 'primary';
 
   /**
@@ -223,6 +252,11 @@ export class BrTableComponent {
 
   /** Densidade da paginação */
   @Input() paginationDensity: 'small' | 'medium' | 'large' = 'small';
+
+  /** Rótulo da região rolável; cai para um texto genérico se nada foi dado. */
+  get rotuloRegiao(): string {
+    return this.ariaLabel || this.caption || 'Tabela de dados, rolável';
+  }
 
   @Output() pageChange = new EventEmitter<number>();
   @Output() itemsPerPageChange = new EventEmitter<number>();

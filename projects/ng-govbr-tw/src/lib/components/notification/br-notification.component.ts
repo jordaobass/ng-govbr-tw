@@ -1,9 +1,10 @@
-import { Component, inject, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, ViewEncapsulation } from '@angular/core';
 import { BrAnimationService } from '../../animations/animation.service';
 
 @Component({
   selector: 'br-notification',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `

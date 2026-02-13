@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   inject,
@@ -16,6 +17,7 @@ import { BrAnimationService } from '../../animations/animation.service';
 @Component({
   selector: 'br-message',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   styles: [`

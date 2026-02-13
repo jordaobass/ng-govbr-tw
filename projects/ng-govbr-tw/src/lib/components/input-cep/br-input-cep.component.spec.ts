@@ -37,7 +37,7 @@ describe('BrInputCepComponent', () => {
   });
 
   it('should require field when required is true', () => {
-    component.required = true;
+    fixture.componentRef.setInput('required', true);
     component.writeValue('');
     const errors = component.validate();
     expect(errors?.['required']).toBe(true);
@@ -55,7 +55,7 @@ describe('BrInputCepComponent', () => {
   });
 
   it('should render label when provided', () => {
-    component.label = 'CEP';
+    fixture.componentRef.setInput('label', 'CEP');
     fixture.detectChanges();
 
     const label = fixture.nativeElement.querySelector('label');
@@ -63,8 +63,8 @@ describe('BrInputCepComponent', () => {
   });
 
   it('should show required indicator', () => {
-    component.label = 'CEP';
-    component.required = true;
+    fixture.componentRef.setInput('label', 'CEP');
+    fixture.componentRef.setInput('required', true);
     fixture.detectChanges();
 
     const required = fixture.nativeElement.querySelector('.text-govbr-danger');

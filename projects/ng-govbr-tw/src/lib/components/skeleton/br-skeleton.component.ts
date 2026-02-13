@@ -1,10 +1,11 @@
-import { Component, Input, ViewEncapsulation, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation, inject } from '@angular/core';
 import { BrAnimationService } from '../../animations/animation.service';
 
 
 @Component({
   selector: 'br-skeleton',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `

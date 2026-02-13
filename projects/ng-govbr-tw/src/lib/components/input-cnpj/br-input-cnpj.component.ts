@@ -1,4 +1,8 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  OnDestroy,
+  OnInit,
   Component,
   Input,
   ViewEncapsulation,
@@ -6,10 +10,12 @@ import {
 } from '@angular/core';
 
 import { ControlValueAccessor, NgControl, ValidationErrors, Validator, AbstractControl } from '@angular/forms';
+import { merge, Subscription } from 'rxjs';
 
 @Component({
   selector: 'br-input-cnpj',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
     <div class="mb-4 font-rawline">
@@ -67,7 +73,7 @@ import { ControlValueAccessor, NgControl, ValidationErrors, Validator, AbstractC
     </div>
   `,
 })
-export class BrInputCnpjComponent implements ControlValueAccessor, Validator {
+export class BrInputCnpjComponent implements ControlValueAccessor, Validator, OnDestroy, OnInit {
   @Input() label?: string;
   @Input() placeholder = '00.000.000/0000-00';
   @Input() required = false;
@@ -96,11 +102,14 @@ export class BrInputCnpjComponent implements ControlValueAccessor, Validator {
   };
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly cdr = inject(ChangeDetectorRef);
+  private inscricaoEstado?: Subscription;
 
   constructor() {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
-    }
+    
+  }
   }
 
   get displayError(): string | undefined {
@@ -257,5 +266,34 @@ export class BrInputCnpjComponent implements ControlValueAccessor, Validator {
     if (digit2 !== parseInt(digits[13], 10)) return false;
 
     return true;
+  }
+
+  /**
+   * Com `OnPush`, o estado de validação precisa avisar a view.
+   *
+   * O erro exibido vem de `ngControl.control.errors`, lido num getter. Nada
+   * nesse caminho passa por `@Input` nem por evento do template, então quando
+   * o formulário fica inválido (um `markAllAsTouched()` no submit, por
+   * exemplo) a mensagem simplesmente não aparecia: compilava, passava no
+   * unitário e falhava na tela.
+   */
+  ngOnInit(): void {
+    // No construtor, `ngControl.control` ainda é null: a diretiva só o
+    // publica depois. Assinar ali deixava a inscrição sem efeito.
+    this.observarEstadoDoControle();
+  }
+
+  private observarEstadoDoControle(): void {
+    const control = this.ngControl?.control;
+    if (!control) return;
+
+    this.inscricaoEstado = merge(
+      control.statusChanges,
+      control.valueChanges
+    ).subscribe(() => this.cdr.markForCheck());
+  }
+
+  ngOnDestroy(): void {
+    this.inscricaoEstado?.unsubscribe();
   }
 }

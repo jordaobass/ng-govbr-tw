@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, Output, ViewEncapsulation, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrAnimationService } from '../../animations/animation.service';
 
 @Component({
   selector: 'br-card',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule],
   encapsulation: ViewEncapsulation.None,
   template: `

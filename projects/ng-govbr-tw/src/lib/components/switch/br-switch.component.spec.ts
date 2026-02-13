@@ -29,7 +29,7 @@ describe('BrSwitchComponent', () => {
   });
 
   it('should not toggle when disabled', () => {
-    component.disabled = true;
+    fixture.componentRef.setInput('disabled', true);
     component.toggle();
     expect(component.checked).toBe(false);
   });
@@ -41,7 +41,7 @@ describe('BrSwitchComponent', () => {
   });
 
   it('should render label when provided', () => {
-    component.label = 'Test Label';
+    fixture.componentRef.setInput('label', 'Test Label');
     fixture.detectChanges();
 
     // `span` genérico pega o primeiro do DOM, que é o botão do switch (vazio).
@@ -57,7 +57,9 @@ describe('BrSwitchComponent', () => {
     expect(button.getAttribute('role')).toBe('switch');
     expect(button.getAttribute('aria-checked')).toBe('false');
 
-    component.toggle();
+    // Clique no botão em vez de `component.toggle()`: sob OnPush é o evento
+    // do template que marca a view, e é esse o caminho do usuário.
+    button.click();
     fixture.detectChanges();
 
     expect(button.getAttribute('aria-checked')).toBe('true');

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   Input,
   ViewEncapsulation,
@@ -10,6 +11,7 @@ import { BrAnimationService } from '../../animations/animation.service';
 @Component({
   selector: 'br-tooltip',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `
