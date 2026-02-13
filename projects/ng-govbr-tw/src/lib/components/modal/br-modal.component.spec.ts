@@ -18,7 +18,7 @@ describe('BrModalComponent — gestão de foco', () => {
 
     fixture = TestBed.createComponent(BrModalComponent);
     component = fixture.componentInstance;
-    component.title = 'Confirmar ação';
+    fixture.componentRef.setInput('title', 'Confirmar ação');
 
     // Um elemento fora do modal para fazer o papel de quem abriu o diálogo.
     gatilho = document.createElement('button');
@@ -36,7 +36,7 @@ describe('BrModalComponent — gestão de foco', () => {
 
   /** Abre o modal pelo caminho real: muda o @Input e avisa o ngOnChanges. */
   function abrir(): void {
-    component.isOpen = true;
+    fixture.componentRef.setInput('isOpen', true);
     component.ngOnChanges({
       isOpen: {
         previousValue: false,
@@ -49,7 +49,7 @@ describe('BrModalComponent — gestão de foco', () => {
   }
 
   function fechar(): void {
-    component.isOpen = false;
+    fixture.componentRef.setInput('isOpen', false);
     component.ngOnChanges({
       isOpen: {
         previousValue: true,

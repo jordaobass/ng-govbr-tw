@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   AfterContentInit,
   ContentChildren,
@@ -19,6 +20,7 @@ import { BrAnimationService } from '../../animations/animation.service';
 @Component({
   selector: 'br-wizard-step',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   styles: [`
@@ -64,6 +66,7 @@ export class BrWizardStepComponent {
 @Component({
   selector: 'br-wizard',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `

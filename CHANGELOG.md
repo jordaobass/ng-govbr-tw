@@ -4,6 +4,61 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 ## [1.4.0] - 2026-02-10
 
+### Alterado — `OnPush` em todos os 67 componentes
+
+`ChangeDetectionStrategy.OnPush` passa a ser a estratégia de todos os
+componentes. Antes, todos rodavam em `Default`, e as strings de classe são
+montadas em getters de até 37 linhas — reavaliados a **cada** ciclo de change
+detection da aplicação consumidora, não a cada mudança do componente.
+
+**Defeito encontrado pela migração (e corrigido):** `br-input`, `br-textarea`,
+`br-input-cpf`, `br-input-cnpj` e `br-select` leem o estado de validação de
+`ngControl.control.errors` num getter. Esse caminho não passa por `@Input` nem
+por evento do template, então com `OnPush` a mensagem de erro **deixava de
+aparecer** quando o formulário ficava inválido (um `markAllAsTouched()` no
+submit, por exemplo). Os cinco agora assinam `statusChanges`/`valueChanges` e
+chamam `markForCheck()`. A assinatura vive no `ngOnInit`: no construtor,
+`ngControl.control` ainda é `null`.
+
+**Contrato que muda para quem consome:** mutar um array de `@Input` no lugar
+(`options.push(...)`) deixa de atualizar a tela — é preciso nova referência.
+É o contrato normal de biblioteca Angular moderna.
+
+Os 13 testes ponta a ponta passam com `OnPush` ativo, incluindo o do toast,
+que muda estado por `setTimeout` fora de evento de template.
+
+### Adicionado — `br-select` com padrão combobox (WAI-ARIA)
+
+Não tinha `aria-haspopup`, `aria-expanded` nem `aria-activedescendant`, e as
+opções eram `<li tabindex="0">` com só `keydown.enter`: sem navegação por
+setas, e o Tab atravessava a lista inteira. Para um leitor de tela não era um
+combobox, era uma pilha de itens focáveis.
+
+Agora: `role="combobox"` no gatilho com `aria-haspopup="listbox"`,
+`aria-expanded`, `aria-controls` e `aria-activedescendant`; opções com
+`role="option"` e `tabindex="-1"`; navegação por ↑/↓ (pulando desabilitadas),
+`Home`/`End`, `Enter`/`Espaço` para escolher e `Escape` para fechar mantendo o
+foco no gatilho. A opção ativa recebe marca visual com barra lateral — o foco
+do DOM fica no gatilho, então sem pista visível quem usa teclado não vê nada
+acontecer.
+
+### Adicionado — `br-table` e `br-badge`
+
+- `br-table` ganhou `ariaLabel` e `caption`, e a área rolável virou
+  `role="region"` com `tabindex="0"` (região rolável precisa ser alcançável por
+  teclado — WCAG 2.1.1). ⚠️ `scope` nos `<th>` continua sendo do consumidor: a
+  tabela inteira é projetada por `<ng-content>`.
+- `br-badge` ganhou `ariaLabel` opcional, para quando o conteúdo é só um número.
+
+### Nota — levantamento de a11y corrigido
+
+O relatório inicial apontou 8 componentes "sem nenhum `aria-`/`role`". Na
+inspeção, a maioria **já estava correta** usando semântica nativa, que um grep
+por `aria-`/`role=` não enxerga: `br-footer` usa `<footer>`, `br-layout` usa
+`<main>`, `br-radio` usa `<fieldset>`/`<legend>`, `br-menu` usa `<nav>` com
+`aria-label`, e `br-list` já expõe `role="list"`. Dos 8, só o `br-badge`
+precisava de mudança.
+
 ### Alterado — `peerDependencies` ampliadas para Angular 17 a 22
 
 Eram `^17 || ^18 || ^19`. Com o Angular 22 como `latest`, isso impedia a

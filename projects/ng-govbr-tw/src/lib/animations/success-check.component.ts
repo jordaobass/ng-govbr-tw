@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation, inject, OnInit } from '@angular/core';
 import { BrAnimationService } from './animation.service';
 
 /**
@@ -11,6 +11,7 @@ import { BrAnimationService } from './animation.service';
 @Component({
   selector: 'br-success-check',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
     <div

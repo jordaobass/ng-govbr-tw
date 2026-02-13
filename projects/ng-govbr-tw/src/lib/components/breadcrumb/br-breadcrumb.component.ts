@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   Input,
   ViewEncapsulation,
@@ -9,6 +10,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'br-breadcrumb',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule],
   encapsulation: ViewEncapsulation.None,
   template: `

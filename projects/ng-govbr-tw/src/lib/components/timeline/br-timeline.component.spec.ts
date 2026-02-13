@@ -24,7 +24,7 @@ describe('BrTimelineComponent', () => {
       { title: 'Step 2', status: 'current' },
       { title: 'Step 3', status: 'pending' },
     ];
-    component.items = items;
+    fixture.componentRef.setInput('items', items);
     fixture.detectChanges();
 
     const timelineItems = fixture.nativeElement.querySelectorAll('.br-timeline-item');
@@ -32,7 +32,7 @@ describe('BrTimelineComponent', () => {
   });
 
   it('should apply completed status class', () => {
-    component.items = [{ title: 'Done', status: 'completed' }];
+    fixture.componentRef.setInput('items', [{ title: 'Done', status: 'completed' }]);
     fixture.detectChanges();
 
     const item = fixture.nativeElement.querySelector('.br-timeline-item-completed');
@@ -40,7 +40,7 @@ describe('BrTimelineComponent', () => {
   });
 
   it('should apply current status class', () => {
-    component.items = [{ title: 'In Progress', status: 'current' }];
+    fixture.componentRef.setInput('items', [{ title: 'In Progress', status: 'current' }]);
     fixture.detectChanges();
 
     const item = fixture.nativeElement.querySelector('.br-timeline-item-current');
@@ -48,7 +48,7 @@ describe('BrTimelineComponent', () => {
   });
 
   it('should apply pending status class by default', () => {
-    component.items = [{ title: 'Pending' }];
+    fixture.componentRef.setInput('items', [{ title: 'Pending' }]);
     fixture.detectChanges();
 
     const item = fixture.nativeElement.querySelector('.br-timeline-item-pending');
@@ -56,7 +56,7 @@ describe('BrTimelineComponent', () => {
   });
 
   it('should display date when provided', () => {
-    component.items = [{ title: 'Event', date: '01/01/2026' }];
+    fixture.componentRef.setInput('items', [{ title: 'Event', date: '01/01/2026' }]);
     fixture.detectChanges();
 
     const date = fixture.nativeElement.querySelector('.br-timeline-date');
@@ -64,7 +64,7 @@ describe('BrTimelineComponent', () => {
   });
 
   it('should display description when provided', () => {
-    component.items = [{ title: 'Event', description: 'Some description' }];
+    fixture.componentRef.setInput('items', [{ title: 'Event', description: 'Some description' }]);
     fixture.detectChanges();
 
     const description = fixture.nativeElement.querySelector('.br-timeline-description');
@@ -72,8 +72,8 @@ describe('BrTimelineComponent', () => {
   });
 
   it('should apply horizontal orientation class', () => {
-    component.orientation = 'horizontal';
-    component.items = [{ title: 'Step' }];
+    fixture.componentRef.setInput('orientation', 'horizontal');
+    fixture.componentRef.setInput('items', [{ title: 'Step' }]);
     fixture.detectChanges();
 
     const timeline = fixture.nativeElement.querySelector('.br-timeline-horizontal');
@@ -81,7 +81,7 @@ describe('BrTimelineComponent', () => {
   });
 
   it('should have proper accessibility attributes', () => {
-    component.items = [{ title: 'Step', status: 'current' }];
+    fixture.componentRef.setInput('items', [{ title: 'Step', status: 'current' }]);
     fixture.detectChanges();
 
     const list = fixture.nativeElement.querySelector('[role="list"]');

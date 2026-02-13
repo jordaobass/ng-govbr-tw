@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrSkiplinkComponent } from './br-skiplink.component';
 
 describe('BrSkiplinkComponent', () => {
-  let component: BrSkiplinkComponent;
   let fixture: ComponentFixture<BrSkiplinkComponent>;
 
   beforeEach(async () => {
@@ -11,7 +10,6 @@ describe('BrSkiplinkComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(BrSkiplinkComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
@@ -28,10 +26,10 @@ describe('BrSkiplinkComponent', () => {
   });
 
   it('should render one link per item', () => {
-    component.itens = [
+    fixture.componentRef.setInput('itens', [
       { href: '#conteudo', label: 'Ir para o conteúdo' },
       { href: '#rodape', label: 'Ir para o rodapé' },
-    ];
+    ]);
     fixture.detectChanges();
 
     const links = fixture.nativeElement.querySelectorAll('a');

@@ -20,8 +20,8 @@ describe('BrMenuBarItemComponent — abertura do submenu', () => {
 
     fixture = TestBed.createComponent(BrMenuBarItemComponent);
     component = fixture.componentInstance;
-    component.label = 'Serviços';
-    component.hasSubmenu = true;
+    fixture.componentRef.setInput('label', 'Serviços');
+    fixture.componentRef.setInput('hasSubmenu', true);
     fixture.detectChanges();
   });
 
@@ -62,7 +62,7 @@ describe('BrMenuBarItemComponent — abertura do submenu', () => {
   });
 
   it('should not open when there is no submenu', () => {
-    component.hasSubmenu = false;
+    fixture.componentRef.setInput('hasSubmenu', false);
     component.openSub(true);
     expect(component.showSub).toBe(false);
   });

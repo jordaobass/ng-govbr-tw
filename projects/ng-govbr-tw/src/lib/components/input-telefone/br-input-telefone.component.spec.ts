@@ -54,14 +54,14 @@ describe('BrInputTelefoneComponent', () => {
   });
 
   it('should accept valid landline when allowed', () => {
-    component.allowLandline = true;
+    fixture.componentRef.setInput('allowLandline', true);
     component.writeValue('1133334444');
     const errors = component.validate();
     expect(errors).toBeNull();
   });
 
   it('should require field when required is true', () => {
-    component.required = true;
+    fixture.componentRef.setInput('required', true);
     component.writeValue('');
     const errors = component.validate();
     expect(errors?.['required']).toBe(true);
@@ -79,7 +79,7 @@ describe('BrInputTelefoneComponent', () => {
   });
 
   it('should render label when provided', () => {
-    component.label = 'Telefone';
+    fixture.componentRef.setInput('label', 'Telefone');
     fixture.detectChanges();
 
     const label = fixture.nativeElement.querySelector('label');
@@ -87,8 +87,8 @@ describe('BrInputTelefoneComponent', () => {
   });
 
   it('should show required indicator', () => {
-    component.label = 'Telefone';
-    component.required = true;
+    fixture.componentRef.setInput('label', 'Telefone');
+    fixture.componentRef.setInput('required', true);
     fixture.detectChanges();
 
     const required = fixture.nativeElement.querySelector('.text-govbr-danger');

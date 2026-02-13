@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
@@ -28,6 +29,7 @@ import { BrAnimationService } from '../../animations/animation.service';
 @Component({
   selector: 'br-datepicker',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormsModule],
   encapsulation: ViewEncapsulation.None,
   styles: [`
