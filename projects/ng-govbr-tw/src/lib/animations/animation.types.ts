@@ -86,6 +86,7 @@ export type BrAnimationEasing =
   | 'easeInOut'
   | 'easeInBack'
   | 'easeOutBack'
+  | 'easeOutQuint'
   | 'easeInOutBack'
   | 'easeInElastic'
   | 'easeOutElastic'
@@ -100,6 +101,13 @@ export const BR_ANIMATION_EASING_MAP: Record<BrAnimationEasing, string> = {
   easeInOut: 'ease-in-out',
   easeInBack: 'cubic-bezier(0.6, -0.28, 0.735, 0.045)',
   easeOutBack: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+  /**
+   * Desaceleração forte sem ultrapassar o valor final. É o padrão para
+   * entrada de superfície (modal, tooltip): objeto real desacelera e para.
+   * Prefira este ao `easeOutBack`, cujo overshoot chama atenção para a
+   * animação em vez de para o conteúdo.
+   */
+  easeOutQuint: 'cubic-bezier(0.22, 1, 0.36, 1)',
   easeInOutBack: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
   easeInElastic: 'cubic-bezier(0.5, -0.5, 0.75, 1.25)',
   easeOutElastic: 'cubic-bezier(0.25, -0.25, 0.25, 1.5)',

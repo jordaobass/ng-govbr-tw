@@ -116,7 +116,7 @@
   --govbr-danger-hover-rgb: 179 27 5;
   --govbr-success-hover-rgb: 15 107 26;
   --govbr-warning-hover-rgb: 224 180 6;
-  --govbr-focus-color-rgb: 255 190 46;
+  --govbr-focus-color-rgb: 194 133 12;
   --govbr-pure-0-rgb: 255 255 255;
   --govbr-on-primary-rgb: 255 255 255;
   --govbr-bg-rgb: 255 255 255;
@@ -140,7 +140,7 @@
   --govbr-spacing-3: 12px;
 
   /* === Gov.br DS Tokens — Focus (acessibilidade) === */
-  --govbr-focus-color: #ffbe2e;
+  --govbr-focus-color: #c2850c;
   --govbr-focus-width: 3px;
   --govbr-focus-offset: 2px;
   --govbr-focus-style: solid;
@@ -199,7 +199,7 @@ body {
 .govbr-input:focus,
 .govbr-input:focus-visible {
   border-color: var(--govbr-focus-color);
-  box-shadow: 0 0 0 var(--govbr-focus-width) rgba(255, 190, 46, 0.45);
+  box-shadow: 0 0 0 var(--govbr-focus-width) rgb(var(--govbr-focus-color-rgb) / 0.45);
   outline: none;
 }
 

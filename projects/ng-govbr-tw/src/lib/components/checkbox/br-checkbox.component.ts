@@ -143,7 +143,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     .br-checkbox input:focus-visible + label::before,
     .br-checkbox input:focus + label::before {
       border-color: var(--govbr-focus-color, var(--govbr-focus-color)) !important;
-      box-shadow: 0 0 0 3px rgba(255, 190, 46, 0.45);
+      box-shadow: 0 0 0 3px rgb(var(--govbr-focus-color-rgb) / 0.45);
       outline: none;
     }
 

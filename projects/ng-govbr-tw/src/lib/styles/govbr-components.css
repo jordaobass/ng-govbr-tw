@@ -52,7 +52,7 @@
   --govbr-font-weight-bold: 700;
 
   /* === Gov.br DS Tokens — Focus (acessibilidade) === */
-  --govbr-focus-color: #ffbe2e;
+  --govbr-focus-color: #c2850c;
   --govbr-focus-width: 3px;
   --govbr-focus-offset: 2px;
   --govbr-focus-style: solid;
@@ -105,7 +105,7 @@
 .govbr-input:focus,
 .govbr-input:focus-visible {
   border-color: var(--govbr-focus-color);
-  box-shadow: 0 0 0 var(--govbr-focus-width) rgba(255, 190, 46, 0.45);
+  box-shadow: 0 0 0 var(--govbr-focus-width) rgb(var(--govbr-focus-color-rgb) / 0.45);
   outline: none;
 }
 

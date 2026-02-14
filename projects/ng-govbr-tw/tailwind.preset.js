@@ -46,7 +46,7 @@ module.exports = {
         'govbr-danger-hover': cor('danger-hover', '179 27 5'),
         'govbr-success-hover': cor('success-hover', '15 107 26'),
         'govbr-warning-hover': cor('warning-hover', '224 180 6'),
-        'govbr-focus': cor('focus-color', '255 190 46'),
+        'govbr-focus': cor('focus-color', '194 133 12'),
         'govbr-pure-0': cor('pure-0', '255 255 255'),
         'govbr-on-primary': cor('on-primary', '255 255 255'),
         'govbr-bg': cor('bg', '255 255 255'),
