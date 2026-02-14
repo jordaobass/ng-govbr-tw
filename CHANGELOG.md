@@ -4,6 +4,24 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 ## [1.4.0] - 2026-02-10
 
+### Alterado — anel de foco e easing
+
+- **Anel de foco do tema claro: `#ffbe2e` → `#c2850c`.** O valor antigo é o
+  `--focus-color-dark` do `@govbr-ds/core` — foco do tema **escuro**, usado no
+  claro por engano. Medido contra branco: 1,66:1 antes (reprova a WCAG 1.4.11,
+  que pede 3:1) e **3,16:1** agora. O novo é o `--focus-color-light` oficial
+  (`gold-vivid-40`). ⚠️ Sobre o cinza de página (`--govbr-gray-2`) dá 2,97:1 —
+  0,03 abaixo do mínimo, mesma situação do DS oficial, já que o tom é o dele.
+- O brilho do foco estava fixo em `rgba(255, 190, 46, 0.45)` em **9 lugares**,
+  então mudar o token não teria mudado o halo. Todos passaram a derivar de
+  `rgb(var(--govbr-focus-color-rgb) / 0.45)`.
+- **Modal e tooltip deixam de entrar com quique.** Usavam `easeOutBack`, cujo
+  `1.275` ultrapassa o valor final. Passaram para o novo `easeOutQuint`
+  (`cubic-bezier(0.22, 1, 0.36, 1)`), que desacelera sem ultrapassar.
+  O `easeOutBack` **continua existindo** com o mesmo valor: é um easing
+  nomeado e público, e "Back" significa overshoot — mudar o valor dele faria
+  o nome mentir.
+
 ### Alterado — `OnPush` em todos os 67 componentes
 
 `ChangeDetectionStrategy.OnPush` passa a ser a estratégia de todos os

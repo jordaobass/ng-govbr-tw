@@ -243,15 +243,15 @@ import { merge, Subscription } from 'rxjs';
     .br-input-field:focus {
       outline: none;
       border-color: var(--govbr-focus-color, var(--govbr-focus-color));
-      box-shadow: 0 0 0 3px rgba(255, 190, 46, 0.45);
+      box-shadow: 0 0 0 3px rgb(var(--govbr-focus-color-rgb) / 0.45);
     }
 
     .br-input-field.has-prefix:focus {
-      box-shadow: -3px 0 0 0 rgba(255, 190, 46, 0.45), 0 0 0 3px rgba(255, 190, 46, 0.45);
+      box-shadow: -3px 0 0 0 rgb(var(--govbr-focus-color-rgb) / 0.45), 0 0 0 3px rgb(var(--govbr-focus-color-rgb) / 0.45);
     }
 
     .br-input-field.has-suffix:focus {
-      box-shadow: 3px 0 0 0 rgba(255, 190, 46, 0.45), 0 0 0 3px rgba(255, 190, 46, 0.45);
+      box-shadow: 3px 0 0 0 rgb(var(--govbr-focus-color-rgb) / 0.45), 0 0 0 3px rgb(var(--govbr-focus-color-rgb) / 0.45);
     }
 
     .br-input-field:disabled {
@@ -344,7 +344,7 @@ import { merge, Subscription } from 'rxjs';
 
     .br-input-button:focus {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(255, 190, 46, 0.45);
+      box-shadow: 0 0 0 3px rgb(var(--govbr-focus-color-rgb) / 0.45);
     }
 
     .br-input.has-button .br-input-field {

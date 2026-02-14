@@ -14,6 +14,7 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BrAnimationService } from '../../animations/animation.service';
+import { BR_ANIMATION_EASING_MAP } from '../../animations/animation.types';
 
 /**
  * Elementos que recebem foco por teclado. `[tabindex="-1"]` fica de fora de
@@ -189,7 +190,7 @@ export class BrModalComponent implements OnChanges {
   get modalAnimation(): string {
     if (!this.animationService.isEnabled()) return 'none';
     const duration = this.animationService.resolveDuration('normal');
-    return `br-modal-enter ${duration}ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards`;
+    return `br-modal-enter ${duration}ms ${BR_ANIMATION_EASING_MAP.easeOutQuint} forwards`;
   }
 
   get backdropClasses(): string {

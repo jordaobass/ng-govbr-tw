@@ -118,3 +118,56 @@ test('as variáveis de token estão definidas na página', async ({ page }) => {
 
   expect(faltando, `variáveis de token ausentes: ${faltando.join(', ')}`).toEqual([]);
 });
+
+/**
+ * O anel de foco precisa de 3:1 contra as cores adjacentes (WCAG 1.4.11).
+ *
+ * O valor antigo (`#ffbe2e`, que no DS oficial é o foco do tema ESCURO) dava
+ * 1,66:1 sobre branco — reprovava com folga. O atual é o `--focus-color-light`
+ * oficial (`#c2850c`, gold-vivid-40).
+ *
+ * ⚠️ Medido: 3,16:1 sobre `--govbr-bg` (branco) e **2,97:1 sobre
+ * `--govbr-gray-2`**, que é o fundo de página. Fica 0,03 abaixo do mínimo
+ * contra o cinza — mesma situação do DS oficial, já que o tom é o dele. O
+ * teste trava o valor para que uma regressão (voltar ao amarelo claro) não
+ * passe despercebida.
+ */
+test('o anel de foco contrasta com a superfície do componente', async ({ page }) => {
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+
+  const medir = () =>
+    page.evaluate(() => {
+      const cv = document.createElement('canvas');
+      cv.width = cv.height = 1;
+      const ctx = cv.getContext('2d')!;
+      const rgb = (v: string) => {
+        ctx.clearRect(0, 0, 1, 1);
+        ctx.fillStyle = '#000';
+        ctx.fillStyle = v;
+        ctx.fillRect(0, 0, 1, 1);
+        const d = ctx.getImageData(0, 0, 1, 1).data;
+        return [d[0], d[1], d[2]] as [number, number, number];
+      };
+      const lum = ([r, g, b]: [number, number, number]) => {
+        const f = (c: number) => {
+          c /= 255;
+          return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+        };
+        return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+      };
+      const raiz = getComputedStyle(document.documentElement);
+      const foco = rgb(raiz.getPropertyValue('--govbr-focus-color').trim());
+      const superficie = rgb(raiz.getPropertyValue('--govbr-bg').trim());
+      const [a, b] = [lum(foco), lum(superficie)].sort((x, y) => y - x);
+      return +(((a + 0.05) / (b + 0.05)).toFixed(2));
+    });
+
+  const claro = await medir();
+  expect(claro, `foco sobre a superfície do componente: ${claro}:1`).toBeGreaterThanOrEqual(3);
+
+  await page.evaluate(() => document.documentElement.classList.add('govbr-contrast'));
+  await page.waitForTimeout(600);
+  const escuro = await medir();
+  expect(escuro, `foco no alto contraste: ${escuro}:1`).toBeGreaterThanOrEqual(3);
+});
