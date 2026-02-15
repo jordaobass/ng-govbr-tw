@@ -1,5 +1,5 @@
 {
-  "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "$schema": "https://raw.githubusercontent.com/angular/angular-cli/main/packages/angular_devkit/schematics/collection-schema.json",
   "schematics": {
     "ng-add": {
       "description": "Configura o projeto para usar @schenkerjon/ng-govbr-tw",

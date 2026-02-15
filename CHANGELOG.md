@@ -4,6 +4,46 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 ## [1.4.0] - 2026-02-10
 
+### Corrigido — `ng-add` estava quebrado de seis formas
+
+O schematic é o primeiro contato de quem instala a lib. Cada item abaixo foi
+reproduzido e depois provado corrigido em app descartável.
+
+1. **Não rodava no Angular 20+.** O `schema.json` usava `"id"` em vez de
+   `"$id"`; o CLI moderno rejeita com *NOT SUPPORTED: keyword "id"* e **aborta
+   o schematic inteiro**. Nenhum arquivo era tocado — o `ng add` simplesmente
+   não fazia nada.
+2. **A URL da fonte Rawline estava morta.** O host
+   `cdn.dsgovserp.estaleiro.serpro.gov.br` não resolve DNS (medido: HTTP 000).
+   Todo projeto configurado por `ng add` recebeu um `<link>` quebrado e ficou
+   sem a tipografia do Gov.br, sem erro na tela. Corrigido para
+   `cdngovbr-ds.estaleiro.serpro.gov.br` (HTTP 200).
+3. **O patch do `tailwind.config` só conhecia CommonJS.** Em
+   `tailwind.config.ts` com `export default {} satisfies Config`, ou em projeto
+   ESM, o `String.replace` não casava, devolvia o texto intacto e o arquivo era
+   gravado **sem o preset** — com o log dizendo "configurado". Agora cobre CJS,
+   ESM, TS e `const config = {}`, importa o preset quando não há `require`, e
+   **avisa alto** quando não reconhece o formato, em vez de falhar calado.
+4. **O `@import` entrava depois do `@tailwind utilities`.** A especificação CSS
+   exige `@import` antes de qualquer regra; `postcss-import` estrito descarta a
+   regra nessa posição e os estilos da lib não entram. Agora entra no topo.
+5. **`addGlobalStyles` ignorava workspace multi-projeto.** Só olhava
+   `src/styles.*` e desistia — enquanto a função vizinha, para o index.html, já
+   tratava o caso. As duas passaram a ler o `angular.json`, que é a fonte de
+   verdade.
+6. **O `govbr-contrast.css` nunca era importado.** Quem instalava pelo caminho
+   recomendado não tinha alto contraste, e nada avisava.
+
+Extra: o schematic agora confere se `tailwindcss` está nas dependências e
+avisa se faltar — a lib não funciona sem ele.
+
+**Provado executando** em três variações, cada uma criada do zero, com
+`ng add` a partir do tarball e `ng build` depois: `tailwind.config.ts` com
+`satisfies Config`; workspace multi-projeto sem aplicação na raiz; e
+`tailwind.config.js` CommonJS. No app resultante, medido no navegador: botão
+primário em `rgb(19,81,180)`, fonte Rawline, token `--govbr-primary` definido,
+e o alto contraste invertendo as cores. Zero erro de runtime.
+
 ### Alterado — anel de foco e easing
 
 - **Anel de foco do tema claro: `#ffbe2e` → `#c2850c`.** O valor antigo é o

@@ -41,6 +41,7 @@ Estados: **decidida** · **aberta** · **dívida aceita** (decidida, com data de
 | V1 | **Toolchain da lib no Angular 20 sai do LTS ~nov/2026.** Subir o piso para 21 | v20 sair do LTS | Quem perde patch é o build de desenvolvimento, não os consumidores. Piso 21 cortaria apps em 20 |
 | V2 | **Cobertura de teste parcial.** A 1.4.0 cobre `button`, `br-input`, `select`, `modal`, `pagination`; ficam sem teste `header`, `table`, `datepicker`, `accordion`, `wizard`, `upload` e animações | próxima release | Prometer cobertura total nesta release seria promessa que ela não cumpre. Registrar em `MELHORIAS.md` |
 | V3 | **Showcase monolítico (2.940 linhas).** Quebrar por rota | próxima release | Maior diff e menor risco da release. 8.1 e 8.2 são obrigatórios; 8.3 pode escorregar |
+| V5 | **O `ng-add` não tem teste automatizado.** A correção dos 6 defeitos foi provada executando `ng add` em três apps descartáveis, mas nada impede a regressão num CI. Testar schematic exige `SchematicTestRunner` e um tsconfig próprio, fora da suíte karma | quando o schematic voltar a ser mexido | O caminho crítico está provado por execução registrada no CHANGELOG; montar a infraestrutura de teste de schematic custa mais que o risco atual |
 | V4 | **`<alpha-value>` nos tokens.** Se a lib não usa modificador de opacidade (`bg-govbr-primary/50`), `var()` direto basta; a forma de canal (`rgb(var(--x) / <alpha-value>)`) fica para quando precisar | ao primeiro uso de opacidade em token | Medir antes de complicar o preset |
 
 ## Abertas — precisam do dono

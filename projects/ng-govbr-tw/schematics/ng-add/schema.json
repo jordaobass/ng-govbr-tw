@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "id": "ng-govbr-tw-ng-add",
+  "$id": "ng-govbr-tw-ng-add",
   "title": "ng-govbr-tw ng-add schematic",
   "type": "object",
   "properties": {
