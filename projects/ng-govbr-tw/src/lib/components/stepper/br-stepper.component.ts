@@ -15,34 +15,43 @@ export interface BrStepperStep {
   imports: [CommonModule],
   encapsulation: ViewEncapsulation.None,
   template: `
+    <!--
+      No horizontal, a trilha pode ficar mais larga que a tela: medido em
+      433px de conteúdo numa janela de 360px, com 4 passos. Conteúdo largo
+      rola DENTRO do próprio container — a página nunca rola na horizontal.
+      Região rolável precisa ser alcançável por teclado (WCAG 2.1.1), daí o
+      tabindex só quando há rolagem possível.
+    -->
     <nav
       class="br-stepper font-rawline"
-      [class.br-stepper-vertical]="orientation === 'vertical'"
+      [class.br-stepper-vertical]="orientacaoValida === 'vertical'"
+      [class.br-stepper-rolavel]="orientacaoValida === 'horizontal'"
+      [attr.tabindex]="orientacaoValida === 'horizontal' ? 0 : null"
       role="navigation"
       [attr.aria-label]="ariaLabel"
     >
       <ol
         class="flex"
-        [class.flex-col]="orientation === 'vertical'"
-        [class.gap-0]="orientation === 'horizontal'"
+        [class.flex-col]="orientacaoValida === 'vertical'"
+        [class.gap-0]="orientacaoValida === 'horizontal'"
         role="list"
       >
         @for (step of steps; track step.label; let i = $index; let isLast = $last) {
           <li
             class="flex"
-            [class]="orientation === 'horizontal' ? 'flex-1 items-center' : 'items-start'"
+            [class]="orientacaoValida === 'horizontal' ? 'flex-1 items-center' : 'items-start'"
             role="listitem"
           >
             <div
               class="flex items-center"
-              [class.flex-col]="orientation === 'vertical'"
-              [class.w-full]="orientation === 'horizontal'"
+              [class.flex-col]="orientacaoValida === 'vertical'"
+              [class.w-full]="orientacaoValida === 'horizontal'"
             >
               <!-- Step indicator -->
               <button
                 type="button"
                 class="flex items-center gap-3 group"
-                [class.flex-col]="orientation === 'horizontal' && !compact"
+                [class.flex-col]="orientacaoValida === 'horizontal' && !compact"
                 [class.cursor-pointer]="clickable && i <= currentStep"
                 [class.cursor-default]="!clickable || i > currentStep"
                 [disabled]="!clickable || i > currentStep"
@@ -64,7 +73,7 @@ export interface BrStepperStep {
 
                 <div
                   class="text-left"
-                  [class.text-center]="orientation === 'horizontal' && !compact"
+                  [class.text-center]="orientacaoValida === 'horizontal' && !compact"
                 >
                   <span
                     class="block font-medium transition-colors"
@@ -98,6 +107,22 @@ export interface BrStepperStep {
     </nav>
   `,
   styles: [`
+    .br-stepper-rolavel {
+      overflow-x: auto;
+      /* A barra some em telas largas, onde nao ha o que rolar. */
+      scrollbar-width: thin;
+    }
+
+    .br-stepper-rolavel:focus-visible {
+      outline: var(--govbr-focus-width, 3px) var(--govbr-focus-style, solid) var(--govbr-focus-color);
+      outline-offset: var(--govbr-focus-offset, 2px);
+    }
+
+    /* Sem isto o flex esmaga o rotulo ate virar uma coluna de letras. */
+    .br-stepper-rolavel > ol > li {
+      min-width: max-content;
+    }
+
     .br-stepper-vertical li {
       position: relative;
       padding-bottom: 24px;
@@ -120,6 +145,19 @@ export class BrStepperComponent {
   @Input() steps: BrStepperStep[] = [];
   @Input() currentStep = 0;
   @Input() orientation: 'horizontal' | 'vertical' = 'horizontal';
+
+  /**
+   * Orientação efetiva.
+   *
+   * Ligar `[orientation]="variavel"` com a variável indefinida sobrescreve o
+   * default da classe. O template comparava `=== 'horizontal'` e `===
+   * 'vertical'`, então um valor fora dos dois caía no ramo do `else` de cada
+   * comparação e produzia um layout híbrido: estilo vertical, sem a classe de
+   * rolagem, estourando a largura em 465px numa tela de 360px.
+   */
+  get orientacaoValida(): 'horizontal' | 'vertical' {
+    return this.orientation === 'vertical' ? 'vertical' : 'horizontal';
+  }
   @Input() compact = false;
   @Input() clickable = false;
   @Input() ariaLabel = 'Etapas do processo';
@@ -152,7 +190,7 @@ export class BrStepperComponent {
   }
 
   getConnectorClasses(index: number): string {
-    const base = this.orientation === 'horizontal'
+    const base = this.orientacaoValida === 'horizontal'
       ? 'h-0.5 mx-3 min-w-[24px]'
       : 'br-stepper-connector';
 

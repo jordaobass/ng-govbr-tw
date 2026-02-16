@@ -43,6 +43,28 @@
               "projects/ng-govbr-tw/**/*.html"
             ]
           }
+        },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "compodoc": false,
+            "port": 6006,
+            "styles": [
+              ".storybook/styles.css"
+            ]
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "compodoc": false,
+            "outputDir": "dist/storybook",
+            "styles": [
+              ".storybook/styles.css"
+            ]
+          }
         }
       }
     },

@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "../projects/ng-govbr-tw/src/**/*.stories.ts",
+    "../projects/ng-govbr-tw/src/**/*.ts",
+    "./*.ts"
+  ],
+  "exclude": ["../projects/ng-govbr-tw/src/**/*.spec.ts"]
+}
