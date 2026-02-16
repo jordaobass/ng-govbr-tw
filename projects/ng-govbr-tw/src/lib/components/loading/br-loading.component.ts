@@ -101,14 +101,26 @@ export class BrLoadingComponent {
     return 'relative inline-flex items-center justify-center';
   }
 
+  /**
+   * Tamanho efetivo.
+   *
+   * Ligar `[size]="variavel"` com a variável indefinida **sobrescreve** o
+   * default da classe, e um índice fora do mapa produzia `undefined`: o
+   * diâmetro virava `NaN` e o SVG saía com `cx="NaN"`, quebrando o desenho
+   * sem erro que apontasse a causa.
+   */
+  private get tamanhoValido(): 'small' | 'medium' | 'large' {
+    return this.size === 'small' || this.size === 'large' ? this.size : 'medium';
+  }
+
   get progressDiameter(): number {
     const diameters = { small: 44, medium: 64, large: 84 } as const;
-    return diameters[this.size];
+    return diameters[this.tamanhoValido];
   }
 
   get strokeWidth(): number {
     const widths = { small: 3, medium: 4, large: 5 } as const;
-    return widths[this.size];
+    return widths[this.tamanhoValido];
   }
 
   get progressRadius(): number {

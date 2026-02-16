@@ -1,0 +1,12 @@
+/*
+ * Mesmo conjunto que o `ng-add` configura num projeto consumidor: tokens,
+ * estilos de componente, alto contraste e as diretivas do Tailwind declaradas
+ * pela aplicação (a lib não as embarca — ver D11).
+ */
+@import "../projects/ng-govbr-tw/src/lib/styles/govbr-tw.css";
+@import "../projects/ng-govbr-tw/src/lib/styles/govbr-components.css";
+@import "../projects/ng-govbr-tw/src/lib/styles/govbr-contrast.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
