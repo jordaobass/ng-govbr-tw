@@ -43,7 +43,7 @@ import {
         >
           {{ label }}
           @if (required) {
-            <span class="text-govbr-danger ml-0.5" aria-hidden="true">*</span>
+            <span class="text-govbr-danger-dark ml-0.5" aria-hidden="true">*</span>
           }
         </label>
       }
@@ -76,7 +76,7 @@ import {
       @if (hasError && errorMessage) {
         <p
           [id]="inputId + '-error'"
-          class="mt-1 text-govbr-xs text-govbr-danger flex items-center gap-1"
+          class="mt-1 text-govbr-xs text-govbr-danger-dark flex items-center gap-1"
           role="alert"
         >
           <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
@@ -84,7 +84,7 @@ import {
         </p>
       }
       @if (hint && !hasError) {
-        <p class="mt-1 text-govbr-xs text-govbr-gray-40">{{ hint }}</p>
+        <p class="mt-1 text-govbr-xs text-govbr-gray-60">{{ hint }}</p>
       }
     </div>
   `,

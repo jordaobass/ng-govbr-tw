@@ -49,7 +49,7 @@ import { BrAnimationService } from '../../animations/animation.service';
           >
           {{ label }}
           @if (required) {
-            <span class="text-govbr-danger ml-0.5">*</span>
+            <span class="text-govbr-danger-dark ml-0.5">*</span>
           }
         </label>
       }
@@ -83,7 +83,7 @@ import { BrAnimationService } from '../../animations/animation.service';
         <span
           class="truncate min-w-0 flex-1 text-left"
           [class.text-govbr-gray-80]="displayValue"
-          [class.text-govbr-gray-40]="!displayValue"
+          [class.text-govbr-gray-60]="!displayValue"
         >
           {{ displayValue || placeholder }}
         </span>
@@ -154,7 +154,7 @@ import { BrAnimationService } from '../../animations/animation.service';
               </li>
             }
             @if (filteredOptions.length === 0) {
-              <li class="px-4 py-3 text-govbr-sm text-govbr-gray-40 text-center">
+              <li class="px-4 py-3 text-govbr-sm text-govbr-gray-60 text-center">
                 Nenhum resultado encontrado
               </li>
             }
@@ -166,7 +166,7 @@ import { BrAnimationService } from '../../animations/animation.service';
       @if (displayError) {
         <span
           [id]="selectId + '-error'"
-          class="flex items-center mt-1 text-govbr-sm text-govbr-danger"
+          class="flex items-center mt-1 text-govbr-sm text-govbr-danger-dark"
           role="alert"
         >
           <i class="fa-solid fa-times-circle mr-1" aria-hidden="true"></i>{{ displayError }}
@@ -305,7 +305,7 @@ export class BrSelectComponent implements ControlValueAccessor, OnDestroy, OnIni
       : '';
 
     const disabledCls = this.isDisabled
-      ? 'bg-govbr-gray-2 text-govbr-gray-40 cursor-not-allowed'
+      ? 'bg-govbr-gray-2 text-govbr-gray-60 cursor-not-allowed'
       : 'bg-govbr-bg cursor-pointer hover:bg-[rgba(0,0,0,0.08)]';
 
     return [base, statusCls, disabledCls].filter(Boolean).join(' ');

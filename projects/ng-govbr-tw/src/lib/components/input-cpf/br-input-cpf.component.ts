@@ -26,7 +26,7 @@ import { merge, Subscription } from 'rxjs';
         >
           {{ label }}
           @if (required) {
-            <span class="text-govbr-danger ml-0.5">*</span>
+            <span class="text-govbr-danger-dark ml-0.5">*</span>
           }
         </label>
       }
@@ -56,7 +56,7 @@ import { merge, Subscription } from 'rxjs';
           maxlength="14"
         />
         <i
-          class="fa-solid fa-id-card absolute right-3 top-1/2 -translate-y-1/2 text-govbr-gray-40 pointer-events-none"
+          class="fa-solid fa-id-card absolute right-3 top-1/2 -translate-y-1/2 text-govbr-gray-60 pointer-events-none"
           aria-hidden="true"
         ></i>
       </div>
@@ -64,7 +64,7 @@ import { merge, Subscription } from 'rxjs';
       @if (displayError) {
         <span
           [id]="inputId + '-error'"
-          class="flex items-center mt-1 text-govbr-sm text-govbr-danger"
+          class="flex items-center mt-1 text-govbr-sm text-govbr-danger-dark"
           role="alert"
         >
           <i class="fa-solid fa-times-circle mr-1" aria-hidden="true"></i>{{ displayError }}
@@ -154,7 +154,7 @@ export class BrInputCpfComponent implements ControlValueAccessor, Validator, OnD
     const base = `w-full px-4 pr-10 font-rawline govbr-input ${densityHeights[this.density]}`;
     const statusCls = this.displayError ? 'govbr-input--danger' : '';
     const disabledCls = this.isDisabled
-      ? 'bg-govbr-gray-2 text-govbr-gray-40 cursor-not-allowed'
+      ? 'bg-govbr-gray-2 text-govbr-gray-60 cursor-not-allowed'
       : 'bg-govbr-bg text-govbr-gray-80';
 
     return [base, statusCls, disabledCls].filter(Boolean).join(' ');

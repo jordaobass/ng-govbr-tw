@@ -184,7 +184,7 @@ import { merge, Subscription } from 'rxjs';
     }
 
     .br-input-required {
-      color: var(--govbr-danger, var(--govbr-danger));
+      color: var(--govbr-danger-dark);
       margin-left: 4px;
     }
 
@@ -377,12 +377,12 @@ import { merge, Subscription } from 'rxjs';
     }
 
     .br-input-feedback.danger {
-      color: var(--govbr-danger, var(--govbr-danger));
+      color: var(--govbr-danger-dark);
       background-color: var(--govbr-danger-bg);
     }
 
     .br-input-feedback.success {
-      color: var(--govbr-success, var(--govbr-success));
+      color: var(--govbr-success-dark);
       background-color: var(--govbr-success-bg);
     }
 
@@ -398,32 +398,32 @@ import { merge, Subscription } from 'rxjs';
 
     /* States */
     .br-input.invalid .br-input-field {
-      border-color: var(--govbr-danger, var(--govbr-danger));
+      border-color: var(--govbr-danger-dark);
       border-width: 2px;
     }
 
     .br-input.invalid .br-input-addon {
-      border-color: var(--govbr-danger, var(--govbr-danger));
+      border-color: var(--govbr-danger-dark);
       border-width: 2px;
     }
 
     .br-input.invalid .br-input-field:focus {
-      border-color: var(--govbr-danger, var(--govbr-danger));
+      border-color: var(--govbr-danger-dark);
       box-shadow: 0 0 0 3px rgba(229, 34, 7, 0.25);
     }
 
     .br-input.valid .br-input-field {
-      border-color: var(--govbr-success, var(--govbr-success));
+      border-color: var(--govbr-success-dark);
       border-width: 2px;
     }
 
     .br-input.valid .br-input-addon {
-      border-color: var(--govbr-success, var(--govbr-success));
+      border-color: var(--govbr-success-dark);
       border-width: 2px;
     }
 
     .br-input.valid .br-input-field:focus {
-      border-color: var(--govbr-success, var(--govbr-success));
+      border-color: var(--govbr-success-dark);
       box-shadow: 0 0 0 3px rgba(22, 136, 33, 0.25);
     }
 

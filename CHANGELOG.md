@@ -4,6 +4,50 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 ## [1.4.0] - 2026-02-10
 
+### Corrigido — acessibilidade, medida com axe-core nas 114 stories
+
+O Storybook com addon de a11y expôs 7 regras violadas, 5 delas críticas. A
+biblioteca afirmava no README ser "acessível e pronta para produção"; para
+órgão público isso é obrigação legal, não adorno. Todas corrigidas:
+
+- **`button-name`** — `br-modal` e `br-signin` renderizavam botão **sem texto**
+  quando o rótulo vinha indefinido: "botão" e mais nada no leitor de tela.
+  Ambos passaram a ter piso (`rotuloPrimario`, `rotuloCancelar`, `rotulo`).
+- **`aria-required-parent`** — os itens de `br-menu` usavam
+  `role="menuitem"`/`"treeitem"`, que exigem ancestral `role="menu"` e
+  pertencem a menu de **aplicação**, não de navegação. Removidos: dentro do
+  `<nav>` um `<a>`/`<button>` já é anunciado corretamente.
+- **`aria-required-children`** — `br-list` tinha `role="list"` envolvendo o
+  `<h3>` do título, e os itens não eram `listitem`. O cabeçalho saiu do
+  elemento com o papel e `br-item` passou a declarar `role="listitem"`.
+- **`select-name`** — o seletor de itens por página do `br-pagination` não
+  tinha nome acessível.
+- **`aria-allowed-attr`** — `aria-expanded` num `<input type="text">` sem
+  papel, nos pickers (agora `role="combobox"` com `aria-controls` apontando
+  para o painel), e `aria-orientation` em `role="presentation"` no
+  `br-divider` (agora condicionado ao texto, que é quando vira `separator`).
+- **`label-content-name-mismatch`** — `aria-label` que não contém o texto
+  visível quebra comando de voz: quem fala, fala o que lê. Removido de
+  `br-signin`, da área de soltar do `br-upload` e dos passos do `br-wizard`,
+  onde `aria-current` já anuncia o estado.
+- **`color-contrast`** (36 nós) — mesma raiz já tratada nos tokens, aplicada
+  agora aos usos que faltavam: cor **sólida** usada como texto sobre fundo
+  claro. `text-govbr-danger`/`success` viraram as variantes `-dark`, e
+  `text-govbr-gray-40` (3,33:1 — nunca serve para texto) virou `gray-60`
+  (7,02:1) em 40 usos.
+
+**Exceção declarada:** o rótulo de controle desabilitado continua em 2,78:1.
+A WCAG 1.4.3 isenta "texto que faz parte de componente de interface inativo",
+e o padrão de opacidade é o mesmo que o DS usa em `.govbr-input:disabled`. O
+teste E2E ignora `color-contrast` **apenas** dentro de controle inativo —
+suprimir a regra inteira esconderia os casos reais.
+
+### Adicionado — suíte E2E do Storybook
+
+20 testes ao todo. Sobre o Storybook: toda story renderiza, nenhuma estoura a
+largura a 360/768/1280px, e nenhuma tem violação séria ou crítica no axe. A
+lista de casos sai do `index.json` do build — story nova entra sozinha.
+
 ### Corrigido — `ng-add` estava quebrado de seis formas
 
 O schematic é o primeiro contato de quem instala a lib. Cada item abaixo foi

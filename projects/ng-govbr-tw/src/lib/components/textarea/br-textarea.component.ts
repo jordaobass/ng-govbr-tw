@@ -27,7 +27,7 @@ import { merge, Subscription } from 'rxjs';
           >
           {{ label }}
           @if (required) {
-            <span class="text-govbr-danger ml-0.5">*</span>
+            <span class="text-govbr-danger-dark ml-0.5">*</span>
           }
         </label>
       }
@@ -60,8 +60,8 @@ import { merge, Subscription } from 'rxjs';
         <div class="flex justify-end mt-0.5">
           <span
             class="text-govbr-xs"
-            [class.text-govbr-danger]="isOverLimit"
-            [class.text-govbr-gray-40]="!isOverLimit"
+            [class.text-govbr-danger-dark]="isOverLimit"
+            [class.text-govbr-gray-60]="!isOverLimit"
             >
             {{ value?.length || 0 }}/{{ maxLength }}
           </span>
@@ -72,7 +72,7 @@ import { merge, Subscription } from 'rxjs';
       @if (displayError) {
         <span
           [id]="textareaId + '-error'"
-          class="flex items-center mt-1 text-govbr-sm text-govbr-danger"
+          class="flex items-center mt-1 text-govbr-sm text-govbr-danger-dark"
           role="alert"
         >
           <i class="fa-solid fa-times-circle mr-1" aria-hidden="true"></i>{{ displayError }}
@@ -240,7 +240,7 @@ export class BrTextareaComponent implements ControlValueAccessor, OnDestroy, OnI
           : '';
 
     const disabledCls = this.isDisabled
-      ? 'bg-govbr-gray-2 text-govbr-gray-40 cursor-not-allowed'
+      ? 'bg-govbr-gray-2 text-govbr-gray-60 cursor-not-allowed'
       : 'bg-govbr-bg text-govbr-gray-80';
 
     return [base, statusCls, disabledCls].filter(Boolean).join(' ');

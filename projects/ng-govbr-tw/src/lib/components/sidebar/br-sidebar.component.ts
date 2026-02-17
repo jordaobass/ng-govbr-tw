@@ -37,7 +37,7 @@ export class BrSidebarGroupComponent {}
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `
-    <h4 class="px-4 py-1.5 text-govbr-xs font-semibold uppercase tracking-wider text-govbr-gray-40 truncate">
+    <h4 class="px-4 py-1.5 text-govbr-xs font-semibold uppercase tracking-wider text-govbr-gray-60 truncate">
       <ng-content></ng-content>
     </h4>
   `,
@@ -129,7 +129,7 @@ export class BrSidebarItemComponent {
   }
 
   get iconClasses(): string {
-    return `fa-solid fa-${this.icon} w-5 text-center text-govbr-gray-40 flex-shrink-0`;
+    return `fa-solid fa-${this.icon} w-5 text-center text-govbr-gray-60 flex-shrink-0`;
   }
 }
 
@@ -152,11 +152,11 @@ export class BrSidebarItemComponent {
         (click)="open = !open"
         >
         @if (icon) {
-          <i [class]="'fa-solid fa-' + icon + ' w-5 text-center text-govbr-gray-40 flex-shrink-0'"></i>
+          <i [class]="'fa-solid fa-' + icon + ' w-5 text-center text-govbr-gray-60 flex-shrink-0'"></i>
         }
         <span class="truncate">{{ label }}</span>
         <i
-          class="fa-solid fa-chevron-down ml-auto text-xs text-govbr-gray-40 transition-transform duration-200"
+          class="fa-solid fa-chevron-down ml-auto text-xs text-govbr-gray-60 transition-transform duration-200"
           [class.rotate-180]="open"
         ></i>
       </button>
@@ -233,7 +233,7 @@ export class BrSidebarSubComponent {
       @if (collapsible) {
         <button
           type="button"
-          class="hidden md:flex absolute -right-3 top-6 w-6 h-6 items-center justify-center rounded-full bg-govbr-bg border border-govbr-gray-10 shadow-sm text-govbr-gray-40 hover:text-govbr-primary hover:border-govbr-primary transition-colors z-10"
+          class="hidden md:flex absolute -right-3 top-6 w-6 h-6 items-center justify-center rounded-full bg-govbr-bg border border-govbr-gray-10 shadow-sm text-govbr-gray-60 hover:text-govbr-primary hover:border-govbr-primary transition-colors z-10"
           [attr.aria-label]="collapsed ? 'Expandir menu' : 'Recolher menu'"
           (click)="toggleCollapse()"
           >

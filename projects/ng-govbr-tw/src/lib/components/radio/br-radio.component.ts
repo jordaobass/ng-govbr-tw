@@ -31,7 +31,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
           >
           {{ legend }}
           @if (required) {
-            <span class="text-govbr-danger ml-0.5">*</span>
+            <span class="text-govbr-danger-dark ml-0.5">*</span>
           }
         </legend>
       }
@@ -66,7 +66,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       </div>
     
       @if (error) {
-        <span class="flex items-center mt-1 text-govbr-sm text-govbr-danger">
+        <span class="flex items-center mt-1 text-govbr-sm text-govbr-danger-dark">
           <i class="fa-solid fa-times-circle mr-1"></i>{{ error }}
         </span>
       }

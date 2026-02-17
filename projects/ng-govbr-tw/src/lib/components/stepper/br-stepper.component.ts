@@ -81,11 +81,11 @@ export interface BrStepperStep {
                   >
                     {{ step.label }}
                     @if (step.optional) {
-                      <span class="text-xs text-govbr-gray-40 font-normal ml-1">(opcional)</span>
+                      <span class="text-xs text-govbr-gray-60 font-normal ml-1">(opcional)</span>
                     }
                   </span>
                   @if (step.description && !compact) {
-                    <span class="block text-xs text-govbr-gray-40 mt-0.5">
+                    <span class="block text-xs text-govbr-gray-60 mt-0.5">
                       {{ step.description }}
                     </span>
                   }
@@ -175,17 +175,17 @@ export class BrStepperComponent {
       return `${base} bg-govbr-primary text-govbr-on-primary ring-4 ring-govbr-primary-lightest`;
     } else {
       // Pending
-      return `${base} bg-govbr-gray-10 text-govbr-gray-40 border-2 border-govbr-gray-20`;
+      return `${base} bg-govbr-gray-10 text-govbr-gray-60 border-2 border-govbr-gray-20`;
     }
   }
 
   getStepLabelClasses(index: number): string {
     if (index < this.currentStep) {
-      return 'text-govbr-success text-sm';
+      return 'text-govbr-success-dark text-sm';
     } else if (index === this.currentStep) {
       return 'text-govbr-primary text-sm';
     } else {
-      return 'text-govbr-gray-40 text-sm';
+      return 'text-govbr-gray-60 text-sm';
     }
   }
 

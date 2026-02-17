@@ -29,6 +29,12 @@ import { BrAnimationService } from '../../animations/animation.service';
       to { opacity: 1; transform: translateX(0); }
     }
   `],
+  /*
+   * Os botões de passo NÃO levam `aria-label`: o estado já é anunciado por
+   * `aria-current="step"`, e um rótulo que não contém o texto visível quebra
+   * a regra `label-content-name-mismatch` — quem usa comando de voz fala o
+   * que vê na tela, e o nome acessível precisa conter isso.
+   */
   template: `
     @if (active) {
       <div class="py-4 font-rawline" role="tabpanel" [style.animation]="stepAnimation">
@@ -86,7 +92,6 @@ export class BrWizardStepComponent {
                 (click)="goToStep(i)"
                 class="flex items-center gap-2 group whitespace-nowrap"
                 [attr.aria-current]="i === currentStep ? 'step' : null"
-                [attr.aria-label]="step.label + (i < currentStep ? ' (concluído)' : i === currentStep ? ' (atual)' : '')"
                 >
                 <!-- Circle indicator -->
                 <span [class]="getStepCircleClasses(i)">

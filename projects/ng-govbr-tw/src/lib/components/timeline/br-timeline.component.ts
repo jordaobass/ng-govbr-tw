@@ -123,7 +123,7 @@ export interface BrTimelineItem {
     .br-timeline-date {
       display: block;
       font-size: var(--govbr-font-size-xs);
-      color: var(--govbr-gray-40);
+      color: var(--govbr-gray-60);
       margin-bottom: var(--govbr-spacing-1);
     }
 
@@ -144,12 +144,12 @@ export interface BrTimelineItem {
 
     /* ═══ Status: Completed ═══ */
     .br-timeline-item-completed .br-timeline-icon {
-      background-color: var(--govbr-success);
+      background-color: var(--govbr-success-dark);
       color: var(--govbr-on-primary);
     }
 
     .br-timeline-item-completed .br-timeline-line {
-      background-color: var(--govbr-success);
+      background-color: var(--govbr-success-dark);
     }
 
     .br-timeline-item-completed .br-timeline-title {
@@ -175,11 +175,12 @@ export interface BrTimelineItem {
     }
 
     .br-timeline-item-pending .br-timeline-title {
-      color: var(--govbr-gray-40);
+      /* gray-40 sobre a pagina da 3,33:1 e reprova para texto (precisa 4,5). */
+      color: var(--govbr-gray-60);
     }
 
     .br-timeline-item-pending .br-timeline-description {
-      color: var(--govbr-gray-40);
+      color: var(--govbr-gray-60);
     }
 
     /* ═══ Horizontal Orientation ═══ */

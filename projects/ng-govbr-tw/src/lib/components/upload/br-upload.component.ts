@@ -43,6 +43,11 @@ export interface BrUploadFile {
       multi: true,
     },
   ],
+  /*
+   * A área de soltar arquivos NÃO leva `aria-label`: ela já tem texto visível
+   * dentro, e um rótulo diferente do texto quebra
+   * `label-content-name-mismatch` — quem navega por voz fala o que lê.
+   */
   template: `
     <!-- Drop zone -->
     <div class="font-rawline">
@@ -50,7 +55,7 @@ export interface BrUploadFile {
         <span class="block text-govbr-sm font-semibold text-govbr-gray-80 mb-1">
           {{ label }}
           @if (required) {
-            <span class="text-govbr-danger" aria-hidden="true">*</span>
+            <span class="text-govbr-danger-dark" aria-hidden="true">*</span>
           }
         </span>
       }
@@ -65,7 +70,7 @@ export interface BrUploadFile {
         (keydown.space)="fileInput.click()"
         role="button"
         tabindex="0"
-        [attr.aria-label]="label || 'Enviar arquivo'"
+
         >
         <i class="fa-solid fa-cloud-arrow-up text-2xl mb-2"
           [class.text-govbr-primary]="!dragging"
@@ -77,7 +82,7 @@ export interface BrUploadFile {
         >
           Arraste arquivos aqui ou clique para selecionar
         </p>
-        <p [class]="'text-govbr-xs mt-1 ' + (dragging ? 'text-govbr-on-primary opacity-80' : 'text-govbr-gray-40')">
+        <p [class]="'text-govbr-xs mt-1 ' + (dragging ? 'text-govbr-on-primary opacity-80' : 'text-govbr-gray-60')">
           @if (accept) {
             Formatos: {{ accept }}
           }
@@ -97,10 +102,10 @@ export interface BrUploadFile {
       />
 
       @if (helperText && !error) {
-        <p class="text-govbr-xs text-govbr-gray-40 mt-1">{{ helperText }}</p>
+        <p class="text-govbr-xs text-govbr-gray-60 mt-1">{{ helperText }}</p>
       }
       @if (error) {
-        <p class="text-govbr-xs text-govbr-danger mt-1">{{ error }}</p>
+        <p class="text-govbr-xs text-govbr-danger-dark mt-1">{{ error }}</p>
       }
 
       <!-- File list -->
@@ -117,14 +122,14 @@ export interface BrUploadFile {
                 />
               } @else {
                 <div class="w-10 h-10 rounded bg-govbr-gray-10 flex items-center justify-center flex-shrink-0">
-                  <i [class]="getFileIcon(f.type) + ' text-govbr-gray-40'"></i>
+                  <i [class]="getFileIcon(f.type) + ' text-govbr-gray-60'"></i>
                 </div>
               }
 
               <!-- Info -->
               <div class="flex-1 min-w-0">
                 <p class="text-govbr-sm text-govbr-gray-80 font-medium truncate">{{ f.name }}</p>
-                <p class="text-govbr-xs text-govbr-gray-40">{{ formatSize(f.size) }}</p>
+                <p class="text-govbr-xs text-govbr-gray-60">{{ formatSize(f.size) }}</p>
                 @if (f.status === 'uploading') {
                   <div class="mt-1 h-1.5 bg-govbr-gray-10 rounded-full overflow-hidden">
                     <div
@@ -134,18 +139,18 @@ export interface BrUploadFile {
                   </div>
                 }
                 @if (f.status === 'error') {
-                  <p class="text-govbr-xs text-govbr-danger mt-0.5">Erro no envio</p>
+                  <p class="text-govbr-xs text-govbr-danger-dark mt-0.5">Erro no envio</p>
                 }
               </div>
 
               <!-- Status / Remove -->
               @if (f.status === 'done') {
-                <i class="fa-solid fa-check-circle text-govbr-success flex-shrink-0"></i>
+                <i class="fa-solid fa-check-circle text-govbr-success-dark flex-shrink-0"></i>
               }
               @if (!disabled) {
                 <button
                   type="button"
-                  class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-govbr-gray-40 hover:text-govbr-danger hover:bg-govbr-gray-5 transition-colors govbr-focus-ring"
+                  class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-govbr-gray-60 hover:text-govbr-danger-dark hover:bg-govbr-gray-5 transition-colors govbr-focus-ring"
                   aria-label="Remover arquivo"
                   (click)="removeFile(i, $event)"
                   >

@@ -11,6 +11,10 @@ import { defineConfig, devices } from '@playwright/test';
 const PORTA = Number(process.env.PORTA_DEMO ?? 14731);
 const BASE = process.env.BASE_URL ?? `http://localhost:${PORTA}`;
 
+/** Storybook é a documentação da lib e tem suíte própria (decisão D19). */
+export const PORTA_STORYBOOK = Number(process.env.PORTA_STORYBOOK ?? 14741);
+export const BASE_STORYBOOK = `http://localhost:${PORTA_STORYBOOK}`;
+
 export default defineConfig({
   testDir: './e2e',
   // Um teste que depende de ordem é um teste que mente quando roda sozinho.
@@ -55,10 +59,20 @@ export default defineConfig({
    */
   webServer: process.env.BASE_URL
     ? undefined
-    : {
-        command: `npx --yes http-server ../dist/demo/browser -p ${PORTA} -s --silent --proxy http://localhost:${PORTA}?`,
-        url: BASE,
-        reuseExistingServer: !process.env.CI,
-        timeout: 60_000,
-      },
+    : [
+        {
+          command: `npx --yes http-server ../dist/demo/browser -p ${PORTA} -s --silent --proxy http://localhost:${PORTA}?`,
+          url: BASE,
+          reuseExistingServer: !process.env.CI,
+          timeout: 60_000,
+        },
+        {
+          // O Storybook já serve /iframe.html em caminho real: não precisa de
+          // fallback de SPA.
+          command: `npx --yes http-server ../dist/storybook -p ${PORTA_STORYBOOK} -s --silent`,
+          url: `${BASE_STORYBOOK}/index.json`,
+          reuseExistingServer: !process.env.CI,
+          timeout: 60_000,
+        },
+      ],
 });

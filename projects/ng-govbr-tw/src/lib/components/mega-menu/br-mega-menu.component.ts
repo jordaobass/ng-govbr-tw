@@ -161,7 +161,7 @@ export interface BrSocialLink {
             @for (item of currentMenuItems; track item.id; let i = $index) {
               @if (item.section && (i === 0 || currentMenuItems[i-1]?.section !== item.section)) {
                 <li class="mt-6 first:mt-2">
-                  <span class="block px-4 py-2 text-xs font-semibold text-govbr-gray-40 uppercase tracking-wider">
+                  <span class="block px-4 py-2 text-xs font-semibold text-govbr-gray-60 uppercase tracking-wider">
                     {{ item.section }}
                   </span>
                 </li>
@@ -183,7 +183,7 @@ export interface BrSocialLink {
                   }
                   <span class="flex-1 text-left">{{ item.label }}</span>
                   @if (item.children && item.children.length > 0) {
-                    <i class="fa-solid fa-chevron-right text-xs text-govbr-gray-40"></i>
+                    <i class="fa-solid fa-chevron-right text-xs text-govbr-gray-60"></i>
                   }
                 </button>
               </li>
@@ -193,7 +193,7 @@ export interface BrSocialLink {
           <!-- Social Links Section -->
           @if (socialLinks.length > 0 && navigationStack.length === 0) {
             <div class="mt-6 px-4 py-4 border-t border-govbr-gray-5">
-              <span class="block text-xs font-semibold text-govbr-gray-40 uppercase tracking-wider mb-3">
+              <span class="block text-xs font-semibold text-govbr-gray-60 uppercase tracking-wider mb-3">
                 Redes sociais
               </span>
               <div class="flex items-center gap-3">
@@ -551,7 +551,7 @@ export class BrMegaMenuColumnComponent {
           class="flex items-center gap-2 px-2 py-2 text-govbr-sm text-govbr-gray-60 hover:text-govbr-primary hover:bg-govbr-gray-2 rounded transition-colors govbr-focus-ring"
         >
           @if (icon) {
-            <i [class]="'fa-solid fa-' + icon + ' w-4 text-center text-govbr-gray-40'"></i>
+            <i [class]="'fa-solid fa-' + icon + ' w-4 text-center text-govbr-gray-60'"></i>
           }
           <span>{{ label }}</span>
         </a>
@@ -562,7 +562,7 @@ export class BrMegaMenuColumnComponent {
           (click)="action.emit()"
         >
           @if (icon) {
-            <i [class]="'fa-solid fa-' + icon + ' w-4 text-center text-govbr-gray-40'"></i>
+            <i [class]="'fa-solid fa-' + icon + ' w-4 text-center text-govbr-gray-60'"></i>
           }
           <span>{{ label }}</span>
         </button>

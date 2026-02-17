@@ -36,6 +36,7 @@ import {
             <div class="br-pagination-select">
               <select
                 [id]="selectId"
+                aria-label="Itens por página"
                 [value]="itemsPerPage"
                 (change)="onItemsPerPageChange($event)"
               >

@@ -74,7 +74,7 @@ import { BrContrastService } from '../../services/br-contrast.service';
                     role="menu"
                     aria-label="Acesso Rápido"
                     >
-                    <span class="block px-4 py-1.5 text-govbr-xs font-semibold text-govbr-gray-40 uppercase tracking-wider" aria-hidden="true">Acesso Rápido</span>
+                    <span class="block px-4 py-1.5 text-govbr-xs font-semibold text-govbr-gray-60 uppercase tracking-wider" aria-hidden="true">Acesso Rápido</span>
                     <ng-content select="[header-links]"></ng-content>
                   </div>
                 }
@@ -104,7 +104,7 @@ import { BrContrastService } from '../../services/br-contrast.service';
                     role="menu"
                     aria-label="Funcionalidades"
                     >
-                    <span class="block px-4 py-1.5 text-govbr-xs font-semibold text-govbr-gray-40 uppercase tracking-wider" aria-hidden="true">Funcionalidades</span>
+                    <span class="block px-4 py-1.5 text-govbr-xs font-semibold text-govbr-gray-60 uppercase tracking-wider" aria-hidden="true">Funcionalidades</span>
                     <ng-content select="[header-functions]"></ng-content>
                   </div>
                 }
@@ -201,7 +201,7 @@ import { BrContrastService } from '../../services/br-contrast.service';
                     <div class="border-t border-govbr-gray-10">
                       <button
                         type="button"
-                        class="flex items-center w-full px-4 py-2.5 text-govbr-sm text-govbr-danger hover:bg-govbr-gray-2 transition-colors text-left"
+                        class="flex items-center w-full px-4 py-2.5 text-govbr-sm text-govbr-danger-dark hover:bg-govbr-gray-2 transition-colors text-left"
                         role="menuitem"
                         (click)="logout.emit(); closeAvatarMenu()"
                         >
@@ -515,7 +515,7 @@ export class BrHeaderComponent implements AfterContentInit, OnInit {
   }
 
   get avatarChevronClasses(): string {
-    const color = this.isWhite ? 'text-govbr-gray-40' : 'text-govbr-on-primary/60';
+    const color = this.isWhite ? 'text-govbr-gray-60' : 'text-govbr-on-primary/60';
     return `fa-solid fa-chevron-down text-[10px] transition-transform duration-200 ${color}`;
   }
 

@@ -6,12 +6,17 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   encapsulation: ViewEncapsulation.None,
+  /*
+   * `aria-orientation` só é permitido em `role="separator"`. Sem texto o
+   * divider é `role="presentation"`, e o atributo fazia o axe reprovar com
+   * `aria-allowed-attr` — por isso ele é condicionado ao texto.
+   */
   template: `
     <div
       class="flex items-center font-rawline"
       [class]="containerClasses"
       [attr.role]="text ? 'separator' : 'presentation'"
-      [attr.aria-orientation]="orientation"
+      [attr.aria-orientation]="text ? orientation : null"
     >
       @if (text) {
         <div [class]="lineClasses"></div>
@@ -78,6 +83,6 @@ export class BrDividerComponent {
   }
 
   get textClasses(): string {
-    return 'px-4 text-sm text-govbr-gray-40 whitespace-nowrap';
+    return 'px-4 text-sm text-govbr-gray-60 whitespace-nowrap';
   }
 }
