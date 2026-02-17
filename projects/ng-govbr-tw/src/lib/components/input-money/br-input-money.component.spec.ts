@@ -81,8 +81,12 @@ describe('BrInputMoneyComponent', () => {
     fixture.componentRef.setInput('required', true);
     fixture.detectChanges();
 
-    const required = fixture.nativeElement.querySelector('.text-govbr-danger');
-    expect(required.textContent).toBe('*');
+    // Consulta pelo CONTEÚDO, não pela classe de cor: amarrar o teste ao
+    // token visual faz ele quebrar a cada ajuste de contraste, sem que o
+    // comportamento tenha mudado.
+    const required = [...fixture.nativeElement.querySelectorAll('label span')]
+      .find((e: Element) => e.textContent?.trim() === '*');
+    expect(required).toBeTruthy();
   });
 
   it('should convert float input to cents', () => {

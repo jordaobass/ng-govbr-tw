@@ -187,7 +187,7 @@ export class BrMenuBarItemComponent {
           role="menuitem"
           >
           @if (icon) {
-            <i [class]="'fa-solid fa-' + icon + ' w-4 text-center text-govbr-gray-40'"></i>
+            <i [class]="'fa-solid fa-' + icon + ' w-4 text-center text-govbr-gray-60'"></i>
           }
           <span>{{ label }}</span>
         </a>
@@ -199,7 +199,7 @@ export class BrMenuBarItemComponent {
           (click)="action.emit()"
           >
           @if (icon) {
-            <i [class]="'fa-solid fa-' + icon + ' w-4 text-center text-govbr-gray-40'"></i>
+            <i [class]="'fa-solid fa-' + icon + ' w-4 text-center text-govbr-gray-60'"></i>
           }
           <span>{{ label }}</span>
         </button>

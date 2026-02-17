@@ -45,7 +45,7 @@ import { BrTimepickerComponent } from '../timepicker/br-timepicker.component';
         <legend class="block text-sm font-semibold text-govbr-gray-80 mb-2">
           {{ label }}
           @if (required) {
-            <span class="text-govbr-danger ml-0.5">*</span>
+            <span class="text-govbr-danger-dark ml-0.5">*</span>
           }
         </legend>
       }

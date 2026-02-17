@@ -112,7 +112,7 @@ const SELETOR_FOCAVEL = [
                     class="px-5 py-2 text-govbr-base font-semibold font-rawline text-govbr-primary bg-transparent border border-govbr-primary rounded-govbr-pill hover:bg-govbr-primary hover:text-govbr-on-primary transition-colors govbr-focus-ring"
                     (click)="cancel()"
                     >
-                    {{ cancelText }}
+                    {{ rotuloCancelar }}
                   </button>
                 }
                 @if (showPrimaryButton) {
@@ -122,7 +122,7 @@ const SELETOR_FOCAVEL = [
                     [class]="primaryButtonClasses"
                     (click)="confirm()"
                     >
-                    {{ primaryText }}
+                    {{ rotuloPrimario }}
                   </button>
                 }
               }
@@ -210,13 +210,13 @@ export class BrModalComponent implements OnChanges {
   get variantIconColor(): string {
     const colors = {
       default: '',
-      danger: 'text-govbr-danger',
+      danger: 'text-govbr-danger-dark',
       // Amarelo puro (#ffcd07) sobre o fundo claro do modal dá 1,50:1 e
       // reprova até o mínimo de 3:1 da WCAG 1.4.11 para gráfico significativo
       // — o ícone de aviso ficava praticamente invisível. A variante escura
       // dá 7,40:1. Tom pendente de conferência contra o DS oficial (A1).
       warning: 'text-govbr-warning-dark',
-      success: 'text-govbr-success',
+      success: 'text-govbr-success-dark',
     } as const;
     return colors[this.variant];
   }
@@ -258,6 +258,21 @@ export class BrModalComponent implements OnChanges {
     ].join(' ');
 
     return [base, sizes[this.size]].filter(Boolean).join(' ');
+  }
+
+  /**
+   * Rótulo do botão primário, com piso.
+   *
+   * Ligar `[primaryText]="variavel"` com a variável indefinida sobrescreve o
+   * default da classe e o botão saía SEM TEXTO — o axe reprovava com
+   * `button-name`, e quem usa leitor de tela ouvia "botão" e mais nada.
+   */
+  get rotuloPrimario(): string {
+    return this.primaryText?.trim() || 'Confirmar';
+  }
+
+  get rotuloCancelar(): string {
+    return this.cancelText?.trim() || 'Cancelar';
   }
 
   ngOnChanges(changes: SimpleChanges): void {

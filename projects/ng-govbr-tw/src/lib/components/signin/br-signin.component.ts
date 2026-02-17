@@ -12,7 +12,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEn
       class="inline-flex items-center justify-center gap-3 font-rawline font-semibold rounded-full transition-all duration-200 govbr-focus-ring"
       [class]="buttonClasses"
       [disabled]="disabled || loading"
-      [attr.aria-label]="ariaLabel"
+      [attr.aria-label]="ariaLabel || null"
       [attr.aria-busy]="loading"
       (click)="handleClick()"
     >
@@ -20,7 +20,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEn
         <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
         <span>Carregando...</span>
       } @else {
-        <span>{{ text }}</span>
+        <span>{{ rotulo }}</span>
         <img
           [src]="logoSrc"
           [alt]="'Logo Gov.br'"
@@ -46,6 +46,17 @@ export class BrSigninComponent {
   /** Texto do botão */
   @Input() text = 'Entrar com';
 
+  /**
+   * Texto efetivo do botão.
+   *
+   * Ligar `[text]="variavel"` com a variável indefinida sobrescreve o default
+   * da classe e o botão fica SEM TEXTO — `button-name` no axe, e "botão" e
+   * mais nada para quem usa leitor de tela.
+   */
+  get rotulo(): string {
+    return this.text?.trim() || 'Entrar com';
+  }
+
   /** URL do logo Gov.br */
   @Input() logoSrc = 'https://www.gov.br/++theme++flavor/static/images/govbr-logo-small.png';
 
@@ -59,7 +70,13 @@ export class BrSigninComponent {
   @Input() fullWidth = false;
 
   /** Aria label customizado */
-  @Input() ariaLabel = 'Entrar com conta Gov.br';
+  /**
+   * Rótulo acessível. Vazio por padrão **de propósito**: o botão já tem texto
+   * visível, e um `aria-label` que não contém esse texto quebra a regra
+   * `label-content-name-mismatch` — quem usa comando de voz fala o que lê na
+   * tela. Preencha só quando o nome acessível precisar dizer mais que o texto.
+   */
+  @Input() ariaLabel = '';
 
   /** Evento de clique */
   @Output() signinClick = new EventEmitter<void>();

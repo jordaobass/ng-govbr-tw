@@ -26,7 +26,7 @@ import { RouterModule } from '@angular/router';
               >
               <i class="fa-solid fa-house text-govbr-sm leading-none"></i>
             </a>
-            <i class="fa-solid fa-chevron-right text-[10px] text-govbr-gray-40 mx-2 leading-none"></i>
+            <i class="fa-solid fa-chevron-right text-[10px] text-govbr-gray-60 mx-2 leading-none"></i>
           </li>
         }
 
@@ -52,7 +52,7 @@ import { RouterModule } from '@angular/router';
               </span>
             }
             @if (!last) {
-              <i class="fa-solid fa-chevron-right text-[10px] text-govbr-gray-40 mx-2 leading-none"></i>
+              <i class="fa-solid fa-chevron-right text-[10px] text-govbr-gray-60 mx-2 leading-none"></i>
             }
           </li>
         }

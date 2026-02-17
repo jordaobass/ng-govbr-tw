@@ -99,8 +99,8 @@ export class BrToastContainerComponent {
     const base = 'flex items-start gap-3 p-4 rounded border-l-4 shadow-lg';
 
     const typeStyles = {
-      success: 'bg-govbr-success-bg border-govbr-success text-govbr-success',
-      danger: 'bg-govbr-danger-bg border-govbr-danger text-govbr-danger',
+      success: 'bg-govbr-success-bg border-govbr-success text-govbr-success-dark',
+      danger: 'bg-govbr-danger-bg border-govbr-danger text-govbr-danger-dark',
       warning: 'bg-govbr-warning-bg border-govbr-warning text-govbr-gray-80',
       info: 'bg-govbr-info-bg border-govbr-info text-govbr-primary-dark',
     } as const;

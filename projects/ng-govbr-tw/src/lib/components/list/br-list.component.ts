@@ -26,7 +26,7 @@ import { RouterModule } from '@angular/router';
   imports: [RouterModule],
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div [class]="itemClasses" [attr.role]="clickable ? 'button' : null" [attr.tabindex]="clickable ? 0 : null" (click)="onItemClick()" (keydown.enter)="onItemClick()">
+    <div [class]="itemClasses" [attr.role]="papel" [attr.tabindex]="clickable ? 0 : null" (click)="onItemClick()" (keydown.enter)="onItemClick()">
       <!-- Leading icon/avatar -->
       @if (icon || avatarSrc) {
         <div class="flex-shrink-0">
@@ -69,7 +69,7 @@ import { RouterModule } from '@angular/router';
         <ng-content select="[item-meta]"></ng-content>
         <ng-content select="[item-actions]"></ng-content>
         @if (showArrow) {
-          <i class="fa-solid fa-chevron-right text-xs text-govbr-gray-40"></i>
+          <i class="fa-solid fa-chevron-right text-xs text-govbr-gray-60"></i>
         }
       </div>
     </div>
@@ -83,6 +83,18 @@ export class BrItemComponent {
   @Input() avatarAlt?: string;
   @Input() tag?: string;
   @Input() clickable = false;
+
+  /**
+   * Papel do item.
+   *
+   * `br-list` envolve os itens num `role="list"`, e esse papel só admite
+   * filhos `listitem` — sem isto o axe reprovava com `aria-required-children`.
+   * Quando o item é clicável, `button` tem precedência: a interação importa
+   * mais para quem navega por teclado do que a contagem da lista.
+   */
+  get papel(): string {
+    return this.clickable ? 'button' : 'listitem';
+  }
   @Input() showArrow = false;
   @Input() selected = false;
   @Input() disabled = false;
@@ -132,7 +144,12 @@ export class BrItemComponent {
   imports: [],
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div [class]="listClasses" [attr.role]="role">
+    <!--
+      O cabeçalho fica FORA do elemento com role=list: esse papel só admite
+      filhos listitem, e o h3 do título fazia o axe reprovar com
+      aria-required-children.
+    -->
+    <div [class]="listClasses">
       @if (title) {
         <div class="px-4 py-2 border-b border-govbr-gray-10">
           <h3 class="text-sm font-semibold text-govbr-gray-80">{{ title }}</h3>
@@ -141,7 +158,9 @@ export class BrItemComponent {
           }
         </div>
       }
-      <ng-content></ng-content>
+      <div [attr.role]="role">
+        <ng-content></ng-content>
+      </div>
     </div>
     `,
 })

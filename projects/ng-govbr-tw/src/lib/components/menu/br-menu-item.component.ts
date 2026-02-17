@@ -15,6 +15,13 @@ import { RouterModule } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule],
   encapsulation: ViewEncapsulation.None,
+  /*
+   * Sem `role="menuitem"` nos itens: esse papel exige um ancestral
+   * `role="menu"` e pertence a menu de APLICAÇÃO (como o de um editor), não a
+   * menu de navegação. Dentro do `<nav role="navigation">` do `br-menu`, um
+   * `<a>`/`<button>` comum já é anunciado corretamente — e o axe reprovava
+   * com `aria-required-parent`.
+   */
   template: `
     <!-- Link item (no children) -->
     @if (route && !hasChildren) {
@@ -24,7 +31,6 @@ import { RouterModule } from '@angular/router';
         #rla="routerLinkActive"
         [routerLinkActiveOptions]="{ exact: exact }"
         [class]="rla.isActive ? activeClasses : itemClasses"
-        role="menuitem"
         >
         @if (icon) {
           <i [class]="rla.isActive ? activeIconClasses : iconClasses" aria-hidden="true"></i>
@@ -40,7 +46,6 @@ import { RouterModule } from '@angular/router';
         [class]="itemClasses"
         [attr.aria-expanded]="hasChildren ? expanded : null"
         [attr.aria-haspopup]="hasChildren ? 'true' : null"
-        [attr.role]="hasChildren ? 'treeitem' : 'menuitem'"
         (click)="onClick()"
         >
         @if (icon) {

@@ -51,7 +51,7 @@ import { BrAnimationService } from '../../animations/animation.service';
         <label [for]="inputId" class="block text-sm font-semibold text-govbr-gray-80 mb-1">
           {{ label }}
           @if (required) {
-            <span class="text-govbr-danger ml-0.5">*</span>
+            <span class="text-govbr-danger-dark ml-0.5">*</span>
           }
         </label>
       }
@@ -67,7 +67,9 @@ import { BrAnimationService } from '../../animations/animation.service';
           (input)="onInputChange($event)"
           (focus)="openCalendar()"
           [class]="inputClasses"
+          role="combobox"
           [attr.aria-expanded]="calendarOpen"
+          [attr.aria-controls]="calendarOpen ? inputId + '-painel' : null"
           aria-haspopup="dialog"
           autocomplete="off"
           inputmode="numeric"
@@ -89,13 +91,14 @@ import { BrAnimationService } from '../../animations/animation.service';
         <p class="mt-1 text-xs text-govbr-gray-60">{{ hint }}</p>
       }
       @if (error) {
-        <p class="mt-1 text-xs text-govbr-danger" role="alert">{{ error }}</p>
+        <p class="mt-1 text-xs text-govbr-danger-dark" role="alert">{{ error }}</p>
       }
     
       <!-- Calendar dropdown -->
       @if (calendarOpen) {
         <div
           class="absolute z-50 mt-1 bg-govbr-bg border border-govbr-gray-10 rounded shadow-lg p-3 w-72"
+          [id]="inputId + '-painel'"
           role="dialog"
           aria-label="Selecionar data"
           [style.animation]="calendarAnimation"

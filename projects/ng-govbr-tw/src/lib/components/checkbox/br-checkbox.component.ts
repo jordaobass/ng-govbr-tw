@@ -161,23 +161,23 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     /* Invalid state */
     .br-checkbox.invalid input + label::before,
     .br-checkbox.is-invalid input + label::before {
-      border-color: var(--govbr-danger, var(--govbr-danger));
+      border-color: var(--govbr-danger-dark);
     }
 
     .br-checkbox.invalid input:checked + label::after,
     .br-checkbox.is-invalid input:checked + label::after {
-      border-color: var(--govbr-danger, var(--govbr-danger));
+      border-color: var(--govbr-danger-dark);
     }
 
     /* Valid state */
     .br-checkbox.valid input + label::before,
     .br-checkbox.is-valid input + label::before {
-      border-color: var(--govbr-success, var(--govbr-success));
+      border-color: var(--govbr-success-dark);
     }
 
     .br-checkbox.valid input:checked + label::after,
     .br-checkbox.is-valid input:checked + label::after {
-      border-color: var(--govbr-success, var(--govbr-success));
+      border-color: var(--govbr-success-dark);
     }
 
     /* Small size */
@@ -240,12 +240,12 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     }
 
     .br-checkbox-feedback.danger {
-      color: var(--govbr-danger, var(--govbr-danger));
+      color: var(--govbr-danger-dark);
       background-color: var(--govbr-danger-bg);
     }
 
     .br-checkbox-feedback.success {
-      color: var(--govbr-success, var(--govbr-success));
+      color: var(--govbr-success-dark);
       background-color: var(--govbr-success-bg);
     }
 
