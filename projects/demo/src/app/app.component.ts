@@ -41,6 +41,12 @@ import {
             <a href="https://www.npmjs.com/package/@schenkerjon/ng-govbr-tw" target="_blank" class="text-govbr-primary hover:underline">
               NPM
             </a>
+            &bull;
+            <!-- Caminho relativo: o demo é servido sob /ng-govbr-tw/, então
+                 isto resolve para /ng-govbr-tw/storybook/. -->
+            <a href="storybook/" class="text-govbr-primary hover:underline">
+              Documentação dos componentes
+            </a>
           </p>
         </div>
       </br-footer>

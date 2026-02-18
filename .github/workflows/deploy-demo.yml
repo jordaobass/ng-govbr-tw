@@ -36,8 +36,20 @@ jobs:
       - name: Build demo
         run: npx ng build demo --base-href /ng-govbr-tw/
 
+      # O app redireciona / para /showcase. Servidor estático devolve 404 nesse
+      # caminho ao recarregar; o 404.html é o fallback de SPA do GitHub Pages.
       - name: Copy 404.html for SPA routing
         run: cp dist/demo/browser/index.html dist/demo/browser/404.html
+
+      # O Storybook é a documentação da biblioteca. Vai para /storybook/ —
+      # verificado que ele funciona em subcaminho, porque usa caminho relativo.
+      - name: Build Storybook
+        run: npx ng run ng-govbr-tw:build-storybook
+
+      - name: Publicar o Storybook em /storybook/
+        run: |
+          mkdir -p dist/demo/browser/storybook
+          cp -r dist/storybook/* dist/demo/browser/storybook/
 
       - uses: actions/configure-pages@v4
 
