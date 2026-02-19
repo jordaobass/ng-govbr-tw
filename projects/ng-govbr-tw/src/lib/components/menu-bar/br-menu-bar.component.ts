@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  inject,
   Component,
   EventEmitter,
   Input,
@@ -117,8 +118,22 @@ export class BrMenuBarItemComponent {
   @Input() icon?: string;
   @Input() exact = false;
   @Input() hasSubmenu = false;
-  @Input() variant: 'primary' | 'dark' | 'white' = 'primary';
+  /**
+   * Variante do item. Quando não informada, **herda a da barra**.
+   *
+   * Sem a herança, `<br-menu-bar variant="white">` deixava os itens em
+   * `primary`: no alto contraste isso dava texto preto sobre barra preta —
+   * 1:1, invisível. Repetir a variante em cada item seria exigir do
+   * consumidor uma informação que o componente pai já tem.
+   */
+  @Input() variant?: 'primary' | 'dark' | 'white';
   @Output() action = new EventEmitter<void>();
+
+  private readonly barra = inject(BrMenuBarComponent, { optional: true, host: false });
+
+  get varianteEfetiva(): 'primary' | 'dark' | 'white' {
+    return this.variant ?? this.barra?.variant ?? 'primary';
+  }
 
   showSub = false;
 
@@ -164,7 +179,7 @@ export class BrMenuBarItemComponent {
     return [
       'flex items-center px-4 py-3 text-govbr-sm font-semibold font-rawline transition-colors whitespace-nowrap cursor-pointer',
       'govbr-focus-ring',
-      variantMap[this.variant],
+      variantMap[this.varianteEfetiva],
     ].join(' ');
   }
 }

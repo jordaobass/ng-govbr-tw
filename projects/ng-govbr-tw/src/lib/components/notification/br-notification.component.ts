@@ -96,7 +96,7 @@ export class BrNotificationComponent {
   get badgeClasses(): string {
     const variantStyles = {
       danger: 'bg-govbr-danger text-govbr-on-primary',
-      warning: 'bg-govbr-warning text-govbr-gray-80',
+      warning: 'bg-govbr-warning text-govbr-on-warning',
       success: 'bg-govbr-success text-govbr-on-primary',
       info: 'bg-govbr-info text-govbr-on-primary',
       primary: 'bg-govbr-primary text-govbr-on-primary',

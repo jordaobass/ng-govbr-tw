@@ -49,6 +49,7 @@ module.exports = {
         'govbr-focus': cor('focus-color', '194 133 12'),
         'govbr-pure-0': cor('pure-0', '255 255 255'),
         'govbr-on-primary': cor('on-primary', '255 255 255'),
+        'govbr-on-warning': cor('on-warning', '51 51 51'),
         'govbr-bg': cor('bg', '255 255 255'),
         'govbr-bg-alternative': cor('bg-alternative', '240 240 240'),
         'govbr-gray': {

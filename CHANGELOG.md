@@ -4,6 +4,52 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 ## [1.4.0] - 2026-02-10
 
+### Corrigido — o que ficava INVISÍVEL no alto contraste
+
+Encontrado por você olhando a tela, não pelos testes. Os 20 testes que havia
+verificavam presença no DOM, largura e axe — **nenhum enxerga texto pintado
+da cor do próprio fundo** dentro de um componente. Medido no navegador:
+
+- **Rodapé: links a 1:1** (branco sobre branco). A regra global
+  `html.govbr-contrast a { color: #ffff00 }` existe para link sobre a página
+  PRETA, mas alguns componentes têm superfície própria que vira CLARA no
+  contraste (`--govbr-primary-darkest` passa a branco). Ali o amarelo some.
+  A regra ganhou exceção: dentro de `br-footer`, `br-menu-bar`, `br-mega-menu`
+  e de superfícies `primary`, o link herda a cor do componente.
+- **Texto branco sobre amarelo a 1,07:1** em `br-modal`, `br-tooltip`,
+  `br-notification` e `br-avatar`. Os quatro usavam `text-govbr-gray-80` sobre
+  `bg-govbr-warning`; no contraste o gray-80 vira branco e o amarelo continua
+  amarelo. Novo token **`--govbr-on-warning`**, que não inverte, porque a
+  superfície de aviso é clara nos dois temas.
+- **`br-menu-bar` não informava a variante aos seus itens.** Com
+  `variant="white"`, a barra ficava preta no contraste e os itens seguiam em
+  `primary` com texto preto: 1:1. Agora o item **herda** a variante da barra
+  quando não recebe uma — exigir que o consumidor repita em cada item uma
+  informação que o pai já tem era a própria causa do defeito.
+
+### Corrigido — Storybook sem ícones e sem a tipografia
+
+O `govbr-tw.css` deixou de importar CDN (D7) e quem passou a oferecer fonte e
+ícones foi o `index.html` do consumidor. O Storybook tem a **própria casca**, e
+eu não a configurei: nenhum `<i class="fa-solid …">` renderizava e o Rawline
+caía no fallback do sistema. Verificado: `font-awesome` e `rawline` não eram
+sequer requisitados. Corrigido com `.storybook/preview-head.html` — o mesmo
+par que o `ng-add` injeta, então o que se vê ali é o que o consumidor recebe.
+
+O addon de backgrounds também foi desligado: ele fixava `#f8f8f8` e brigava
+com o tema, deixando **118 stories** com texto branco sobre fundo claro no
+alto contraste. O fundo agora vem do token `--govbr-bg`.
+
+### Adicionado — o teste que faltava
+
+`testes/e2e/invisivel.spec.ts`: percorre todo texto e ícone visível, sobe a
+árvore até achar quem **realmente** pinta o fundo, e reprova o que ficar
+abaixo de 1,5:1. Roda no showcase (tema claro e alto contraste) e nas 114
+stories. Isenta controle inativo, como manda a WCAG 1.4.3, e ignora elemento
+sobre gradiente, que a medição por `background-color` não alcança.
+
+Total: 23 testes ponta a ponta.
+
 ### Corrigido — acessibilidade, medida com axe-core nas 114 stories
 
 O Storybook com addon de a11y expôs 7 regras violadas, 5 delas críticas. A

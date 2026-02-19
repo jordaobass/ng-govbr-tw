@@ -65,7 +65,7 @@ export class BrAvatarComponent {
       neutral: 'bg-govbr-gray-20 text-govbr-gray-80',
       success: 'bg-govbr-success text-govbr-on-primary',
       danger: 'bg-govbr-danger text-govbr-on-primary',
-      warning: 'bg-govbr-warning text-govbr-gray-80',
+      warning: 'bg-govbr-warning text-govbr-on-warning',
     } as const;
 
     return [

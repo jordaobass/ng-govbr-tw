@@ -1420,7 +1420,7 @@ interface ComponentSection {
               <div class="p-6 flex flex-wrap gap-3">
                 <button data-testid="toast-success" class="px-4 py-2 rounded-govbr-pill bg-govbr-success text-govbr-on-primary text-govbr-sm font-semibold govbr-focus-ring" (click)="dispararToast('success')">Sucesso</button>
                 <button data-testid="toast-danger" class="px-4 py-2 rounded-govbr-pill bg-govbr-danger text-govbr-on-primary text-govbr-sm font-semibold govbr-focus-ring" (click)="dispararToast('danger')">Erro</button>
-                <button data-testid="toast-warning" class="px-4 py-2 rounded-govbr-pill bg-govbr-warning text-govbr-gray-80 text-govbr-sm font-semibold govbr-focus-ring" (click)="dispararToast('warning')">Aviso</button>
+                <button data-testid="toast-warning" class="px-4 py-2 rounded-govbr-pill bg-govbr-warning text-govbr-on-warning text-govbr-sm font-semibold govbr-focus-ring" (click)="dispararToast('warning')">Aviso</button>
                 <button data-testid="toast-info" class="px-4 py-2 rounded-govbr-pill bg-govbr-info text-govbr-on-primary text-govbr-sm font-semibold govbr-focus-ring" (click)="dispararToast('info')">Informação</button>
               </div>
               <div class="border-t border-govbr-gray-10 bg-govbr-gray-2">

@@ -31,20 +31,20 @@ import {
       <br-footer
         logoSrc="https://www.gov.br/++theme++flavor/static/images/govbr-logo-large.png"
       >
-        <div class="text-center text-sm text-govbr-gray-60">
+        <div class="text-center text-sm">
           <p>Biblioteca open-source para Angular 17+</p>
           <p class="mt-1">
-            <a href="https://github.com/jordaobass/ng-govbr-tw" target="_blank" class="text-govbr-primary hover:underline">
+            <a href="https://github.com/jordaobass/ng-govbr-tw" target="_blank" class="underline">
               GitHub
             </a>
             &bull;
-            <a href="https://www.npmjs.com/package/@schenkerjon/ng-govbr-tw" target="_blank" class="text-govbr-primary hover:underline">
+            <a href="https://www.npmjs.com/package/@schenkerjon/ng-govbr-tw" target="_blank" class="underline">
               NPM
             </a>
             &bull;
             <!-- Caminho relativo: o demo é servido sob /ng-govbr-tw/, então
                  isto resolve para /ng-govbr-tw/storybook/. -->
-            <a href="storybook/" class="text-govbr-primary hover:underline">
+            <a href="storybook/" class="underline">
               Documentação dos componentes
             </a>
           </p>

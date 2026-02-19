@@ -78,7 +78,7 @@ export class BrTooltipComponent {
       info: 'bg-govbr-info text-govbr-on-primary',
       success: 'bg-govbr-success text-govbr-on-primary',
       danger: 'bg-govbr-danger text-govbr-on-primary',
-      warning: 'bg-govbr-warning text-govbr-gray-80',
+      warning: 'bg-govbr-warning text-govbr-on-warning',
     } as const;
 
     const positionMap = {

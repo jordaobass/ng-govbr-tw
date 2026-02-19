@@ -1,0 +1,20 @@
+<!--
+  Fonte e ícones da casca do Storybook.
+
+  O `govbr-tw.css` deixou de importar CDN (decisão D7) e quem passou a
+  oferecer as fontes foi o `index.html` do consumidor — é o que o `ng-add`
+  configura. O Storybook tem a PRÓPRIA casca HTML, e sem estes dois links
+  ele ficava sem nenhum ícone (todo `<i class="fa-solid …">` vazio) e sem a
+  tipografia do Gov.br, caindo no fallback do sistema.
+
+  É o mesmo par que o `ng-add` injeta no projeto de quem instala a lib, então
+  o que se vê aqui é o que o consumidor recebe.
+-->
+<link
+  rel="stylesheet"
+  href="https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>

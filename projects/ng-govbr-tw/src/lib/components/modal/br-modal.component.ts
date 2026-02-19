@@ -237,7 +237,7 @@ export class BrModalComponent implements OnChanges {
     const variantStyles = {
       default: 'text-govbr-on-primary bg-govbr-primary hover:bg-govbr-primary-dark',
       danger: 'text-govbr-on-primary bg-govbr-danger hover:bg-govbr-danger-hover',
-      warning: 'text-govbr-gray-80 bg-govbr-warning hover:bg-govbr-warning-hover',
+      warning: 'text-govbr-on-warning bg-govbr-warning hover:bg-govbr-warning-hover',
       success: 'text-govbr-on-primary bg-govbr-success hover:bg-govbr-success-hover',
     } as const;
     return `${base} ${variantStyles[this.variant]}`;

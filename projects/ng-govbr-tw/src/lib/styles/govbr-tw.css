@@ -90,6 +90,16 @@
   --govbr-on-primary: #ffffff;
 
   /*
+   * Texto sobre a superfície de AVISO. O amarelo é claro nos dois temas,
+   * então este token NÃO inverte — ao contrário do `on-primary`, cuja
+   * superfície vira branca no alto contraste.
+   *
+   * Antes, quatro componentes usavam `gray-80` aqui; no contraste o gray-80
+   * vira branco e o texto sumia no amarelo (1,07:1, medido no navegador).
+   */
+  --govbr-on-warning: #333333;
+
+  /*
    * === Canais RGB — consumidos pelo tailwind.preset.js ===
    *
    * O preset gera `rgb(var(--govbr-X-rgb) / <alpha-value>)` para que o
@@ -119,6 +129,7 @@
   --govbr-focus-color-rgb: 194 133 12;
   --govbr-pure-0-rgb: 255 255 255;
   --govbr-on-primary-rgb: 255 255 255;
+  --govbr-on-warning-rgb: 51 51 51;
   --govbr-bg-rgb: 255 255 255;
   --govbr-bg-alternative-rgb: 240 240 240;
   --govbr-gray-2-rgb: 248 248 248;

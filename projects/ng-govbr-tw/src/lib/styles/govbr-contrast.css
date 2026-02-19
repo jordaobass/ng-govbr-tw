@@ -45,6 +45,8 @@ html.govbr-contrast {
    * então o texto tem de virar preto — senão o item ativo fica branco no branco.
    */
   --govbr-on-primary: #000;
+  /* O amarelo do aviso continua claro aqui, então o texto segue escuro. */
+  --govbr-on-warning: #000;
 
   /*
    * Os canais RGB precisam acompanhar cada cor acima. O preset gera
@@ -72,6 +74,7 @@ html.govbr-contrast {
   --govbr-warning-hover-rgb: 255 255 255;
   --govbr-focus-color-rgb: 255 255 0;
   --govbr-on-primary-rgb: 0 0 0;
+  --govbr-on-warning-rgb: 0 0 0;
   --govbr-bg-rgb: 0 0 0;
   --govbr-bg-alternative-rgb: 17 17 17;
   --govbr-gray-2-rgb: 17 17 17;
@@ -90,6 +93,25 @@ html.govbr-contrast body {
 
 html.govbr-contrast a {
   color: #ffff00;
+}
+
+/*
+ * Exceção à regra acima.
+ *
+ * O amarelo é a cor de link sobre o fundo PRETO da página. Mas alguns
+ * componentes têm superfície própria que, no alto contraste, vira CLARA —
+ * `--govbr-primary-darkest` passa a ser branco. Ali o amarelo dá 1,07:1 e o
+ * link some: medido no rodapé, onde GitHub/NPM ficaram invisíveis.
+ *
+ * Nessas superfícies o link herda a cor do texto do próprio componente, que
+ * já acompanha a superfície via `--govbr-on-primary`.
+ */
+html.govbr-contrast br-footer a,
+html.govbr-contrast br-menu-bar a,
+html.govbr-contrast br-mega-menu a,
+html.govbr-contrast .bg-govbr-primary-darkest a,
+html.govbr-contrast .bg-govbr-primary a {
+  color: inherit;
 }
 
 html.govbr-contrast img {
