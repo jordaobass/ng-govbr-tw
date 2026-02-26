@@ -44,3 +44,4 @@ Thumbs.db
 # Storybook
 /dist/storybook
 storybook-static
+.npmrc
