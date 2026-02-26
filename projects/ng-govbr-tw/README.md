@@ -1,8 +1,10 @@
 # @schenkerjon/ng-govbr-tw
 
-Biblioteca Angular de componentes baseados no **Design System do Governo Federal (GovBR DS)**, estilizados com **Tailwind CSS 3**. Componentes standalone, acessíveis e prontos para produção.
+Biblioteca Angular de componentes baseados no **Design System do Governo Federal (GovBR DS)**, estilizados com **Tailwind CSS 3 ou 4**. Componentes standalone, acessíveis e prontos para produção.
 
-Compatível com Angular 17, 18 e 19.
+Compatível com **Angular 17 a 22**.
+
+📖 **[Documentação interativa (Storybook)](https://jordaobass.github.io/ng-govbr-tw/)** — todos os componentes, com controles ao vivo e painel de acessibilidade.
 
 ## Instalação
 
@@ -16,12 +18,17 @@ npm install @schenkerjon/ng-govbr-tw
 ng add @schenkerjon/ng-govbr-tw
 ```
 
-O schematic configura automaticamente:
-- Preset Tailwind no `tailwind.config.js`
+O schematic **detecta se o projeto usa Tailwind 3 ou 4** e configura cada um —
+são incompatíveis entre si, e aplicar a errada deixa a aplicação sem nenhuma
+classe `govbr-*`, sem erro algum na tela.
+
+- **Tailwind 3**: preset e `content` no `tailwind.config.js`
+- **Tailwind 4**: nenhum arquivo de config (o tema é CSS-first); entram o
+  `@theme` da lib e o `@source` do pacote
 - Fontes Rawline e Font Awesome no `index.html`
 - Import do CSS no `styles.css`
 
-### Configuração manual
+### Configuração manual — Tailwind 3
 
 1. Adicione o preset ao `tailwind.config.js`:
 
@@ -40,16 +47,51 @@ module.exports = {
 2. Adicione as fontes no `index.html`:
 
 ```html
-<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;500;600;700;900&display=swap" rel="stylesheet" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 ```
 
-3. Importe o CSS base:
+3. Importe o CSS base — **antes** das diretivas `@tailwind`:
 
 ```css
 /* styles.css */
-@import '@schenkerjon/ng-govbr-tw/src/lib/styles/govbr-tw.css';
+@import '@schenkerjon/ng-govbr-tw/styles/govbr-tw.css';
+@import '@schenkerjon/ng-govbr-tw/styles/govbr-contrast.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 ```
+
+> ⚠️ **Dois detalhes que falham em silêncio.**
+>
+> **O caminho é `styles/…`, não `src/lib/styles/…`.** O `package.json` declara
+> `exports`, e o esbuild do Angular bloqueia caminho profundo: o build morre
+> com `Could not resolve`. Versões anteriores deste README documentavam o
+> caminho profundo — se o seu projeto o usa, troque.
+>
+> **A ordem importa.** `@import` depois de `@tailwind` é descartado pelo
+> `postcss-import` em modo estrito: os estilos da lib simplesmente não entram,
+> sem nenhum erro.
+
+### Configuração manual — Tailwind 4
+
+Não há `tailwind.config.js`: o tema é CSS-first e tudo acontece no `styles.css`.
+
+```css
+@import "tailwindcss";
+@import "@schenkerjon/ng-govbr-tw/styles/govbr-tw.css";
+@import "@schenkerjon/ng-govbr-tw/styles/govbr-contrast.css";
+@import "@schenkerjon/ng-govbr-tw/styles/govbr-tw-v4.css";
+
+/* Sem esta linha o Tailwind 4 gera 7 das 52 classes govbr-* e a aplicação
+   sobe quase sem estilo, SEM erro: o v4 varre o projeto automaticamente mas
+   ignora node_modules de propósito. O caminho é relativo a ESTE arquivo. */
+@source "../node_modules/@schenkerjon/ng-govbr-tw";
+```
+
+As fontes são as mesmas da seção anterior. O `govbr-tw-v4.css` é **gerado** do
+`tailwind.preset.js`, então as duas versões têm sempre os mesmos tokens.
 
 ---
 
@@ -73,12 +115,14 @@ import { BrButtonComponent, BrInputComponent } from '@schenkerjon/ng-govbr-tw';
 | Categoria | Componentes |
 |-----------|-------------|
 | **Layout** | `br-layout`, `br-header`, `br-footer`, `br-menu`, `br-menu-item`, `br-sidebar` |
-| **Navegação** | `br-menu-bar`, `br-mega-menu`, `br-breadcrumb`, `br-tab`, `br-pagination` |
-| **Formulários** | `br-input`, `br-select`, `br-checkbox`, `br-radio-group`, `br-textarea`, `br-datepicker`, `br-timepicker`, `br-datetimepicker` |
+| **Navegação** | `br-menu-bar`, `br-mega-menu`, `br-breadcrumb`, `br-tab`, `br-pagination`, `br-skiplink` |
+| **Formulários** | `br-input`, `br-select`, `br-checkbox`, `br-checkbox-group`, `br-radio-group`, `br-textarea`, `br-datepicker`, `br-timepicker`, `br-datetimepicker`, `br-upload` |
+| **Máscaras** | `br-input-cpf`, `br-input-cnpj`, `br-input-telefone`, `br-input-cep`, `br-input-money` |
+| **Acesso** | `br-signin` |
 | **Botões** | `br-button`, `br-magic-button` |
 | **Dados** | `br-table`, `br-card`, `br-item`, `br-list`, `br-badge` |
-| **Feedback** | `br-message`, `br-modal`, `br-loading`, `br-tooltip` |
-| **Utilitários** | `br-accordion`, `br-wizard`, `br-cookiebar` |
+| **Feedback** | `br-message`, `br-modal`, `br-loading`, `br-tooltip`, `br-toast-container`, `br-notification`, `br-skeleton` |
+| **Utilitários** | `br-accordion`, `br-wizard`, `br-cookiebar`, `br-icon`, `br-divider`, `br-avatar`, `br-chip`, `br-switch`, `br-stepper`, `br-timeline` |
 
 ---
 
@@ -1052,6 +1096,42 @@ Para layouts com sidebar colapsável estilo shadcn:
 | `hasHeader` | `boolean` | `false` |
 | `hasFooter` | `boolean` | `false` |
 | `mobileOpen` | `boolean` | `false` |
+
+---
+
+## Campos com máscara
+
+Cinco campos prontos para formulário de governo. Todos implementam
+`ControlValueAccessor` **e** `Validator` — entram num `FormControl` como
+qualquer campo nativo e já validam sozinhos.
+
+```html
+<br-input-cpf   [formControl]="cpf"   label="CPF"></br-input-cpf>
+<br-input-cnpj  [formControl]="cnpj"  label="CNPJ"></br-input-cnpj>
+<br-input-telefone [formControl]="tel" label="Telefone" [allowLandline]="true"></br-input-telefone>
+<br-input-cep   [formControl]="cep"   label="CEP" [autoFetch]="true"
+                (addressFound)="preencher($event)"></br-input-cep>
+<br-input-money [formControl]="valor" label="Valor" valueUnit="cents"></br-input-money>
+```
+
+| Componente | O que valida | Erros que publica |
+|---|---|---|
+| `br-input-cpf` | dígitos verificadores | `cpfIncomplete`, `cpfInvalid` |
+| `br-input-cnpj` | dígitos verificadores | `cnpjIncomplete`, `cnpjInvalid` |
+| `br-input-telefone` | 10 ou 11 dígitos (`allowLandline`) | `phoneIncomplete`, `phoneInvalid` |
+| `br-input-cep` | 8 dígitos; com `autoFetch` consulta o ViaCEP (`addressFound` / `addressError`) | `cepIncomplete` |
+| `br-input-money` | faixa `min`/`max`, sinal por `allowNegative` | `min`, `max` |
+
+**Nos quatro primeiros, o valor que chega ao formulário é sem pontuação** —
+`"12345678901"`, não `"123.456.789-01"`. A máscara é de apresentação. O
+`br-input-money` é a exceção: entrega um **número**, na unidade declarada por
+`valueUnit`.
+
+> ⚠️ **`br-input-money` e a unidade do valor.** `valueUnit` aceita `"cents"`
+> (**padrão**) ou `"reais"`, e declara o que o `FormControl` guarda. Sem isso
+> `writeValue(100)` é ambíguo — um real ou um centavo? — e versões anteriores
+> adivinhavam pela grandeza do número: `100` virava `R$ 100,00` e `50` virava
+> `R$ 0,50`. Se o seu formulário guarda reais, declare `valueUnit="reais"`.
 
 ---
 

@@ -68,6 +68,7 @@ import { BrAnimationService } from '../../animations/animation.service';
           (focus)="openCalendar()"
           [class]="inputClasses"
           role="combobox"
+          [attr.aria-describedby]="descricaoAcessivel"
           [attr.aria-expanded]="calendarOpen"
           [attr.aria-controls]="calendarOpen ? inputId + '-painel' : null"
           aria-haspopup="dialog"
@@ -88,10 +89,10 @@ import { BrAnimationService } from '../../animations/animation.service';
       </div>
     
       @if (hint && !error) {
-        <p class="mt-1 text-xs text-govbr-gray-60">{{ hint }}</p>
+        <p [id]="inputId + '-hint'" class="mt-1 text-xs text-govbr-gray-60">{{ hint }}</p>
       }
       @if (error) {
-        <p class="mt-1 text-xs text-govbr-danger-dark" role="alert">{{ error }}</p>
+        <p [id]="inputId + '-error'" class="mt-1 text-xs text-govbr-danger-dark" role="alert">{{ error }}</p>
       }
     
       <!-- Calendar dropdown -->
@@ -168,6 +169,21 @@ export class BrDatepickerComponent implements ControlValueAccessor {
 
   @Input() label?: string;
   @Input() placeholder = 'dd/mm/aaaa';
+
+  /**
+   * Ids que descrevem o campo para o leitor de tela.
+   *
+   * O texto de apoio e o de erro eram pintados logo abaixo do campo sem
+   * nenhum vínculo com ele: claro para quem enxerga, inexistente para quem
+   * usa leitor de tela. O axe passou limpo com o defeito presente — nenhuma
+   * ferramenta adivinha que um parágrafo vizinho descreve o campo.
+   */
+  get descricaoAcessivel(): string | null {
+    if (this.error) return `${this.inputId}-error`;
+    if (this.hint) return `${this.inputId}-hint`;
+    return null;
+  }
+
   @Input() hint?: string;
   @Input() error?: string;
   @Input() required = false;

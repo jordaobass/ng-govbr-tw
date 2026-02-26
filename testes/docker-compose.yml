@@ -1,7 +1,7 @@
-# Testes ponta a ponta do showcase.
+# Testes ponta a ponta do Storybook.
 #
-# Pré-requisito: o demo precisa estar BUILDADO antes de subir isto.
-#   cd .. && npx ng build ng-govbr-tw && npx ng build demo --base-href /
+# Pré-requisito: o Storybook precisa estar BUILDADO antes de subir isto.
+#   cd .. && npm run build && npx ng run ng-govbr-tw:build-storybook
 #
 # Rodar:
 #   docker compose run --rm e2e
@@ -16,16 +16,18 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      # O build do demo que a suíte vai exercitar.
+      # O build do Storybook que a suíte vai exercitar.
       - ../dist:/app/dist:ro
       # O código-fonte da lib: o teste de cobertura DERIVA a lista de
       # componentes do fonte, em vez de manter uma cópia que envelhece.
       - ../projects/ng-govbr-tw/src:/app/projects/ng-govbr-tw/src:ro
+      # O gerador do tema v4 e o schematic compilado, que duas suítes executam.
+      - ../scripts:/app/scripts:ro
+      - ../projects/ng-govbr-tw/tailwind.preset.js:/app/projects/ng-govbr-tw/tailwind.preset.js:ro
       # Relatório e traces saem para o host.
       - ./playwright-report:/app/testes/playwright-report
       - ./test-results:/app/testes/test-results
     environment:
-      PORTA_DEMO: 14731
     # O Chromium precisa de mais que os 64MB padrão de /dev/shm, senão
     # trava em páginas grandes sem erro que aponte a causa.
     shm_size: 1gb

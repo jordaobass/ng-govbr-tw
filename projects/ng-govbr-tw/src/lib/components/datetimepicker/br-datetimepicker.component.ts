@@ -40,7 +40,10 @@ import { BrTimepickerComponent } from '../timepicker/br-timepicker.component';
     },
   ],
   template: `
-    <fieldset class="font-rawline" [class.w-full]="block">
+    <fieldset class="font-rawline" [class.w-full]="block"
+      role="group"
+      [attr.aria-describedby]="descricaoAcessivel"
+      [attr.aria-invalid]="dateError || timeError ? 'true' : null">
       @if (label) {
         <legend class="block text-sm font-semibold text-govbr-gray-80 mb-2">
           {{ label }}
@@ -74,12 +77,25 @@ import { BrTimepickerComponent } from '../timepicker/br-timepicker.component';
       </div>
     
       @if (hint && !dateError && !timeError) {
-        <p class="mt-1 text-xs text-govbr-gray-60">{{ hint }}</p>
+        <p [id]="grupoId + '-hint'" class="mt-1 text-xs text-govbr-gray-60">{{ hint }}</p>
       }
     </fieldset>
     `,
 })
 export class BrDatetimepickerComponent implements ControlValueAccessor {
+  private static nextId = 0;
+  readonly grupoId = `br-datetimepicker-${BrDatetimepickerComponent.nextId++}`;
+
+  /**
+   * O apoio descreve o PAR data+hora, não um dos dois campos. Por isso vai no
+   * grupo: pendurá-lo só no campo de data faria o leitor de tela anunciar a
+   * regra do conjunto como se fosse da data.
+   */
+  get descricaoAcessivel(): string | null {
+    if (this.dateError || this.timeError) return null;
+    return this.hint ? `${this.grupoId}-hint` : null;
+  }
+
   @Input() label?: string;
   @Input() dateLabel = 'Data';
   @Input() timeLabel = 'Hora';

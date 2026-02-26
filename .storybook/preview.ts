@@ -7,7 +7,17 @@ import type { Preview } from '@storybook/angular';
  * diferente do que o consumidor recebe seria testar outra coisa.
  */
 const preview: Preview = {
+  /*
+   * O canvas do Storybook vinha com `padding: 0`, e os componentes nasciam
+   * colados no topo e nas laterais — rótulo cortado na borda de cima, campo
+   * de ponta a ponta, sem espaço para o painel de um dropdown abrir.
+   *
+   * O palco abaixo dá respiro e largura de leitura. Componente que é de
+   * largura total por natureza (header, rodapé, barras, layout) declara
+   * `parameters: { palco: 'cheio' }` e fica sem a moldura.
+   */
   parameters: {
+    layout: 'fullscreen',
     controls: {
       matchers: { color: /(background|color)$/i, date: /Date$/i },
       expanded: true,
@@ -57,6 +67,22 @@ const preview: Preview = {
   },
 
   decorators: [
+    (story, contexto) => {
+      /*
+       * O respiro é dado por CSS na raiz do canvas, não embrulhando a story.
+       *
+       * A primeira versão envolvia o `template` num `<div>`. Isso quebra de um
+       * jeito silencioso: story declarada só com `component` + `args`, sem
+       * `template`, viraria `<div class="sb-palco"></div>` — uma moldura vazia,
+       * sem erro nenhum. Mexer numa classe no `<html>` não tem como sumir com
+       * o conteúdo.
+       */
+      document.documentElement.classList.toggle(
+        'sb-palco-cheio',
+        contexto.parameters['palco'] === 'cheio'
+      );
+      return story();
+    },
     (story, contexto) => {
       // O tema vive numa classe no <html>, então o decorator mexe no documento
       // do iframe da story — é assim que a lib funciona de verdade.

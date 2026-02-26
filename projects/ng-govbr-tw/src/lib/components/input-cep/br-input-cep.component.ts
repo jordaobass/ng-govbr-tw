@@ -71,7 +71,7 @@ export interface BrCepAddress {
           [disabled]="disabled"
           [attr.aria-label]="ariaLabel || label"
           [attr.aria-invalid]="hasError"
-          [attr.aria-describedby]="hasError ? inputId + '-error' : null"
+          [attr.aria-describedby]="descricaoAcessivel"
           class="w-full px-4 py-2.5 rounded border text-govbr-base text-govbr-gray-80 placeholder-govbr-gray-40 transition-colors govbr-focus-ring"
           [class]="inputClasses"
           [value]="displayValue"
@@ -95,7 +95,7 @@ export interface BrCepAddress {
         </p>
       }
       @if (hint && !hasError) {
-        <p class="mt-1 text-govbr-xs text-govbr-gray-60">{{ hint }}</p>
+        <p [id]="inputId + '-hint'" class="mt-1 text-govbr-xs text-govbr-gray-60">{{ hint }}</p>
       }
     </div>
   `,
@@ -105,6 +105,21 @@ export class BrInputCepComponent implements ControlValueAccessor, Validator {
 
   @Input() label = '';
   @Input() placeholder = '00000-000';
+
+  /**
+   * Ids que descrevem o campo para o leitor de tela.
+   *
+   * Antes isto apontava só para o erro, e o texto de apoio — visível logo
+   * abaixo do campo — nunca era anunciado: claro para quem enxerga, ausente
+   * para quem não. O axe não pega, porque nenhuma ferramenta adivinha que um
+   * parágrafo vizinho é a descrição do campo.
+   */
+  get descricaoAcessivel(): string | null {
+    if (this.hasError) return `${this.inputId}-error`;
+    if (this.hint) return `${this.inputId}-hint`;
+    return null;
+  }
+
   @Input() hint = '';
   @Input() ariaLabel = '';
   @Input() required = false;

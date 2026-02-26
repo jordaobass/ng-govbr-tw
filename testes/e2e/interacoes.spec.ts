@@ -1,11 +1,25 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
+import { BASE_STORYBOOK } from '../playwright.config';
 
 /**
  * Comportamento, não renderização.
  *
  * Cada teste aqui cobre um caminho que build verde e teste unitário NÃO pegam.
  * O do toast é o mais importante: ele é o canário da migração para `OnPush`.
+ *
+ * Esta suíte mirava o showcase, que foi substituído pelo Storybook (D19). A
+ * tradução não foi mecânica: duas stories tiveram de nascer para não perder
+ * cobertura — o modal **com gatilho** (sem botão não há para onde o foco
+ * voltar) e o alto contraste **pelo serviço** (a barra do Storybook põe a
+ * classe direto e não exercita a persistência).
  */
+
+/** Abre uma story isolada, sem a casca do Storybook em volta. */
+async function abrirStory(page: Page, id: string): Promise<void> {
+  await page.goto(`${BASE_STORYBOOK}/iframe.html?id=${encodeURIComponent(id)}&viewMode=story`, {
+    waitUntil: 'networkidle',
+  });
+}
 
 test.describe('Toast — o canário do OnPush', () => {
   /**
@@ -15,8 +29,7 @@ test.describe('Toast — o canário do OnPush', () => {
    * estiver verde, a migração do OnPush tem rede.
    */
   test('aparece ao clicar e some sozinho depois', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('link', { name: 'Toast' }).first().click();
+    await abrirStory(page, 'feedback-toast--padrao');
 
     const container = page.locator('br-toast-container');
     await expect(container).toHaveCount(1, { timeout: 5000 });
@@ -34,8 +47,7 @@ test.describe('Toast — o canário do OnPush', () => {
   });
 
   test('empilha os quatro tipos', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('link', { name: 'Toast' }).first().click();
+    await abrirStory(page, 'feedback-toast--padrao');
 
     for (const tipo of ['success', 'danger', 'warning', 'info']) {
       await page.getByTestId(`toast-${tipo}`).click();
@@ -48,8 +60,7 @@ test.describe('Toast — o canário do OnPush', () => {
 
 test.describe('Modal — gestão de foco (WCAG 2.4.3)', () => {
   test('prende o foco e devolve ao gatilho ao fechar', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('link', { name: 'Modal' }).first().click();
+    await abrirStory(page, 'feedback-modal--com-gatilho');
 
     const gatilho = page.getByRole('button', { name: 'Abrir Modal' }).first();
     await gatilho.click();
@@ -78,9 +89,7 @@ test.describe('Modal — gestão de foco (WCAG 2.4.3)', () => {
   });
 
   test('o backdrop não entra na ordem de tabulação', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('link', { name: 'Modal' }).first().click();
-    await page.getByRole('button', { name: 'Abrir Modal' }).first().click();
+    await abrirStory(page, 'feedback-modal--padrao');
 
     const backdrop = page.getByRole('dialog').locator('[aria-hidden="true"]').first();
     await expect(backdrop).toHaveCount(1);
@@ -93,10 +102,14 @@ test.describe('Alto contraste', () => {
   /**
    * O estado vivia num booleano de componente e o F5 desligava o tema. Para
    * quem depende de alto contraste, isso é a funcionalidade não existir.
+   *
+   * ⚠️ A story usada aqui chama o `BrContrastService`, não a barra do
+   * Storybook: só o serviço persiste, e é ele que o consumidor usa.
    */
   test('liga, sobrevive ao reload e desliga', async ({ page }) => {
-    await page.goto('/');
-    const botao = page.locator('.showcase-topbar-contrast');
+    await abrirStory(page, 'serviços-alto-contraste--padrao');
+
+    const botao = page.getByTestId('alternar-contraste');
     await expect(botao).toBeVisible();
 
     await botao.click();
@@ -109,15 +122,14 @@ test.describe('Alto contraste', () => {
       'o contraste não sobreviveu ao reload — a preferência não está sendo persistida'
     ).toHaveClass(/govbr-contrast/);
 
-    await page.locator('.showcase-topbar-contrast').click();
+    await page.getByTestId('alternar-contraste').click();
     await expect(page.locator('html')).not.toHaveClass(/govbr-contrast/);
   });
 });
 
 test.describe('Skiplink', () => {
   test('é o primeiro foco da página e aparece ao ser focado', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await abrirStory(page, 'navegação-skiplink--padrao');
 
     await page.keyboard.press('Tab');
 
@@ -130,8 +142,7 @@ test.describe('Skiplink', () => {
 
 test.describe('Accordion e Tabs', () => {
   test('o accordion abre e fecha o painel', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('link', { name: 'Accordion' }).first().click();
+    await abrirStory(page, 'dados-accordion--padrao');
 
     const item = page.locator('br-accordion-item').nth(1);
     const cabecalho = item.locator('button').first();
@@ -140,18 +151,14 @@ test.describe('Accordion e Tabs', () => {
     // painel só troca de altura, e aí o teste passa sem provar nada.
     const antes = await cabecalho.getAttribute('aria-expanded');
     await cabecalho.click();
-    await expect
-      .poll(() => cabecalho.getAttribute('aria-expanded'))
-      .not.toBe(antes);
+    await expect.poll(() => cabecalho.getAttribute('aria-expanded')).not.toBe(antes);
   });
 
   test('as abas trocam o painel ativo', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('link', { name: 'Tabs' }).first().click();
+    await abrirStory(page, 'navegação-tabs--padrao');
 
     const abas = page.locator('br-tab [role="tab"]');
-    const total = await abas.count();
-    test.skip(total < 2, 'showcase sem abas suficientes');
+    await expect(abas.nth(1)).toBeVisible();
 
     await abas.nth(1).click();
     await expect(abas.nth(1)).toHaveAttribute('aria-selected', 'true');

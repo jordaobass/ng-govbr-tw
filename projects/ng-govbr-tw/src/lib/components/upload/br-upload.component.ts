@@ -70,6 +70,7 @@ export interface BrUploadFile {
         (keydown.space)="fileInput.click()"
         role="button"
         tabindex="0"
+        [attr.aria-describedby]="descricaoAcessivel"
 
         >
         <i class="fa-solid fa-cloud-arrow-up text-2xl mb-2"
@@ -95,6 +96,8 @@ export interface BrUploadFile {
       <input
         #fileInput
         type="file"
+        [attr.aria-describedby]="descricaoAcessivel"
+        [attr.aria-invalid]="error ? 'true' : null"
         class="hidden"
         [accept]="accept"
         [multiple]="multiple"
@@ -102,10 +105,10 @@ export interface BrUploadFile {
       />
 
       @if (helperText && !error) {
-        <p class="text-govbr-xs text-govbr-gray-60 mt-1">{{ helperText }}</p>
+        <p [id]="uploadId + '-hint'" class="text-govbr-xs text-govbr-gray-60 mt-1">{{ helperText }}</p>
       }
       @if (error) {
-        <p class="text-govbr-xs text-govbr-danger-dark mt-1">{{ error }}</p>
+        <p [id]="uploadId + '-error'" class="text-govbr-xs text-govbr-danger-dark mt-1" role="alert">{{ error }}</p>
       }
 
       <!-- File list -->
@@ -166,6 +169,16 @@ export interface BrUploadFile {
 })
 export class BrUploadComponent implements ControlValueAccessor {
   private readonly animationService = inject(BrAnimationService);
+
+  private static nextId = 0;
+  readonly uploadId = `br-upload-${BrUploadComponent.nextId++}`;
+
+  /** Ids que descrevem o campo — o apoio não era anunciado, só pintado. */
+  get descricaoAcessivel(): string | null {
+    if (this.error) return `${this.uploadId}-error`;
+    if (this.helperText) return `${this.uploadId}-hint`;
+    return null;
+  }
 
   @Input() label?: string;
   @Input() accept = '';

@@ -1,104 +1,134 @@
-import { test, expect, type Page } from '@playwright/test';
-import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+import { test, expect } from '@playwright/test';
+import { BASE_STORYBOOK } from '../playwright.config';
+import { readdirSync, readFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
 
 /**
- * Nenhum componente da biblioteca pode ser invisível.
+ * Todo componente exportado precisa aparecer em alguma story.
  *
- * Este é o teste que impede a volta do defeito que motivou a suíte: 11 dos 64
- * seletores nunca eram renderizados em lugar nenhum do demo — entre eles o
- * sistema de toast inteiro, que tinha 13 testes unitários e nunca foi montado.
- * Peça testada isoladamente que nunca roda junto não está provada.
+ * Antes isto mirava o showcase; com o Storybook virando a documentação
+ * oficial (D19), a pergunta é a mesma e o lugar mudou: componente exportado
+ * no `public-api.ts` sem story é componente que ninguém vê, ninguém testa
+ * visualmente e ninguém sabe usar.
  *
- * A lista de casos é DERIVADA do código-fonte, não digitada aqui. Componente
- * novo entra no teste sozinho; esquecer de demonstrá-lo falha a suíte.
+ * ⚠️ Não basta o ARQUIVO de story existir: `<br-tab>` tinha story e
+ * renderizava uma casca vazia — zero abas, zero painéis — porque as abas vêm
+ * de `[tabs]` e a story não passava. Por isso aqui se olha o DOM renderizado,
+ * não o diretório.
  */
 
-const RAIZ_LIB = join(__dirname, '../../projects/ng-govbr-tw/src/lib');
+const RAIZ = resolve(__dirname, '../..');
+const LIB = join(RAIZ, 'projects/ng-govbr-tw/src');
 
-function arquivosTs(dir: string): string[] {
-  return readdirSync(dir).flatMap((nome) => {
-    const caminho = join(dir, nome);
-    if (statSync(caminho).isDirectory()) return arquivosTs(caminho);
-    return caminho.endsWith('.ts') && !caminho.endsWith('.spec.ts') ? [caminho] : [];
-  });
-}
+/** Seletores dos componentes exportados no `public-api.ts`. */
+function seletoresExportados(): Map<string, string> {
+  const api = readFileSync(join(LIB, 'public-api.ts'), 'utf-8');
+  const pastas = new Set<string>();
+  for (const m of api.matchAll(/from '\.\/lib\/components\/([\w-]+)\//g)) pastas.add(m[1]);
 
-function seletoresDeclarados(): string[] {
-  const encontrados = new Set<string>();
-  for (const arquivo of arquivosTs(RAIZ_LIB)) {
-    for (const m of readFileSync(arquivo, 'utf-8').matchAll(/selector:\s*'(br-[a-z-]+)'/g)) {
-      encontrados.add(m[1]);
+  const seletores = new Map<string, string>();
+  for (const pasta of pastas) {
+    const dir = join(LIB, 'lib/components', pasta);
+    for (const arq of readdirSync(dir)) {
+      if (!arq.endsWith('.component.ts')) continue;
+      const texto = readFileSync(join(dir, arq), 'utf-8');
+      for (const m of texto.matchAll(/selector:\s*'(br-[\w-]+)'/g)) {
+        seletores.set(m[1], pasta);
+      }
     }
   }
-  return [...encontrados].sort();
+  return seletores;
 }
 
-/** Coleta quais dos seletores existem no DOM NESTE momento. */
-async function presentesAgora(page: Page, seletores: string[]): Promise<string[]> {
-  return page.evaluate(
-    (lista) => lista.filter((s) => document.querySelector(s) !== null),
-    seletores
+test('todo componente exportado é renderizado por alguma story', async ({ page }) => {
+  test.setTimeout(240_000);
+
+  const seletores = seletoresExportados();
+  expect(seletores.size, 'nenhum seletor encontrado — o caminho da lib mudou?').toBeGreaterThan(40);
+
+  const indice = JSON.parse(
+    readFileSync(join(RAIZ, 'dist/storybook/index.json'), 'utf-8')
   );
-}
+  const ids = Object.values(indice.entries as Record<string, { id: string; type: string }>)
+    .filter((e) => e.type === 'story')
+    .map((e) => e.id);
 
-/**
- * Alguns componentes só entram no DOM quando algo é aberto — painel de
- * mega-menu, submenu da barra. Contar sem abrir acusaria ausência falsa.
- *
- * A amostragem é feita LOGO APÓS cada clique, não no fim: abrir o segundo
- * submenu fecha o primeiro, então uma única contagem ao final perderia o que
- * já tinha sido revelado.
- */
-async function revelarEAcumular(page: Page, seletores: string[], vistos: Set<string>) {
-  const gatilhos = [
-    'br-mega-menu-trigger button, br-mega-menu-trigger [role="button"]',
-    'br-menu-bar-item button[aria-haspopup]',
-    'br-menu-bar-item button',
-  ];
-  for (const seletor of gatilhos) {
-    const grupo = page.locator(seletor);
-    const total = await grupo.count();
-    for (let i = 0; i < total; i++) {
-      const alvo = grupo.nth(i);
-      // Hover ANTES do clique: o submenu da barra abre no `mouseenter`, e
-      // alguns painéis só existem enquanto o ponteiro está sobre o item.
-      await alvo.hover({ timeout: 2000 }).catch(() => {});
-      await page.waitForTimeout(150);
-      for (const s of await presentesAgora(page, seletores)) vistos.add(s);
-
-      await alvo.click({ timeout: 2000 }).catch(() => {});
-      await page.waitForTimeout(150);
-      for (const s of await presentesAgora(page, seletores)) vistos.add(s);
-    }
-  }
-}
-
-test('todo seletor da biblioteca é renderizado em algum lugar do demo', async ({ page }) => {
-  const declarados = seletoresDeclarados();
-  expect(declarados.length, 'nenhum seletor encontrado — o caminho da lib mudou?')
-    .toBeGreaterThan(50);
-
-  await page.goto('/');
-  await page.waitForLoadState('networkidle');
-
-  // O showcase tem duas abas e cada uma renderiza componentes diferentes.
-  // A união das duas é o que conta — contar só a aba ativa reprovaria
-  // componentes que estão demonstrados do outro lado.
   const vistos = new Set<string>();
-  for (const aba of ['Componentes', 'Blocos']) {
-    const botao = page.getByRole('button', { name: aba }).first();
-    if (await botao.count()) {
-      await botao.click();
-      await page.waitForTimeout(250);
+  const alvos = [...seletores.keys()];
+
+  for (const id of ids) {
+    if (vistos.size === seletores.size) break;
+
+    await page.goto(
+      `${BASE_STORYBOOK}/iframe.html?id=${encodeURIComponent(id)}&viewMode=story`,
+      { waitUntil: 'domcontentloaded' }
+    );
+    await page.waitForTimeout(140);
+
+    const presentes = (lista: string[]) =>
+      page.evaluate((l) => l.filter((sel) => !!document.querySelector(sel)), lista);
+
+    for (const s of await presentes(alvos)) vistos.add(s);
+
+    /*
+     * Alguns componentes só existem com o painel ABERTO — o subitem da barra
+     * de menu é um deles. Hover antes do clique porque o submenu da barra
+     * abre no `mouseenter`, e há painel que só vive enquanto o ponteiro está
+     * sobre o item.
+     */
+    const gatilhos = await page.locator('[aria-haspopup], [aria-expanded="false"]').all();
+    for (const g of gatilhos.slice(0, 4)) {
+      await g.hover({ timeout: 1500 }).catch(() => {});
+      await page.waitForTimeout(120);
+      for (const s of await presentes(alvos)) vistos.add(s);
+
+      await g.click({ timeout: 1500 }).catch(() => {});
+      await page.waitForTimeout(120);
+      for (const s of await presentes(alvos)) vistos.add(s);
     }
-    for (const s of await presentesAgora(page, declarados)) vistos.add(s);
-    await revelarEAcumular(page, declarados, vistos);
   }
 
-  const ausentes = declarados.filter((s) => !vistos.has(s));
+  const ausentes = alvos.filter((s) => !vistos.has(s)).sort();
   expect(
     ausentes,
-    `componentes declarados que o demo nunca renderiza:\n  ${ausentes.join('\n  ')}`
+    `componentes exportados que nenhuma story renderiza:\n  ${ausentes
+      .map((s) => `${s} (${seletores.get(s)})`)
+      .join('\n  ')}`
   ).toEqual([]);
+});
+
+/**
+ * Componente composto tem de renderizar as PARTES, não só a casca.
+ *
+ * `<br-tab>` passava no teste genérico — o elemento estava lá — enquanto a
+ * barra de abas nascia vazia. Checagem genérica de "tem conteúdo" não serve:
+ * medida em 136 stories, ela acusa 14 e 13 são legítimas (ícone, divisor,
+ * botão flutuante fechado, container de toast vazio). O que funciona é dizer
+ * explicitamente o que cada composto precisa mostrar.
+ */
+test('componentes compostos renderizam suas partes', async ({ page }) => {
+  const esperado: Array<{ id: string; seletor: string; minimo: number }> = [
+    { id: 'navegação-tabs--padrao', seletor: '[role="tab"]', minimo: 2 },
+    { id: 'navegação-tabs--segunda-aba', seletor: '[role="tab"]', minimo: 2 },
+    { id: 'dados-accordion--padrao', seletor: 'br-accordion-item', minimo: 2 },
+    { id: 'navegação-layout--padrao', seletor: 'br-header, br-footer', minimo: 2 },
+    { id: 'formulários-radio-group--padrao', seletor: 'input[type=radio]', minimo: 2 },
+    { id: 'formulários-checkbox-group--padrao', seletor: 'input[type=checkbox]', minimo: 2 },
+    { id: 'dados-wizard--padrao', seletor: '[role="tab"], button', minimo: 2 },
+    { id: 'navegação-menu-bar--primario', seletor: '[role="menuitem"]', minimo: 2 },
+  ];
+
+  const vazios: string[] = [];
+  for (const { id, seletor, minimo } of esperado) {
+    await page.goto(
+      `${BASE_STORYBOOK}/iframe.html?id=${encodeURIComponent(id)}&viewMode=story`,
+      { waitUntil: 'domcontentloaded' }
+    );
+    await page.waitForTimeout(200);
+
+    const n = await page.locator(seletor).count();
+    if (n < minimo) vazios.push(`${id}: ${n} de ${minimo} "${seletor}"`);
+  }
+
+  expect(vazios, `stories que renderizam casca vazia:\n  ${vazios.join('\n  ')}`).toEqual([]);
 });

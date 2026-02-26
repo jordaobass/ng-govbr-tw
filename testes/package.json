@@ -7,11 +7,15 @@
     "e2e": "playwright test",
     "e2e:headed": "playwright test --headed",
     "e2e:report": "playwright show-report",
-    "e2e:ui": "playwright test --ui"
+    "e2e:ui": "playwright test --ui",
+    "tailwind": "playwright test tailwind.spec.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",
-    "@playwright/test": "^1.49.0"
+    "@playwright/test": "^1.49.0",
+    "tw3": "npm:tailwindcss@^3.4.0",
+    "tw4": "npm:tailwindcss@^4.0.0",
+    "tw4-cli": "npm:@tailwindcss/cli@^4.0.0"
   },
   "dependencies": {
     "axe-core": "^4.14.0"

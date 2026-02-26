@@ -1008,23 +1008,23 @@ html.govbr-contrast br-loading .text-govbr-primary {
 }
 
 /* ═══ Message (br-message) ═══ */
-html.govbr-contrast br-message .bg-govbr-info-light,
+html.govbr-contrast br-message .bg-govbr-info-bg,
 html.govbr-contrast br-message div[class*="bg-"] {
   background-color: #001133 !important;
   border-color: #5fc8ff !important;
 }
 
-html.govbr-contrast br-message .bg-govbr-success-light {
+html.govbr-contrast br-message .bg-govbr-success-bg {
   background-color: #003300 !important;
   border-color: #00ff5f !important;
 }
 
-html.govbr-contrast br-message .bg-govbr-warning-light {
+html.govbr-contrast br-message .bg-govbr-warning-bg {
   background-color: #332200 !important;
   border-color: #ffff00 !important;
 }
 
-html.govbr-contrast br-message .bg-govbr-danger-light {
+html.govbr-contrast br-message .bg-govbr-danger-bg {
   background-color: #330000 !important;
   border-color: #ff5f5f !important;
 }

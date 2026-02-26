@@ -8,7 +8,7 @@ const meta: Meta<BrRadioGroupComponent> = {
   component: BrRadioGroupComponent,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrRadioGroupComponent] })],
-  render: (args) => ({ props: args, template: `<br-radio-group [legend]="legend" [name]="name" [options]="options" [inline]="inline" [required]="required"></br-radio-group>` }),
+  render: (args) => ({ props: args, template: `<br-radio-group [legend]="legend" [name]="name" [options]="options" [inline]="inline" [required]="required" [error]="error"></br-radio-group>` }),
   args: {
     legend: 'Forma de atendimento',
     name: 'atendimento',
@@ -25,3 +25,4 @@ type Story = StoryObj<BrRadioGroupComponent>;
 export const Padrao: Story = { args: {} as never };
 export const EmLinha: Story = { args: { inline: true } as never };
 export const Obrigatorio: Story = { args: { required: true } as never };
+export const ComErro: Story = { args: { error: 'Escolha uma forma de atendimento' } as never };

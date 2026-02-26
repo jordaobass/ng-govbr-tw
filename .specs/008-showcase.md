@@ -2,6 +2,27 @@
 
 **Entra em:** 1.3.0 · Publicado em https://jordaobass.github.io/ng-govbr-tw/
 
+> ## 🪦 SUPERADA em 26/02/2026 — o showcase não existe mais
+>
+> Esta spec propunha quebrar o monolito de 2.940 linhas por rota e cobrir os
+> componentes que ninguém via. A decisão **D19** resolveu o problema pela
+> raiz: o showcase foi removido e o **Storybook** assumiu a documentação
+> oficial, na raiz do GitHub Pages.
+>
+> O diagnóstico aqui continua válido — e o remédio foi outro:
+>
+> | problema desta spec | como ficou |
+> |---|---|
+> | monolito de 2.940 linhas mantido à mão | 138 stories que saem do próprio componente |
+> | componentes que ninguém via | teste reprova componente exportado sem story |
+> | exemplo de código copiado ao lado | `Show code` gerado pelo Storybook |
+>
+> Escrever as stories dos cinco componentes que nunca tinham aparecido
+> revelou **três violações sérias de acessibilidade** que o axe não via —
+> porque não havia onde olhar. Está no commit `61ddddc`.
+>
+> Fica registrada porque o diagnóstico é a justificativa da D19.
+
 O showcase não é enfeite: é a **única** superfície onde o comportamento desta lib é
 verificado por olho humano, e é o que um órgão público olha antes de adotar. Hoje ele tem
 três problemas medidos.

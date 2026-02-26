@@ -8,6 +8,7 @@
     "tailwind.preset.js",
     "src/lib/styles/govbr-tw.css",
     "src/lib/styles/govbr-contrast.css",
-    "src/lib/styles/govbr-components.css"
+    "src/lib/styles/govbr-components.css",
+    "src/lib/styles/govbr-tw-v4.css"
   ]
 }

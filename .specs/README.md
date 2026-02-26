@@ -43,12 +43,12 @@ grep -rc 'isPlatformBrowser\|PLATFORM_ID' --include='*.ts' projects/ng-govbr-tw/
 |---|---|---|
 | [001](001-a11y-wcag.md) | Acessibilidade — erro anunciado, combobox, table, focus trap, Skiplink | 1.3.0 |
 | [002](002-performance-onpush.md) | `OnPush` nos 63 símbolos + getters de classe | 1.3.0 |
-| [003](003-dry-inputs-e-field-wrapper.md) | Base dos inputs mascarados + `br-field-wrapper` | 1.3.0 |
+| [003](003-dry-inputs-e-field-wrapper.md) | Base dos inputs mascarados (⚠️ corrigida pela medição: vale só para cpf/cnpj; `br-field-wrapper` não foi construído — ver D23) | 1.3.0 |
 | [004](004-tokens-e-contraste.md) | Preset apontando para CSS vars; matar cor fora de token | 1.3.0 |
 | [005](005-portabilidade-ssr-e-cdn.md) | Guardas de SSR e remoção dos `@import` de CDN | 1.3.0 |
 | [006](006-ng-add.md) | Quatro furos do schematic | 1.3.0 |
 | [007](007-testes.md) | Consertar os 3 specs herdados + prova do caminho quente | 1.3.0 |
-| [008](008-showcase.md) | Showcase: quebrar o monolito e cobrir o que falta | 1.3.0 |
+| ~~[008](008-showcase.md)~~ | ~~Showcase: quebrar o monolito~~ — **superada em 26/02/2026**: o showcase foi removido e o Storybook assumiu (D19) | — |
 | [009](009-release-1.3.0.md) | Bump, CHANGELOG, tag, peers, publish | 1.3.0 |
 | [010](010-migracao-angular-20-22.md) | Piso Angular 20, suporte 20–22 | 2.0.0 |
 

@@ -7,6 +7,9 @@ const meta: Meta<BrMenuBarComponent> = {
   title: 'Navegação/Menu Bar',
   component: BrMenuBarComponent,
   tags: ['autodocs'],
+  // Cromo de página: ocupa a largura inteira num site real. Sem isto o palco
+  // o encaixota no limite de leitura e ele parece quebrado, não contido.
+  parameters: { palco: 'cheio' },
   decorators: [
     // RouterLink nos itens exige um Router provido. A rota curinga é
     // necessária: o Storybook roda em /iframe.html, e um router sem rotas

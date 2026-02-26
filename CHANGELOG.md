@@ -2,7 +2,145 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
-## [1.4.0] - 2026-02-10
+## [1.5.0] - 2026-02-26
+
+### Adicionado — suporte a Tailwind CSS 4, ao lado do 3
+
+A lib passa a publicar **dois** artefatos de tema: `tailwind.preset.js` (v3) e
+`styles/govbr-tw-v4.css` (v4, CSS-first com `@theme`). O `ng add` detecta a
+major instalada e escreve a configuração de cada uma — são incompatíveis entre
+si, e aplicar a errada deixa a aplicação sem nenhuma classe `govbr-*`.
+
+O tema do v4 é **gerado** do preset por `scripts/gerar-tema-v4.mjs`, e o build
+reprova se os dois divergirem. Duas listas dos mesmos 57 tokens seria a mesma
+duplicação que já separou `br-input-cpf` de `br-input-cnpj`.
+
+⚠️ **Para quem usa Tailwind 4, o `@source` não é detalhe.** Medido num
+consumidor real: sem
+`@source "../node_modules/@schenkerjon/ng-govbr-tw"`, o v4 gera **7 das 52**
+classes e a aplicação sobe quase sem estilo, sem erro nenhum — o v4 varre o
+projeto automaticamente mas ignora `node_modules` de propósito. O `ng add`
+escreve a linha; quem configura à mão precisa dela.
+
+### Adicionado — `br-checkbox-group` e `br-icon`
+
+- **`br-checkbox-group`**: escolha múltipla com legenda, apoio e erro no
+  grupo. O `br-checkbox` existente é uma caixa sozinha, booleana; o caso comum
+  em formulário de governo é "marque os que você possui". O valor é `string[]`
+  na ordem das **opções**, não na do clique.
+- **`br-icon`**: a regra de acessibilidade vira estrutural — sem `label` o
+  ícone é decorativo e some para o leitor de tela; com `label` vira
+  `role="img"` e é anunciado. Havia 115 `<i class="fa-…">` escritos à mão,
+  misturando `fa-solid` e `fas`.
+
+### Corrigido — texto de apoio e de erro que o leitor de tela nunca anunciava
+
+Oito componentes pintavam apoio ou erro logo abaixo do campo **sem nenhum
+vínculo com ele**: claro para quem enxerga, inexistente para quem usa leitor
+de tela (WCAG 3.3.1 e 3.3.2).
+
+- `datepicker`, `timepicker`: apoio e erro ganharam id e entraram no
+  `aria-describedby`; o timepicker não tinha `aria-invalid` nenhum
+- `telefone`, `cep`, `money`: o `aria-describedby` apontava **só** para o erro
+  — o texto de apoio, que é o que aparece no caso normal, ficava mudo
+- `datetimepicker`: a descrição é do PAR data+hora, então foi para o grupo
+- `radio-group`: `role="radiogroup"` explícito e erro referenciado
+- `upload`: a descrição chega à zona de soltar **e** ao input de arquivo
+- `checkbox`: o erro não tinha id, nem `role="alert"`, nem `aria-invalid`
+
+O axe passou limpo nos 114 stories **com o defeito presente**, e não é falha
+dele: nenhuma ferramenta adivinha que um parágrafo vizinho descreve o campo.
+
+### Corrigido — três violações sérias escondidas por falta de story
+
+Cinco componentes exportados nunca tinham aparecido em lugar nenhum (header,
+layout, toast-container e as cinco peças do mega-menu). Escrever as stories
+deles revelou:
+
+- `aria-controls="main-navigation"` fixo no `br-header` apontava para um id
+  **que não existe** — o menu vive fora do componente. Virou `@Input() menuId`,
+  emitido só quando há valor
+- o `<li>` do `br-mega-menu-link` ficava dentro do próprio elemento
+  customizado, nunca da `<ul>` da coluna: lista sem semântica de lista
+- o botão de usuário tinha nome acessível que **não continha o texto visível**
+  — quem usa controle por voz dizia o que via e nada acontecia (WCAG 2.5.3)
+
+### Corrigido — a camada de cima não aparecia
+
+- **`br-select` usava `z-10`**, o menor overlay da lib. `datepicker` e
+  `timepicker`, da mesma família, já usavam `z-50`. Com `z-10` o dropdown abre
+  **atrás** de toast, tooltip, cookiebar e magic-button num formulário real
+- **`ring-govbr-focus-color` não existe** em versão nenhuma do Tailwind: o
+  token do preset chama-se `govbr-focus`. Quatro elementos do `br-mega-menu`
+  caíam no anel padrão do Tailwind em vez da cor de foco do DS
+- o alto contraste do `br-message` mirava `.bg-govbr-*-light`, classe que o
+  componente **nunca emite** (ele usa `-bg`): quatro regras de CSS morto, e os
+  quatro tipos de mensagem perdiam a distinção no alto contraste
+
+### Alterado — `br-input-cpf` e `br-input-cnpj` compartilham uma base
+
+Eram cópia com 18% de divergência, e a duplicação já tinha cobrado o preço: a
+correção de acessibilidade de uma rodada anterior chegou a três das cinco
+cópias de campo mascarado e deixou justamente cpf e cnpj para trás.
+
+457 → 334 linhas de código no par, uma cópia só do comportamento. **A API
+pública não muda** e os 65 `it()` de máscara passam sem uma linha alterada —
+era esse o critério.
+
+Medido: só cpf e cnpj são gêmeos. `telefone`↔`cep` divergem 49% e `cep`↔`money`
+75% — ViaCEP, spinner de carga e unidade monetária são comportamento próprio,
+e as duas famílias têm API pública incompatível. Unificar os cinco seria
+abstração por simetria.
+
+### Alterado — Storybook substitui o showcase (BREAKING para o site, não para o pacote)
+
+O app de demo sai inteiro — 2.940 linhas mantidas à mão — e o **Storybook
+assume a raiz** do GitHub Pages, com 138 stories, controles ao vivo e painel
+de acessibilidade.
+
+⚠️ Quebra para quem usava `ng serve demo` ou linkava
+`jordaobass.github.io/ng-govbr-tw/showcase`. **Não afeta o pacote publicado**:
+nada do demo ia para o npm.
+
+Junto, duas queixas visuais do Storybook:
+
+- componentes apareciam pela metade, colados no topo e nas laterais — o canvas
+  vinha com `padding: 0`. Agora há respiro, altura mínima para painel abrir e
+  largura de leitura; cromo de página (rodapé, barras, menu) fica de ponta a
+  ponta
+- dropdown abria recortado: no showcase, **8 de 8** painéis eram cortados pelo
+  cartão `rounded-lg overflow-hidden` que os continha — quem recorta um
+  elemento `absolute` é um **ancestral**
+
+### Adicionado — testes
+
+De 25 para 33 E2E e de 167 para 177 unitários:
+
+- `tailwind.spec.ts`: toda classe `govbr-*` da lib compila no 3 **e** no 4,
+  rodando os dois compiladores de verdade
+- `ng-add.spec.ts`: cinco comportamentos do schematic, que **não tinha teste
+  nenhum** e já acumulava seis defeitos corrigidos à mão
+- `descricao-acessivel.spec.ts`: apoio e erro anunciados, `aria-invalid` e
+  `role="alert"` em toda story de erro
+- `camada.spec.ts`: painel flutuante não recortado e com z-index suficiente
+- `cobertura.spec.ts`: componente exportado sem story reprova — e composto
+  precisa renderizar as **partes** (`<br-tab>` tinha story e renderizava casca
+  vazia)
+
+Cada correção foi provada por **mutação**: desfeita, exigida vermelha,
+restaurada.
+
+### Adicionado — guarda contra uma armadilha recorrente
+
+`scripts/verificar-templates.mjs` roda no build: backtick dentro de
+`template:` encerra o literal no meio do HTML. ⚠️ Contar paridade **não
+basta** — um comentário com dois backticks fecha e reabre o literal, o total
+fica par e o erro que sai é "Cannot find name 'expanded'", apontando para uma
+linha inocente.
+
+---
+
+## [1.4.0] - 2026-02-19
 
 ### Corrigido — o que ficava INVISÍVEL no alto contraste
 

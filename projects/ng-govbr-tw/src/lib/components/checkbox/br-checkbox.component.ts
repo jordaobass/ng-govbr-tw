@@ -35,11 +35,17 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
         [indeterminate]="indeterminate"
         (change)="onCheckChange($event)"
         (blur)="onTouched()"
+        [attr.aria-invalid]="errorMessage ? 'true' : null"
+        [attr.aria-describedby]="errorMessage ? checkboxId + '-error' : null"
       />
       <label [for]="checkboxId">{{ label }}</label>
     </div>
     @if (errorMessage) {
-      <span class="br-checkbox-feedback danger">
+      <span
+        [id]="checkboxId + '-error'"
+        class="br-checkbox-feedback danger"
+        role="alert"
+      >
         <i class="fas fa-times-circle" aria-hidden="true"></i>
         {{ errorMessage }}
       </span>

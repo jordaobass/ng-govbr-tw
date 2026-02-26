@@ -10,3 +10,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * Palco das stories — moldura da documentação, não estilo da biblioteca.
+ *
+ * O canvas do Storybook vinha sem padding: componente colado no topo e nas
+ * laterais, rótulo cortado na borda de cima, campo de ponta a ponta.
+ *
+ * O limite de largura fica no PALCO, não nos filhos: a maioria dos
+ * componentes é `display: inline` por padrão, e `max-width` não vale para
+ * elemento inline não-substituído — foi por isso que limitar os filhos não
+ * teve efeito nenhum.
+ */
+#storybook-root {
+  padding: 2rem;
+  /* Espaço para um painel suspenso abrir sem encostar no fim do iframe. */
+  min-height: 22rem;
+  /* Largura de leitura: campo a 100% ia de ponta a ponta, o que não
+     representa uso real nenhum. */
+  max-width: 46rem;
+  box-sizing: border-box;
+}
+
+/*
+ * Cromo de página (rodapé, barra de menu, sidebar, skiplink) ocupa a largura
+ * inteira num site real — encaixotá-lo no limite de leitura faz parecer
+ * defeito do componente. A classe é posta no `<html>` pelo decorator a partir
+ * de `parameters: { palco: 'cheio' }`.
+ */
+html.sb-palco-cheio #storybook-root {
+  padding: 0;
+  min-height: 0;
+  max-width: none;
+}

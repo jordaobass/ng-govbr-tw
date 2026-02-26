@@ -1,0 +1,61 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introdução" />
+
+# ng-govbr-tw
+
+Componentes Angular do **Gov.br Design System**, estilizados com Tailwind CSS.
+
+Cada componente abaixo traz suas variações, controles ao vivo e um painel de
+acessibilidade. É a documentação oficial da biblioteca — não há um showcase
+separado para manter à mão.
+
+## Instalar
+
+```bash
+npm install @schenkerjon/ng-govbr-tw
+ng add @schenkerjon/ng-govbr-tw
+```
+
+O `ng add` detecta se o projeto usa **Tailwind 3 ou 4** e escreve a
+configuração de cada um. São incompatíveis entre si, e aplicar a errada deixa
+a aplicação sem nenhuma classe `govbr-*` — sem erro algum na tela.
+
+## Usar
+
+Todos os componentes são `standalone`:
+
+```ts
+import { BrButtonComponent, BrInputComponent } from '@schenkerjon/ng-govbr-tw';
+
+@Component({
+  standalone: true,
+  imports: [BrButtonComponent, BrInputComponent],
+  template: `
+    <br-input label="Nome completo" [required]="true"></br-input>
+    <br-button emphasis="primary">Enviar</br-button>
+  `,
+})
+export class MeuFormulario {}
+```
+
+## Alto contraste
+
+O tema do Gov.br é trocado pelo `BrContrastService`, que também **persiste a
+preferência** — recarregar a página não pode desligar o tema de quem depende
+dele.
+
+Use o botão **Contraste** na barra acima para ver qualquer story nos dois
+temas. Todas as cores saem de tokens (`--govbr-*`), então trocar o tema é
+trocar a variável, não reescrever a classe.
+
+## Acessibilidade
+
+A aba **Accessibility** de cada story roda o axe-core ao vivo. A suíte do
+repositório vai além dela em três pontos que ferramenta nenhuma vê sozinha:
+
+- **texto de apoio e de erro precisa ser anunciado**, não só pintado — nenhum
+  scanner adivinha que um parágrafo vizinho descreve o campo;
+- **nada pode ficar invisível** em nenhum dos dois temas, medido em pixel;
+- **a camada de cima tem de aparecer** — painel flutuante não pode ser
+  recortado por um ancestral nem perder de outro overlay no z-index.

@@ -19,19 +19,32 @@ const IMPORTS_CSS = [
   `@import "${PACOTE}/styles/govbr-contrast.css";`,
 ];
 
+/**
+ * No Tailwind 4 não há `tailwind.config.js`: o tema é CSS-first, declarado
+ * com `@theme`. A lib publica os dois artefatos — `tailwind.preset.js` para o
+ * v3 e `styles/govbr-tw-v4.css` para o v4 —, e o segundo é GERADO do
+ * primeiro, para não haver duas listas dos mesmos tokens.
+ */
+const IMPORT_TEMA_V4 = `@import "${PACOTE}/styles/govbr-tw-v4.css";`;
+
 export function ngAdd(options: { project?: string; skipFonts?: boolean }): Rule {
   return (tree: Tree, context: SchematicContext) => {
     context.logger.info('');
     context.logger.info(`🇧🇷 Configurando ${PACOTE}...`);
 
-    conferirTailwindInstalado(tree, context);
-    atualizarTailwindConfig(tree, context);
+    const versao = detectarVersaoTailwind(tree);
+    conferirTailwindInstalado(tree, context, versao);
+
+    // O v4 não tem arquivo de config para atualizar: tudo acontece no CSS.
+    if (versao !== 4) {
+      atualizarTailwindConfig(tree, context);
+    }
 
     if (!options.skipFonts) {
       adicionarFontes(tree, context, options.project);
     }
 
-    adicionarEstilosGlobais(tree, context, options.project);
+    adicionarEstilosGlobais(tree, context, options.project, versao);
 
     context.logger.info('');
     context.logger.info(`✅ ${PACOTE} configurado.`);
@@ -45,30 +58,52 @@ export function ngAdd(options: { project?: string; skipFonts?: boolean }): Rule 
 }
 
 /**
- * A biblioteca não funciona sem Tailwind — as classes `govbr-*` saem do
- * preset. Instalar por conta própria seria decidir pelo dono do projeto;
- * avisar alto é o suficiente.
+ * Qual major do Tailwind o projeto usa — 3 e 4 pedem configurações
+ * incompatíveis entre si (preset JS x `@theme` no CSS), e aplicar a errada
+ * deixa a aplicação sem nenhuma classe `govbr-*`, sem erro nenhum.
+ *
+ * `null` quando não há Tailwind ou a faixa é ilegível; aí vale o caminho do
+ * v3, que é o que a lib sempre suportou.
  */
-function conferirTailwindInstalado(tree: Tree, context: SchematicContext): void {
+function detectarVersaoTailwind(tree: Tree): 3 | 4 | null {
   const bruto = tree.read('package.json')?.toString('utf-8');
-  if (!bruto) return;
+  if (!bruto) return null;
 
   try {
     const pkg = JSON.parse(bruto) as {
       dependencies?: Record<string, string>;
       devDependencies?: Record<string, string>;
     };
-    const temTailwind =
-      !!pkg.dependencies?.['tailwindcss'] || !!pkg.devDependencies?.['tailwindcss'];
+    const faixa = pkg.dependencies?.['tailwindcss'] ?? pkg.devDependencies?.['tailwindcss'];
+    if (!faixa) return null;
 
-    if (!temTailwind) {
-      context.logger.warn('  ⚠ tailwindcss não está nas dependências do projeto.');
-      context.logger.warn('    A biblioteca depende dele para gerar as classes govbr-*:');
-      context.logger.warn('      npm i -D tailwindcss@3 postcss autoprefixer');
-    }
+    // Pega o primeiro número da faixa: cobre `^4.0.0`, `~3.4`, `4`, `>=4.0.0`.
+    const major = Number(faixa.match(/\d+/)?.[0]);
+    return major === 4 ? 4 : major === 3 ? 3 : null;
   } catch {
-    // package.json ilegível não é motivo para abortar a configuração.
+    return null;
   }
+}
+
+/**
+ * A biblioteca não funciona sem Tailwind — as classes `govbr-*` saem do
+ * preset (v3) ou do tema `@theme` (v4). Instalar por conta própria seria
+ * decidir pelo dono do projeto; avisar alto é o suficiente.
+ */
+function conferirTailwindInstalado(
+  tree: Tree,
+  context: SchematicContext,
+  versao: 3 | 4 | null
+): void {
+  if (versao) {
+    context.logger.info(`  ✔ Tailwind ${versao} detectado`);
+    return;
+  }
+  if (!tree.exists('package.json')) return;
+
+  context.logger.warn('  ⚠ tailwindcss não está nas dependências do projeto.');
+  context.logger.warn('    A biblioteca depende dele para gerar as classes govbr-*:');
+  context.logger.warn('      npm i -D tailwindcss@3 postcss autoprefixer   (ou tailwindcss@4)');
 }
 
 // ─── tailwind.config ────────────────────────────────────────────────────────
@@ -223,17 +258,28 @@ function adicionarFontes(tree: Tree, context: SchematicContext, projeto?: string
 function adicionarEstilosGlobais(
   tree: Tree,
   context: SchematicContext,
-  projeto?: string
+  projeto: string | undefined,
+  versao: 3 | 4 | null
 ): void {
   const caminho = acharStylesGlobal(tree, projeto);
+
   if (!caminho) {
     context.logger.warn('  ⚠ Arquivo de estilos globais não encontrado. Adicione à mão:');
     IMPORTS_CSS.forEach((l) => context.logger.warn(`    ${l}`));
+    if (versao === 4) {
+      context.logger.warn(`    ${IMPORT_TEMA_V4}`);
+      context.logger.warn(`    @source "<caminho>/node_modules/${PACOTE}";`);
+    }
     return;
   }
 
+  const necessarios = [...IMPORTS_CSS];
+  if (versao === 4) {
+    necessarios.push(IMPORT_TEMA_V4, linhaSource(caminho));
+  }
+
   const conteudo = tree.read(caminho)?.toString('utf-8') || '';
-  const faltando = IMPORTS_CSS.filter((imp) => !conteudo.includes(imp.split('"')[1]));
+  const faltando = necessarios.filter((l) => !conteudo.includes(chaveDaLinha(l)));
   if (!faltando.length) {
     context.logger.info('  ✔ Estilos govbr-tw já importados');
     return;
@@ -241,6 +287,34 @@ function adicionarEstilosGlobais(
 
   tree.overwrite(caminho, inserirImports(conteudo, faltando));
   context.logger.info(`  ✔ Estilos importados em ${caminho}`);
+  if (versao === 4) {
+    context.logger.info('  ✔ Tema @theme do Tailwind 4 e @source da lib adicionados');
+  }
+}
+
+/** O trecho que identifica a linha, para não duplicá-la a cada `ng add`. */
+function chaveDaLinha(linha: string): string {
+  return linha.split('"')[1];
+}
+
+/**
+ * `@source` apontando para o pacote dentro de `node_modules`.
+ *
+ * ⚠️ Sem esta linha o Tailwind 4 gera 7 das 52 classes `govbr-*` e a
+ * aplicação sobe quase sem estilo, SEM erro nenhum — medido num consumidor
+ * real. O motivo: o v4 varre automaticamente o projeto mas **ignora
+ * `node_modules` de propósito**, e as classes da lib vivem lá, dentro dos
+ * `.mjs` compilados. No v3 o equivalente é o `content` do config, que o
+ * schematic já escreve.
+ *
+ * O caminho é relativo ao ARQUIVO de estilos, não à raiz: em
+ * `projects/app/src/styles.css` são três níveis para subir, e errar isso faz
+ * o `@source` apontar para o vazio — de novo sem erro.
+ */
+function linhaSource(caminhoDoStyles: string): string {
+  const niveis = caminhoDoStyles.split('/').length - 1;
+  const subir = niveis > 0 ? '../'.repeat(niveis) : './';
+  return `@source "${subir}node_modules/${PACOTE}";`;
 }
 
 /**

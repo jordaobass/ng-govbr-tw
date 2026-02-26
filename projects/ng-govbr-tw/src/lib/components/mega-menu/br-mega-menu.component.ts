@@ -121,7 +121,7 @@ export interface BrSocialLink {
           @if (navigationStack.length > 0) {
             <button
               type="button"
-              class="flex items-center gap-2 text-govbr-primary text-sm font-semibold hover:underline focus:outline-none focus:ring-2 focus:ring-govbr-focus-color rounded px-2 py-1 -ml-2"
+              class="flex items-center gap-2 text-govbr-primary text-sm font-semibold hover:underline govbr-focus-ring rounded px-2 py-1 -ml-2"
               (click)="navigateBack()"
               aria-label="Voltar"
             >
@@ -140,7 +140,7 @@ export interface BrSocialLink {
           }
           <button
             type="button"
-            class="w-10 h-10 flex items-center justify-center rounded-full text-govbr-gray-60 hover:bg-govbr-gray-2 transition-colors focus:outline-none focus:ring-2 focus:ring-govbr-focus-color"
+            class="w-10 h-10 flex items-center justify-center rounded-full text-govbr-gray-60 hover:bg-govbr-gray-2 transition-colors govbr-focus-ring"
             (click)="closeMobile()"
             aria-label="Fechar menu"
           >
@@ -203,7 +203,7 @@ export interface BrSocialLink {
                     target="_blank"
                     rel="noopener noreferrer"
                     [attr.aria-label]="social.label"
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-govbr-bg border border-govbr-gray-5 text-govbr-gray-60 hover:text-govbr-primary hover:border-govbr-primary transition-colors focus:outline-none focus:ring-2 focus:ring-govbr-focus-color"
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-govbr-bg border border-govbr-gray-5 text-govbr-gray-60 hover:text-govbr-primary hover:border-govbr-primary transition-colors govbr-focus-ring"
                   >
                     <ng-container *ngTemplateOutlet="socialIconTemplate || defaultSocialIcon; context: { $implicit: social }"></ng-container>
                     <ng-template #defaultSocialIcon>
@@ -336,7 +336,7 @@ export class BrMegaMenuComponent {
     const base = [
       'w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors',
       'border-b border-govbr-gray-5 last:border-b-0',
-      'focus:outline-none focus:ring-2 focus:ring-inset focus:ring-govbr-focus-color focus:ring-dashed',
+      'govbr-focus-ring',
     ];
 
     if (isActive) {
@@ -543,8 +543,18 @@ export class BrMegaMenuColumnComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule],
   encapsulation: ViewEncapsulation.None,
+  /*
+   * ⚠️ O papel de item de lista fica no HOST, não num `<li>` no template.
+   *
+   * O `<li>` existia aqui dentro, e o pai dele no DOM era o próprio
+   * `<br-mega-menu-link>` — nunca a `<ul role="list">` da coluna. Resultado:
+   * `<li>` fora de lista, violação séria do axe, e a lista perdia a
+   * semântica justamente para quem depende dela. Não dá para trocar a tag do
+   * host em Angular; dá para dar-lhe o papel.
+   */
+  host: { role: 'listitem', class: 'block' },
   template: `
-    <li>
+    <ng-container>
       @if (route) {
         <a
           [routerLink]="route"
@@ -567,7 +577,7 @@ export class BrMegaMenuColumnComponent {
           <span>{{ label }}</span>
         </button>
       }
-    </li>
+    </ng-container>
   `,
 })
 export class BrMegaMenuLinkComponent {

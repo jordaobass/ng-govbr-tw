@@ -24,7 +24,10 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     },
   ],
   template: `
-    <fieldset class="border-none p-0 m-0 font-rawline">
+    <fieldset class="border-none p-0 m-0 font-rawline"
+      role="radiogroup"
+      [attr.aria-describedby]="descricaoAcessivel"
+      [attr.aria-invalid]="error ? 'true' : null">
       @if (legend) {
         <legend
           class="block text-govbr-sm font-semibold text-govbr-gray-80 mb-2"
@@ -66,14 +69,23 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       </div>
     
       @if (error) {
-        <span class="flex items-center mt-1 text-govbr-sm text-govbr-danger-dark">
-          <i class="fa-solid fa-times-circle mr-1"></i>{{ error }}
+        <span
+          [id]="name + '-error'"
+          class="flex items-center mt-1 text-govbr-sm text-govbr-danger-dark"
+          role="alert"
+        >
+          <i class="fa-solid fa-times-circle mr-1" aria-hidden="true"></i>{{ error }}
         </span>
       }
     </fieldset>
     `,
 })
 export class BrRadioGroupComponent implements ControlValueAccessor {
+  /** Id do erro, para o grupo inteiro — o erro é do conjunto, não de uma opção. */
+  get descricaoAcessivel(): string | null {
+    return this.error ? `${this.name}-error` : null;
+  }
+
   @Input() legend?: string;
   @Input() name = `br-radio-${BrRadioGroupComponent.nextId++}`;
   @Input() options: BrRadioOption[] = [];

@@ -8,7 +8,12 @@ import type { StorybookConfig } from '@storybook/angular';
  * depender de um `ng build` anterior ter rodado.
  */
 const config: StorybookConfig = {
-  stories: ['../projects/ng-govbr-tw/src/**/*.stories.ts'],
+  /*
+   * A capa vem primeiro na lista, e é o que o Storybook abre por padrão. Sem
+   * ela a porta de entrada era "Feedback / Success Check", escolhido por
+   * ordem alfabética — primeira impressão ruim para quem chega sem contexto.
+   */
+  stories: ['../.storybook/*.mdx', '../projects/ng-govbr-tw/src/**/*.stories.ts'],
 
   addons: [
     '@storybook/addon-essentials',

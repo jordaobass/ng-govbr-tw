@@ -1,147 +1,126 @@
-# Como usar e publicar a @aspect-br/ng-govbr-tw
+# Publicar `@schenkerjon/ng-govbr-tw` no npm
 
-## 1. Como usar no seu projeto
+Runbook de release. **Como usar a biblioteca não está aqui** — está no
+[README](README.md) e na [documentação interativa](https://jordaobass.github.io/ng-govbr-tw/).
+Manter um terceiro lugar com instrução de uso só produz três versões que
+discordam entre si; foi o que aconteceu com este arquivo.
 
-### 1.1 Instalacao a partir do pacote local (antes de publicar)
-
-```bash
-# Build da lib
-cd C:\03_dev\projetos\artigos\poc-mds\govbr-tw
-ng build ng-govbr-tw
-
-# No seu projeto, instala direto do dist
-cd C:\caminho\do\seu\projeto
-npm install C:\03_dev\projetos\artigos\poc-mds\govbr-tw\dist\ng-govbr-tw
-```
-
-### 1.2 Instalacao via npm (apos publicar)
-
-```bash
-npm install @aspect-br/ng-govbr-tw
-```
-
-### 1.3 Configurar Tailwind no seu projeto
-
-No `tailwind.config.js` do seu projeto:
-
-```js
-module.exports = {
-  presets: [require('@aspect-br/ng-govbr-tw/tailwind.preset')],
-  content: [
-    "./src/**/*.{html,ts}",
-    "./node_modules/@aspect-br/ng-govbr-tw/**/*.{html,ts,mjs}"
-  ],
-};
-```
-
-No `styles.css` do seu projeto:
-
-```css
-@import '@aspect-br/ng-govbr-tw/src/lib/styles/govbr-tw.css';
-```
-
-### 1.4 Usar os componentes
-
-```typescript
-import { BrButtonComponent, BrInputComponent } from '@aspect-br/ng-govbr-tw';
-
-@Component({
-  standalone: true,
-  imports: [BrButtonComponent, BrInputComponent],
-  template: `
-    <br-button variant="primary">Salvar</br-button>
-    <br-input label="Nome" [(ngModel)]="nome"></br-input>
-  `
-})
-export class MeuComponente {}
-```
-
-### 1.5 Componentes disponiveis
-
-| Componente | Seletor | Descricao |
-|---|---|---|
-| BrButtonComponent | `<br-button>` | Botao com variantes primary, secondary, danger |
-| BrInputComponent | `<br-input>` | Campo de entrada com ControlValueAccessor |
-| BrBadgeComponent | `<br-badge>` | Badge/tag de status |
-| BrMessageComponent | `<br-message>` | Mensagem de feedback |
-| BrTableComponent | `<br-table>` | Tabela com paginacao |
-| BrCardComponent | `<br-card>` | Card informativo |
-| BrHeaderComponent | `<br-header>` | Cabecalho do sistema |
-| BrFooterComponent | `<br-footer>` | Rodape do sistema |
-| BrMenuComponent | `<br-menu>` | Menu lateral de navegacao |
-| BrMenuItemComponent | `<br-menu-item>` | Item do menu |
-| BrLayoutComponent | `<br-layout>` | Layout principal com header, menu e footer |
+> ### O que havia aqui até 27/02/2026
+>
+> Um guia de uso escrito quando o pacote ainda se chamava `@aspect-br/ng-govbr-tw`.
+> Ele errava **tudo**: 8 ocorrências de um escopo que não existe, 5 caminhos
+> `C:\03_dev\...` de outra máquina, um `@import` que quebra o `ng build`,
+> `<br-button variant="primary">` quando o input é `emphasis`, versões de
+> exemplo em `0.0.x`, e uma tabela com 11 dos 65 componentes.
+>
+> Nada apontava para ele e nada o verificava. Documento sem dono e sem portão
+> apodrece em silêncio — e este chegou ao ponto de instruir a criar uma
+> organização npm com o nome errado.
 
 ---
 
-## 2. Como publicar no npm
+## 1. Antes de publicar
 
-### 2.1 Primeira vez — criar conta e configurar
+A sequência abaixo é a mesma que o CI roda. Rode tudo da raiz do projeto.
 
 ```bash
-# Criar conta em npmjs.com (se ainda nao tem)
-npm adduser
+# 1) a biblioteca — o build tem três portões embutidos
+npm run build
+#    ✔ verificar:templates   — backtick dentro de template literal
+#    ✔ tema:v4:verificar     — govbr-tw-v4.css em sincronia com o preset
+#    ✔ ng-packagr + schematics
 
-# Ou fazer login se ja tem conta
-npm login
+# 2) testes unitários
+export CHROME_BIN=$(npx playwright install chromium --dry-run 2>/dev/null; \
+  echo "$HOME/.cache/ms-playwright/chromium-*/chrome-linux64/chrome")
+npx ng test ng-govbr-tw --watch=false --browsers=ChromeHeadlessNoSandbox
+
+# 3) lint
+npx ng lint
+
+# 4) Storybook (os E2E testam o BUILD dele, não o dev server)
+npx ng run ng-govbr-tw:build-storybook
+
+# 5) ponta a ponta
+cd testes && npx playwright test && cd ..
 ```
 
-Como o pacote usa scope `@aspect-br`, voce precisa criar uma organizacao no npm:
+Tudo verde é pré-requisito. Em especial, `documentacao.spec.ts` reprova se:
 
-1. Acesse https://www.npmjs.com
-2. Va em Settings -> Organizations -> Create
-3. Nome da organizacao: `aspect-br`
+- algum componente exportado não aparecer **nos dois** READMEs;
+- a versão do `package.json` não tiver entrada no `CHANGELOG.md`;
+- algum `export` apontar para arquivo inexistente;
+- algum README documentar caminho de import interno (`src/lib/...`), que o
+  `exports` bloqueia e faz o `ng build` do consumidor morrer.
 
-### 2.2 Publicar
+## 2. Versão e CHANGELOG
+
+A versão vive em `projects/ng-govbr-tw/package.json` — **não** no `package.json`
+da raiz, que é do workspace e nunca é publicado.
 
 ```bash
-# Build de producao da lib
-cd C:\03_dev\projetos\artigos\poc-mds\govbr-tw
-ng build ng-govbr-tw
+# semver: componente exportado novo ou artefato publicado novo = minor
+#         correção sem mudança de API = patch
+#         remoção ou mudança de API pública = major
+```
 
-# Publicar (--access public porque pacotes com scope sao privados por padrao)
-cd dist\ng-govbr-tw
+Escreva a entrada do `CHANGELOG.md` **antes** de publicar. O teste cobra.
+
+## 3. Publicar
+
+⚠️ **O diretório é `dist/ng-govbr-tw`, não a raiz.** Publicar da raiz enviaria
+o workspace inteiro.
+
+```bash
+npm login                       # uma vez por máquina
+
+cd dist/ng-govbr-tw
+npm publish --dry-run --access public   # confira versão, nº de arquivos e tamanho
 npm publish --access public
 ```
 
-### 2.3 Atualizar versao nas proximas publicacoes
+`--access public` é obrigatório: pacote com escopo nasce privado no npm.
 
-Edite a versao em `projects/ng-govbr-tw/package.json`:
+## 4. Depois de publicar — conferir o que está NO AR
 
-```json
-"version": "0.0.2"
-```
-
-Depois repita build + publish.
-
-Ou use `npm version` dentro do diretorio da lib:
+Publicar não é o fim: o registro é outra máquina, e "corrigir o fonte não é
+corrigir o site" vale aqui também.
 
 ```bash
-cd projects\ng-govbr-tw
-npm version patch   # 0.0.1 -> 0.0.2
-npm version minor   # 0.0.2 -> 0.1.0
-npm version major   # 0.1.0 -> 1.0.0
+# a versão chegou?
+npm view @schenkerjon/ng-govbr-tw version
+
+# o README certo subiu? (o npm mostra projects/ng-govbr-tw/README.md,
+# copiado pelo ng-packagr — NÃO o README da raiz)
+npm view @schenkerjon/ng-govbr-tw readme | head -8
+
+# o artefato do Tailwind 4 foi junto?
+npm view @schenkerjon/ng-govbr-tw exports
 ```
 
-Depois:
+E a prova que vale mais que todas: instalar num app limpo e compilar.
 
 ```bash
-cd C:\03_dev\projetos\artigos\poc-mds\govbr-tw
-ng build ng-govbr-tw
-cd dist\ng-govbr-tw
-npm publish --access public
+npx @angular/cli@17 new consumidor --skip-git --style=css --defaults
+cd consumidor
+npm i -D tailwindcss@3 postcss autoprefixer
+npm i @schenkerjon/ng-govbr-tw
+npx ng add @schenkerjon/ng-govbr-tw
+npx ng build
+# o token tem de estar no bundle, não só o build passar:
+grep -c -- '--govbr-primary:' dist/consumidor/browser/styles-*.css
 ```
 
----
-
-## 3. Resumo rapido
-
-```
-ng build ng-govbr-tw  ->  cd dist/ng-govbr-tw  ->  npm publish --access public
-```
-
-Qualquer pessoa instala com:
+## 5. Marcar a release no git
 
 ```bash
-npm install @aspect-br/ng-govbr-tw
+git tag -a v1.5.0 -m "1.5.0"
+git push origin v1.5.0
+```
+
+## Resumo
+
+```
+npm run build  →  testes  →  CHANGELOG  →  cd dist/ng-govbr-tw
+               →  npm publish --access public  →  conferir no ar  →  git tag
 ```

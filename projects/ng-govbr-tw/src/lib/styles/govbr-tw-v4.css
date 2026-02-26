@@ -1,0 +1,95 @@
+/*
+ * Tema do Gov.br para Tailwind CSS 4.
+ *
+ * ⚠️ ARQUIVO GERADO por `scripts/gerar-tema-v4.mjs` a partir de
+ * `tailwind.preset.js`. Não edite à mão: o build reprova se os dois
+ * divergirem. Token novo entra no preset e se regenera aqui.
+ *
+ * Uso num projeto Tailwind 4 (CSS-first, sem `tailwind.config.js`):
+ *
+ *   @import "tailwindcss";
+ *   @import "@schenkerjon/ng-govbr-tw/styles/govbr-tw.css";
+ *   @import "@schenkerjon/ng-govbr-tw/styles/govbr-components.css";
+ *   @import "@schenkerjon/ng-govbr-tw/styles/govbr-contrast.css";
+ *   @import "@schenkerjon/ng-govbr-tw/styles/govbr-tw-v4.css";
+ *
+ * No Tailwind 3 nada disto se aplica — lá vale `presets: [require(...)]` com
+ * o `tailwind.preset.js`.
+ *
+ * As cores apontam para os MESMOS canais `--govbr-*-rgb` do preset v3, e é o
+ * que faz o tema de alto contraste alcançar as classes: trocar o tema é
+ * trocar a variável, não reescrever a classe. Verificado no navegador —
+ * `bg-govbr-primary` vai de rgb(19,81,180) para rgb(255,203,0) ao ligar o
+ * contraste, e `bg-govbr-primary/60` acompanha.
+ */
+@theme {
+  /* Cores — mesmos canais `--govbr-*-rgb` do preset v3 */
+  --color-govbr-primary: rgb(var(--govbr-primary-rgb, 19 81 180));
+  --color-govbr-primary-dark: rgb(var(--govbr-primary-dark-rgb, 12 50 111));
+  --color-govbr-primary-darkest: rgb(var(--govbr-primary-darkest-rgb, 7 29 65));
+  --color-govbr-primary-light: rgb(var(--govbr-primary-light-rgb, 197 212 235));
+  --color-govbr-primary-lightest: rgb(var(--govbr-primary-lightest-rgb, 219 232 251));
+  --color-govbr-success: rgb(var(--govbr-success-rgb, 22 136 33));
+  --color-govbr-success-bg: rgb(var(--govbr-success-bg-rgb, 227 245 225));
+  --color-govbr-danger: rgb(var(--govbr-danger-rgb, 229 34 7));
+  --color-govbr-danger-bg: rgb(var(--govbr-danger-bg-rgb, 253 224 219));
+  --color-govbr-warning: rgb(var(--govbr-warning-rgb, 255 205 7));
+  --color-govbr-warning-bg: rgb(var(--govbr-warning-bg-rgb, 255 245 194));
+  --color-govbr-info: rgb(var(--govbr-info-rgb, 21 91 203));
+  --color-govbr-info-bg: rgb(var(--govbr-info-bg-rgb, 212 229 255));
+  --color-govbr-danger-dark: rgb(var(--govbr-danger-dark-rgb, 125 18 4));
+  --color-govbr-success-dark: rgb(var(--govbr-success-dark-rgb, 11 74 18));
+  --color-govbr-warning-dark: rgb(var(--govbr-warning-dark-rgb, 107 82 0));
+  --color-govbr-danger-hover: rgb(var(--govbr-danger-hover-rgb, 179 27 5));
+  --color-govbr-success-hover: rgb(var(--govbr-success-hover-rgb, 15 107 26));
+  --color-govbr-warning-hover: rgb(var(--govbr-warning-hover-rgb, 224 180 6));
+  --color-govbr-focus: rgb(var(--govbr-focus-color-rgb, 194 133 12));
+  --color-govbr-pure-0: rgb(var(--govbr-pure-0-rgb, 255 255 255));
+  --color-govbr-on-primary: rgb(var(--govbr-on-primary-rgb, 255 255 255));
+  --color-govbr-on-warning: rgb(var(--govbr-on-warning-rgb, 51 51 51));
+  --color-govbr-bg: rgb(var(--govbr-bg-rgb, 255 255 255));
+  --color-govbr-bg-alternative: rgb(var(--govbr-bg-alternative-rgb, 240 240 240));
+  --color-govbr-gray-2: rgb(var(--govbr-gray-2-rgb, 248 248 248));
+  --color-govbr-gray-5: rgb(var(--govbr-gray-5-rgb, 237 237 237));
+  --color-govbr-gray-10: rgb(var(--govbr-gray-10-rgb, 204 204 204));
+  --color-govbr-gray-20: rgb(var(--govbr-gray-20-rgb, 168 168 168));
+  --color-govbr-gray-40: rgb(var(--govbr-gray-40-rgb, 136 136 136));
+  --color-govbr-gray-60: rgb(var(--govbr-gray-60-rgb, 85 85 85));
+  --color-govbr-gray-80: rgb(var(--govbr-gray-80-rgb, 51 51 51));
+
+  /* Tipografia */
+  --font-rawline: Rawline, Raleway, sans-serif;
+  --text-govbr-xs: 0.75rem;
+  --text-govbr-xs--line-height: 1rem;
+  --text-govbr-sm: 0.875rem;
+  --text-govbr-sm--line-height: 1.25rem;
+  --text-govbr-base: 1rem;
+  --text-govbr-base--line-height: 1.5rem;
+  --text-govbr-lg: 1.125rem;
+  --text-govbr-lg--line-height: 1.75rem;
+  --text-govbr-xl: 1.25rem;
+  --text-govbr-xl--line-height: 1.75rem;
+  --text-govbr-2xl: 1.5rem;
+  --text-govbr-2xl--line-height: 2rem;
+  --text-govbr-3xl: 1.875rem;
+  --text-govbr-3xl--line-height: 2.25rem;
+
+  /* Raio e espaçamento */
+  --radius-govbr-pill: 100em;
+  --spacing-govbr-1: 0.25rem;
+  --spacing-govbr-2: 0.5rem;
+  --spacing-govbr-3: 0.75rem;
+  --spacing-govbr-4: 1rem;
+  --spacing-govbr-5: 1.25rem;
+  --spacing-govbr-6: 1.5rem;
+  --spacing-govbr-8: 2rem;
+  --spacing-govbr-10: 2.5rem;
+
+  /* Animação */
+  --animate-modal-in: modal-in 0.2s ease-out;
+
+  @keyframes modal-in {
+    0% { opacity: 0; transform: scale(0.95) translateY(-10px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+}

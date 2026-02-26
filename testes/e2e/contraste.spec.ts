@@ -1,4 +1,15 @@
 import { test, expect, type Page } from '@playwright/test';
+import { BASE_STORYBOOK } from '../playwright.config';
+
+/**
+ * Qualquer story serve de superfície de medição: o que importa é uma página
+ * com o CSS da biblioteca carregado, e toda story carrega o mesmo conjunto que
+ * o `ng-add` configura num projeto consumidor. Esta é escolhida por ter fundo,
+ * texto e borda de token na mesma tela.
+ */
+const PAGINA = `${BASE_STORYBOOK}/iframe.html?id=${encodeURIComponent(
+  'serviços-alto-contraste--padrao'
+)}&viewMode=story`;
 
 /**
  * O tema de alto contraste tem de ALCANÇAR as classes que os componentes usam.
@@ -72,7 +83,7 @@ async function medirCores(page: Page, fundo: string[], texto: string[]) {
 }
 
 test('toda classe de token responde ao tema de alto contraste', async ({ page }) => {
-  await page.goto('/');
+  await page.goto(PAGINA);
   await page.waitForLoadState('networkidle');
 
   const claro = await medirCores(page, CLASSES_FUNDO, CLASSES_TEXTO);
@@ -97,7 +108,7 @@ test('toda classe de token responde ao tema de alto contraste', async ({ page })
 });
 
 test('as variáveis de token estão definidas na página', async ({ page }) => {
-  await page.goto('/');
+  await page.goto(PAGINA);
   await page.waitForLoadState('networkidle');
 
   // Guarda contra o defeito que o demo teve: importava `govbr-components.css`
@@ -133,7 +144,7 @@ test('as variáveis de token estão definidas na página', async ({ page }) => {
  * passe despercebida.
  */
 test('o anel de foco contrasta com a superfície do componente', async ({ page }) => {
-  await page.goto('/');
+  await page.goto(PAGINA);
   await page.waitForLoadState('networkidle');
 
   const medir = () =>

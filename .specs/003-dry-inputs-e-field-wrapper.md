@@ -2,6 +2,39 @@
 
 **Entra em:** 1.3.0 · **Executar antes da [001](001-a11y-wcag.md)** nos mascarados
 
+> ## ⚠️ Corrigida pela medição — 21/02/2026
+>
+> Três afirmações desta spec não resistiram à conferência. Ficam registradas
+> porque o erro é instrutivo, não porque continuam valendo.
+>
+> **1. "Os 5 inputs mascarados são cópias quase integrais um do outro" — falso
+> para 3 deles.** Medido normalizando o token de nome e contando linhas que
+> diferem:
+>
+> | par | divergência |
+> |---|---|
+> | cpf ↔ cnpj | **18%** (54 de ~297 linhas) |
+> | telefone ↔ cep | 49% (119 de ~245) |
+> | telefone ↔ money | 65% |
+> | cep ↔ money | **75%** |
+>
+> Só cpf e cnpj são gêmeos. ViaCEP, spinner de carga e unidade monetária são
+> comportamento próprio. E as duas famílias expõem **API pública diferente**
+> (`helperText/error/density` × `hint/ariaLabel/disabled`), que a §3.3 desta
+> mesma spec proíbe mudar. Unificar os cinco seria abstração por simetria.
+>
+> **2. "cpf e cnpj não têm `aria-invalid` nem `role="alert"`" — já não era
+> verdade** quando a refatoração começou: a spec 001 havia corrigido os cinco.
+> O critério de aceite nº 2 nasceu satisfeito.
+>
+> **3. "os 64 `it()` de máscara" — são 65.** O de moeda ganhou um ao receber
+> `valueUnit`.
+>
+> **O que foi feito:** `BrDocumentoMascaradoBase` + estratégia de máscara, só
+> para cpf e cnpj. 457 → 334 linhas de código no par, uma cópia só do
+> comportamento, 167 unitários verdes sem tocar num `it()`. O
+> `br-field-wrapper` (§3.1) **não foi construído** — ver D23.
+
 ## Estado atual — medido em 10/10/2026
 
 Os 5 inputs mascarados são cópias quase integrais um do outro:

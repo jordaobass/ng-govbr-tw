@@ -98,48 +98,52 @@ async function procurarInvisiveis(page: Page) {
 }
 
 test.describe('Nada pode ficar invisível', () => {
+  /*
+   * Os dois temas, e não só o alto contraste: o defeito pode nascer do lado
+   * claro também, e varrer um só deles é medir metade. Antes havia uma
+   * passagem pelo showcase para o tema claro; com o Storybook virando a
+   * documentação (D19), as 136 stories cobrem muito mais superfície do que
+   * cobria a página única.
+   */
   for (const contraste of [false, true]) {
     const nome = contraste ? 'no alto contraste' : 'no tema claro';
 
-    test(`showcase: nenhum texto ou ícone some ${nome}`, async ({ page }) => {
-      test.setTimeout(90_000);
-      await page.goto('/');
-      await page.waitForLoadState('networkidle');
+    test(`storybook: nenhum texto ou ícone some ${nome}`, async ({ page }) => {
+      test.setTimeout(240_000);
+      const { readFileSync } = await import('node:fs');
+      const { join } = await import('node:path');
+      const indice = JSON.parse(
+        readFileSync(join(__dirname, '../../dist/storybook/index.json'), 'utf-8')
+      );
+      const ids = Object.values(indice.entries as Record<string, { id: string; type: string }>)
+        .filter((e) => e.type === 'story')
+        .map((e) => e.id);
 
-      if (contraste) {
-        await page.evaluate(() => document.documentElement.classList.add('govbr-contrast'));
-        // Há transições: medir no instante da troca pega a animação pela metade.
-        await page.waitForTimeout(700);
+      const achados: string[] = [];
+      for (const id of ids) {
+        /*
+         * ⚠️ O tema entra pelo GLOBAL do Storybook, não forçando a classe no
+         * `<html>`. O decorator faz as duas coisas — põe a classe E pinta o
+         * fundo do `<body>` com o token do tema. Forçar só a classe deixa
+         * texto escuro-de-contraste sobre fundo claro, e a sonda acusou
+         * breadcrumb e checkbox-group a 1,06:1 num defeito que era meu.
+         */
+        const global = contraste ? '&globals=contraste:true' : '';
+        await page.goto(
+          `${BASE_STORYBOOK}/iframe.html?id=${encodeURIComponent(id)}&viewMode=story${global}`,
+          { waitUntil: 'domcontentloaded' }
+        );
+        // Há transições declaradas: medir no instante da troca pega a animação
+        // pela metade e produz falha intermitente.
+        await page.waitForTimeout(contraste ? 300 : 160);
+
+        for (const a of await procurarInvisiveis(page)) achados.push(`${id} — ${a}`);
       }
 
-      const achados = await procurarInvisiveis(page);
-      expect(achados, `elementos invisíveis ${nome}:\n  ${achados.join('\n  ')}`).toEqual([]);
+      expect(
+        achados,
+        `invisíveis ${nome}:\n  ${achados.slice(0, 12).join('\n  ')}`
+      ).toEqual([]);
     });
   }
-
-  test('storybook: nenhum texto ou ícone some no alto contraste', async ({ page }) => {
-    test.setTimeout(180_000);
-    const { readFileSync } = await import('node:fs');
-    const { join } = await import('node:path');
-    const indice = JSON.parse(
-      readFileSync(join(__dirname, '../../dist/storybook/index.json'), 'utf-8')
-    );
-    const ids = Object.values(indice.entries as Record<string, { id: string; type: string }>)
-      .filter((e) => e.type === 'story')
-      .map((e) => e.id);
-
-    const achados: string[] = [];
-    for (const id of ids) {
-      await page.goto(
-        `${BASE_STORYBOOK}/iframe.html?id=${encodeURIComponent(id)}&viewMode=story&globals=contraste:true`,
-        { waitUntil: 'networkidle' }
-      );
-      await page.evaluate(() => document.documentElement.classList.add('govbr-contrast'));
-      await page.waitForTimeout(250);
-
-      for (const a of await procurarInvisiveis(page)) achados.push(`${id} — ${a}`);
-    }
-
-    expect(achados, `invisíveis no alto contraste:\n  ${achados.slice(0, 12).join('\n  ')}`).toEqual([]);
-  });
 });

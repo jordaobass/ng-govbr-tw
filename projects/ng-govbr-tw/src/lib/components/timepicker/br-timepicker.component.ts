@@ -67,6 +67,8 @@ import { BrAnimationService } from '../../animations/animation.service';
           (focus)="panelOpen = true"
           [class]="inputClasses"
           role="combobox"
+          [attr.aria-describedby]="descricaoAcessivel"
+          [attr.aria-invalid]="error ? 'true' : null"
           [attr.aria-expanded]="panelOpen"
           [attr.aria-controls]="panelOpen ? inputId + '-painel' : null"
           autocomplete="off"
@@ -86,10 +88,10 @@ import { BrAnimationService } from '../../animations/animation.service';
       </div>
     
       @if (hint && !error) {
-        <p class="mt-1 text-xs text-govbr-gray-60">{{ hint }}</p>
+        <p [id]="inputId + '-hint'" class="mt-1 text-xs text-govbr-gray-60">{{ hint }}</p>
       }
       @if (error) {
-        <p class="mt-1 text-xs text-govbr-danger-dark" role="alert">{{ error }}</p>
+        <p [id]="inputId + '-error'" class="mt-1 text-xs text-govbr-danger-dark" role="alert">{{ error }}</p>
       }
     
       <!-- Time panel -->
@@ -156,6 +158,21 @@ export class BrTimepickerComponent implements ControlValueAccessor {
 
   @Input() label?: string;
   @Input() placeholder = 'HH:MM';
+
+  /**
+   * Ids que descrevem o campo para o leitor de tela.
+   *
+   * O texto de apoio e o de erro eram pintados logo abaixo do campo sem
+   * nenhum vínculo com ele: claro para quem enxerga, inexistente para quem
+   * usa leitor de tela. O axe passou limpo com o defeito presente — nenhuma
+   * ferramenta adivinha que um parágrafo vizinho descreve o campo.
+   */
+  get descricaoAcessivel(): string | null {
+    if (this.error) return `${this.inputId}-error`;
+    if (this.hint) return `${this.inputId}-hint`;
+    return null;
+  }
+
   @Input() hint?: string;
   @Input() error?: string;
   @Input() required = false;

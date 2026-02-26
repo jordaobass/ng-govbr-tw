@@ -152,12 +152,20 @@ import { BrContrastService } from '../../services/br-contrast.service';
                   </button>
                 }
                 @if (userName) {
+                  <!--
+                    Sem aria-label de propósito: o nome acessível vem do
+                    conteúdo e fica igual ao texto visível, que é o que a WCAG
+                    2.5.3 (Label in Name) exige para controle por voz. O
+                    prefixo "Menu do usuário" quebrava a regra — o axe acusava
+                    label-content-name-mismatch sério — e não acrescentava
+                    nada: aria-haspopup e aria-expanded já anunciam que abre
+                    um menu, e o próprio menu tem rótulo.
+                  -->
                   <button
                     type="button"
                     [class]="avatarBtnClasses"
                     [attr.aria-expanded]="avatarMenuOpen"
                     aria-haspopup="true"
-                    [attr.aria-label]="'Menu do usuário ' + userName"
                     (click)="toggleAvatarMenu()"
                     >
                     <div [class]="avatarImgClasses">
@@ -226,7 +234,7 @@ import { BrContrastService } from '../../services/br-contrast.service';
                 [class]="hamburgerClasses"
                 [attr.aria-label]="menuOpen ? 'Fechar menu' : 'Abrir menu'"
                 [attr.aria-expanded]="menuOpen"
-                aria-controls="main-navigation"
+                [attr.aria-controls]="menuId || null"
                 (click)="toggleMenu()"
                 >
                 <i [class]="menuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'" aria-hidden="true"></i>
@@ -297,6 +305,17 @@ export class BrHeaderComponent implements AfterContentInit, OnInit {
   @Input() userName?: string;
   @Input() userRole?: string;
   @Input() showLogin = true;
+
+  /**
+   * Id do elemento de navegação que o botão de menu controla.
+   *
+   * ⚠️ Era `aria-controls="main-navigation"` fixo no template, e esse id não
+   * existe: o menu vive FORA do header, na página de quem consome. O axe
+   * acusou `aria-valid-attr-value` crítico — referência pendurada no vazio é
+   * pior que atributo ausente, porque o leitor de tela promete um destino que
+   * não existe. Sem valor, o atributo não é emitido.
+   */
+  @Input() menuId?: string;
 
   @Input() showSearch = true;
   @Input() showContrast = false;

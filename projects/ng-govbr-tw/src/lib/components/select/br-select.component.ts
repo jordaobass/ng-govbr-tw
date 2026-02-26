@@ -96,7 +96,7 @@ import { BrAnimationService } from '../../animations/animation.service';
       <!-- Dropdown -->
       @if (expanded) {
         <div
-          class="absolute left-0 right-0 z-10 mt-1 bg-govbr-bg border border-govbr-gray-10 shadow-lg max-h-[404px] overflow-y-auto rounded"
+          class="absolute left-0 right-0 z-50 mt-1 bg-govbr-bg border border-govbr-gray-10 shadow-lg max-h-[404px] overflow-y-auto rounded"
           [style.animation]="dropdownAnimation"
           >
           <!-- Search filter -->

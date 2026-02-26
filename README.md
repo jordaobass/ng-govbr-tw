@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://jordaobass.github.io/ng-govbr-tw/">
-    <img src="https://img.shields.io/badge/🚀_SHOWCASE-Ver_Demo_Online-1351b4?style=for-the-badge&labelColor=071D41" alt="Ver Demo Online" />
+    <img src="https://img.shields.io/badge/📖_STORYBOOK-Documentação_online-1351b4?style=for-the-badge&labelColor=071D41" alt="Storybook online" />
   </a>
 </p>
 
@@ -11,14 +11,14 @@
 </p>
 
 <p align="center">
-  Biblioteca Angular <strong>open-source</strong> que implementa componentes visuais baseados no <strong>Gov.br Design System</strong>, utilizando <strong>Tailwind CSS 3</strong> para estilização.
+  Biblioteca Angular <strong>open-source</strong> que implementa componentes visuais baseados no <strong>Gov.br Design System</strong>, utilizando <strong>Tailwind CSS 3 ou 4</strong> para estilização.
 </p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@schenkerjon/ng-govbr-tw"><img src="https://img.shields.io/npm/v/@schenkerjon/ng-govbr-tw.svg" alt="npm version" /></a>
   <a href="https://www.npmjs.com/package/@schenkerjon/ng-govbr-tw"><img src="https://img.shields.io/npm/dm/@schenkerjon/ng-govbr-tw.svg" alt="npm downloads" /></a>
-  <img src="https://img.shields.io/badge/Angular-17%2B-dd0031.svg" alt="Angular 17+" />
-  <img src="https://img.shields.io/badge/Tailwind-3.x-38bdf8.svg" alt="Tailwind CSS 3" />
+  <img src="https://img.shields.io/badge/Angular-17_a_22-dd0031.svg" alt="Angular 17 a 22" />
+  <img src="https://img.shields.io/badge/Tailwind-3.x%20%7C%204.x-38bdf8.svg" alt="Tailwind CSS 3 ou 4" />
   <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License" />
 </p>
 
@@ -29,9 +29,9 @@
 - [Visão Geral](#visão-geral)
 - [Instalação](#instalação)
 - [Configuração](#configuração)
-  - [Tailwind CSS](#1-tailwind-css)
-  - [CSS Base](#2-css-base)
-  - [Font Awesome](#3-font-awesome-opcional)
+  - [Tailwind CSS 3](#1a-tailwind-css-3)
+  - [Tailwind CSS 4](#1b-tailwind-css-4)
+  - [Font Awesome](#2-font-awesome-opcional)
 - [Uso Básico](#uso-básico)
 - [Componentes](#componentes)
   - [Formulários](#formulários)
@@ -55,7 +55,7 @@
   - [Upload de Arquivos](#upload-de-arquivos)
   - [Toast Notifications](#toast-notifications)
 - [Inputs Especializados](#inputs-especializados)
-- [Demo](#demo)
+- [Documentação interativa](#documentação-interativa)
 - [Contribuição](#contribuição)
 - [Licença](#licença)
 
@@ -67,8 +67,8 @@ O objetivo deste projeto é oferecer uma alternativa leve e moderna para constru
 
 ### Características
 
-- **Standalone Components** — Compatível com Angular 17+
-- **Tailwind CSS 3** — Classes utilitárias para fácil customização
+- **Standalone Components** — Compatível com **Angular 17 a 22**
+- **Tailwind CSS 3 e 4** — Classes utilitárias para fácil customização
 - **Acessibilidade** — ARIA labels, navegação por teclado, suporte a reduced-motion
 - **Formulários Reativos** — ControlValueAccessor em todos os inputs
 - **Animações Suaves** — Transições respeitando preferências do usuário
@@ -87,9 +87,19 @@ npm install @schenkerjon/ng-govbr-tw
 
 ## Configuração
 
-### 1. Tailwind CSS
+O jeito rápido é deixar o schematic configurar:
 
-Adicione o preset da biblioteca no seu `tailwind.config.js`:
+```bash
+ng add @schenkerjon/ng-govbr-tw
+```
+
+Ele detecta se o projeto usa **Tailwind 3 ou 4** e escreve a configuração de
+cada um — são incompatíveis entre si, e aplicar a errada deixa a aplicação sem
+nenhuma classe `govbr-*`, sem erro algum. À mão, siga a seção da sua versão.
+
+### 1a. Tailwind CSS 3
+
+Preset no `tailwind.config.js`:
 
 ```js
 module.exports = {
@@ -102,19 +112,41 @@ module.exports = {
 };
 ```
 
-### 2. CSS Base
-
-Importe o CSS base no seu `styles.css`:
+E no `styles.css` — os `@import` precisam vir **antes** das diretivas
+`@tailwind`, senão o `postcss-import` os descarta e os estilos da lib
+simplesmente não entram:
 
 ```css
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
 @import '@schenkerjon/ng-govbr-tw/styles/govbr-tw.css';
+@import '@schenkerjon/ng-govbr-tw/styles/govbr-contrast.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 ```
 
-### 3. Font Awesome (Opcional)
+### 1b. Tailwind CSS 4
+
+Não há `tailwind.config.js`: o tema é CSS-first. Tudo acontece no `styles.css`:
+
+```css
+@import "tailwindcss";
+@import "@schenkerjon/ng-govbr-tw/styles/govbr-tw.css";
+@import "@schenkerjon/ng-govbr-tw/styles/govbr-contrast.css";
+@import "@schenkerjon/ng-govbr-tw/styles/govbr-tw-v4.css";
+
+/* Sem esta linha o Tailwind 4 gera 7 das 52 classes govbr-* e a aplicação
+   sobe quase sem estilo, SEM erro: o v4 ignora node_modules na varredura
+   automática, de propósito. O caminho é relativo a ESTE arquivo. */
+@source "../node_modules/@schenkerjon/ng-govbr-tw";
+```
+
+O `govbr-tw-v4.css` é **gerado** do `tailwind.preset.js`, então os dois têm
+sempre os mesmos tokens — não há uma lista para o v3 e outra para o v4. Há um
+teste que compila toda classe `govbr-*` da lib nas duas versões e reprova se
+alguma funcionar numa e sumir na outra.
+
+### 2. Font Awesome (Opcional)
 
 Os ícones utilizam Font Awesome. Adicione no `index.html`:
 
@@ -156,6 +188,7 @@ export class MyComponent {}
 | `BrSelectComponent` | `<br-select>` | Select com busca e multi-seleção |
 | `BrTextareaComponent` | `<br-textarea>` | Área de texto com contagem de caracteres |
 | `BrCheckboxComponent` | `<br-checkbox>` | Checkbox com estados valid/invalid/indeterminate |
+| `BrCheckboxGroupComponent` | `<br-checkbox-group>` | Escolha múltipla com legenda, apoio e erro no grupo; valor `string[]` na ordem das opções |
 | `BrRadioGroupComponent` | `<br-radio-group>` | Grupo de radio buttons |
 | `BrSwitchComponent` | `<br-switch>` | Toggle switch on/off |
 | `BrDatepickerComponent` | `<br-datepicker>` | Seletor de data com calendário |
@@ -176,6 +209,7 @@ export class MyComponent {}
 | `BrModalComponent` | `<br-modal>` | Dialog/modal com footer configurável |
 | `BrNotificationComponent` | `<br-notification>` | Badge de notificação com contador |
 | `BrToastComponent` | `<br-toast>` | Toast notifications |
+| `BrToastContainerComponent` | `<br-toast-container>` | Container dos toasts; monte-o uma vez e dispare pelo `BrToastService` |
 
 ### Navegação
 
@@ -186,6 +220,7 @@ export class MyComponent {}
 | `BrMenuComponent` | `<br-menu>` | Menu lateral push |
 | `BrMenuItemComponent` | `<br-menu-item>` | Item do menu |
 | `BrMenuBarComponent` | `<br-menu-bar>` | Barra de menu horizontal |
+| `BrSkiplinkComponent` | `<br-skiplink>` | Atalho "pular para o conteúdo", primeiro foco da página (WCAG 2.4.1) |
 | `BrMegaMenuComponent` | `<br-mega-menu>` | Mega menu com painéis |
 | `BrSidebarComponent` | `<br-sidebar>` | Sidebar colapsável com mobile drawer |
 | `BrBreadcrumbComponent` | `<br-breadcrumb>` | Navegação breadcrumb |
@@ -202,6 +237,7 @@ export class MyComponent {}
 | `BrItemComponent` | `<br-item>` | Item de lista com avatar/ícone/tag |
 | `BrAccordionComponent` | `<br-accordion>` | Accordion com modo single/multiple |
 | `BrDividerComponent` | `<br-divider>` | Divisor horizontal/vertical |
+| `BrIconComponent` | `<br-icon>` | Ícone do Font Awesome; sem `label` é decorativo e some para o leitor de tela, com `label` é anunciado |
 | `BrAvatarComponent` | `<br-avatar>` | Avatar com imagem ou iniciais |
 | `BrTimelineComponent` | `<br-timeline>` | Timeline de eventos |
 | `BrLayoutComponent` | `<br-layout>` | Layout principal (header + menu + content + footer) |
@@ -850,9 +886,11 @@ export class InputsComponent {
 
 ---
 
-## Demo
+## Documentação interativa
 
-**[🔗 Ver Demo Online](https://jordaobass.github.io/ng-govbr-tw/)** — Showcase interativo com todos os componentes.
+**[🔗 Storybook online](https://jordaobass.github.io/ng-govbr-tw/)** — todos os
+componentes, cada um com suas variações, controles ao vivo e painel de
+acessibilidade.
 
 Para rodar localmente:
 
@@ -860,11 +898,14 @@ Para rodar localmente:
 git clone https://github.com/jordaobass/ng-govbr-tw.git
 cd ng-govbr-tw
 npm install
-npm run build
-ng serve demo
+npm run build                              # a lib, que o Storybook consome
+npx ng run ng-govbr-tw:storybook           # dev server
+npx ng run ng-govbr-tw:build-storybook     # build estático em dist/storybook
 ```
 
-Acesse `http://localhost:4200` para ver o showcase completo.
+O Storybook substituiu o antigo app de showcase: a documentação deixou de ser
+uma página só, mantida à mão, e passou a sair das próprias stories — que são
+também o alvo da suíte ponta a ponta.
 
 ---
 

@@ -35,6 +35,9 @@ export { BrLoadingComponent } from './lib/components/loading/br-loading.componen
 export { BrTabComponent, BrTabPanelComponent } from './lib/components/tab/br-tab.component';
 export type { BrTabItem } from './lib/components/tab/br-tab.component';
 export { BrCheckboxComponent } from './lib/components/checkbox/br-checkbox.component';
+export { BrCheckboxGroupComponent } from './lib/components/checkbox-group/br-checkbox-group.component';
+export type { BrCheckboxOption } from './lib/components/checkbox-group/br-checkbox-group.component';
+export { BrIconComponent } from './lib/components/icon/br-icon.component';
 export { BrRadioGroupComponent } from './lib/components/radio/br-radio.component';
 export type { BrRadioOption } from './lib/components/radio/br-radio.component';
 export { BrSelectComponent } from './lib/components/select/br-select.component';

@@ -4,11 +4,14 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build ng-govbr-tw && npm run build:schematics",
+    "build": "npm run verificar:templates && npm run tema:v4:verificar && ng build ng-govbr-tw && npm run build:schematics",
     "build:schematics": "tsc -p projects/ng-govbr-tw/tsconfig.schematics.json && cp projects/ng-govbr-tw/schematics/collection.json dist/ng-govbr-tw/schematics/ && cp projects/ng-govbr-tw/schematics/ng-add/schema.json dist/ng-govbr-tw/schematics/ng-add/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "tema:v4": "node scripts/gerar-tema-v4.mjs",
+    "tema:v4:verificar": "node scripts/gerar-tema-v4.mjs --verificar",
+    "verificar:templates": "node scripts/verificar-templates.mjs"
   },
   "private": true,
   "dependencies": {

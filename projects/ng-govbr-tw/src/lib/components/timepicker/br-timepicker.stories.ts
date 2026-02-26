@@ -8,9 +8,12 @@ const meta: Meta<BrTimepickerComponent> = {
   component: BrTimepickerComponent,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrTimepickerComponent] })],
-  render: (args) => ({ props: args, template: `<br-timepicker [label]="label" [placeholder]="placeholder" [hint]="hint"></br-timepicker>` }),
+  args: { placeholder: 'HH:MM' } as never,
+  render: (args) => ({ props: args, template: `<br-timepicker [label]="label" [placeholder]="placeholder" [hint]="hint" [error]="error"></br-timepicker>` }),
 };
 export default meta;
 type Story = StoryObj<BrTimepickerComponent>;
 
 export const Padrao: Story = { args: { label: 'Horário', placeholder: 'hh:mm' } as never };
+export const ComApoio: Story = { args: { label: 'Horário de chegada', hint: 'Atendimento das 8h às 17h' } as never };
+export const ComErro: Story = { args: { label: 'Horário', error: 'Horário fora do expediente' } as never };
