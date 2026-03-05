@@ -159,4 +159,54 @@ test.describe('ng add', () => {
 
     expect(ler(dir, 'src/styles.css')).toBe(primeira);
   });
+
+  test('garante as diretivas do Tailwind — sem elas nada funciona', async () => {
+    /*
+     * ⚠️ Medido num app `ng new` limpo: o `styles.css` que o Angular cria não
+     * tem `@tailwind` nenhum. O schematic configurava preset, `content` e
+     * imports, imprimia "✅ configurado", e o build gerava **zero**
+     * utilitários — nem `.flex`, nem `.w-10`. Os componentes saíam com as
+     * classes certas no DOM e nenhuma regra de CSS por trás.
+     *
+     * É o pior desfecho possível: configuração faltante virando caminho
+     * quebrado, com mensagem de sucesso.
+     */
+    const dir = await rodarNgAdd({
+      versaoTailwind: '^3.4.0',
+      conteudoStyles: '/* You can add global styles to this file */\n',
+    });
+
+    const css = ler(dir, 'src/styles.css');
+    expect(css, 'sem @tailwind o projeto nao gera utilitario nenhum').toContain(
+      '@tailwind utilities;'
+    );
+    // E os imports continuam ANTES das diretivas, senão o postcss-import os
+    // descarta.
+    expect(css.indexOf('@import')).toBeLessThan(css.indexOf('@tailwind'));
+  });
+
+  test('Tailwind 4: garante o @import "tailwindcss"', async () => {
+    const dir = await rodarNgAdd({
+      versaoTailwind: '^4.0.0',
+      conteudoStyles: '/* vazio */\n',
+    });
+
+    const css = ler(dir, 'src/styles.css');
+    expect(css).toContain('@import "tailwindcss";');
+    // A entrada do Tailwind precisa vir ANTES do tema, senão o `@theme` não
+    // encontra o que estender.
+    expect(css.indexOf('@import "tailwindcss"')).toBeLessThan(
+      css.indexOf('styles/govbr-tw-v4.css')
+    );
+  });
+
+  test('não duplica diretivas em projeto que já tem Tailwind montado', async () => {
+    const dir = await rodarNgAdd({
+      versaoTailwind: '^3.4.0',
+      conteudoStyles: '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n',
+    });
+
+    const css = ler(dir, 'src/styles.css');
+    expect((css.match(/@tailwind utilities/g) || []).length).toBe(1);
+  });
 });

@@ -2,6 +2,42 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
+## [1.5.3] - 2026-03-05
+
+### Corrigido — `ng add` dizia "configurado" e deixava a aplicação sem estilo
+
+Encontrado ao provar a 1.5.2 num app de verdade: instalei a biblioteca num
+`ng new` limpo, rodei `ng add`, e o componente saiu **sem forma nenhuma** —
+círculo sem fundo, sem tamanho.
+
+A causa não era a biblioteca. O `styles.css` que o Angular cria **não tem as
+diretivas do Tailwind**, e o schematic não as acrescentava. Ele configurava
+preset, `content` e imports, imprimia `✅ configurado`, e o build gerava
+**zero** utilitários: nem `.flex`, nem `.w-10`. Os componentes saíam com as
+classes certas no DOM e nenhuma regra de CSS por trás.
+
+Agora o `ng add` garante o que falta:
+
+- **Tailwind 3** — `@tailwind base/components/utilities` ao final, **depois**
+  dos `@import` (que a especificação CSS exige no topo, e que o
+  `postcss-import` descarta se vierem depois);
+- **Tailwind 4** — `@import "tailwindcss"` antes do tema, senão o `@theme`
+  não encontra o que estender.
+
+Projeto que já tem Tailwind montado não muda: as diretivas só entram quando
+não existem, e rodar duas vezes não duplica.
+
+### Testes
+
+48 E2E (eram 45). Três casos novos no `ng-add.spec.ts`, provados por mutação:
+desligar a garantia derruba dois deles.
+
+E a prova que vale mais: `ng new` limpo + `ng add` + **nada manual** →
+`br-success-check` com círculo verde de 1159px e o ✓ de 354px, nos dois modos
+de movimento.
+
+---
+
 ## [1.5.2] - 2026-03-05
 
 > **Esta afeta o pacote.** Diferente da 1.5.1, há correção de componente aqui.

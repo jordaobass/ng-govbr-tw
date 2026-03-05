@@ -265,10 +265,15 @@ function adicionarEstilosGlobais(
 
   if (!caminho) {
     context.logger.warn('  ⚠ Arquivo de estilos globais não encontrado. Adicione à mão:');
+    if (versao === 4) context.logger.warn('    @import "tailwindcss";');
     IMPORTS_CSS.forEach((l) => context.logger.warn(`    ${l}`));
     if (versao === 4) {
       context.logger.warn(`    ${IMPORT_TEMA_V4}`);
       context.logger.warn(`    @source "<caminho>/node_modules/${PACOTE}";`);
+    } else {
+      context.logger.warn('    @tailwind base;');
+      context.logger.warn('    @tailwind components;');
+      context.logger.warn('    @tailwind utilities;');
     }
     return;
   }
@@ -285,11 +290,45 @@ function adicionarEstilosGlobais(
     return;
   }
 
-  tree.overwrite(caminho, inserirImports(conteudo, faltando));
+  let novoConteudo = inserirImports(conteudo, faltando);
+
+  const comDiretivas = garantirDiretivas(novoConteudo, versao);
+  if (comDiretivas !== novoConteudo) {
+    novoConteudo = comDiretivas;
+    context.logger.info('  ✔ Diretivas do Tailwind adicionadas (não havia nenhuma)');
+  }
+
+  tree.overwrite(caminho, novoConteudo);
   context.logger.info(`  ✔ Estilos importados em ${caminho}`);
   if (versao === 4) {
     context.logger.info('  ✔ Tema @theme do Tailwind 4 e @source da lib adicionados');
   }
+}
+
+/**
+ * Sem as diretivas do Tailwind, NADA funciona — e falha em silêncio.
+ *
+ * ⚠️ Medido num app `ng new` limpo: o `styles.css` que o Angular cria não tem
+ * `@tailwind` nenhum. O schematic configurava preset, `content` e imports,
+ * imprimia "✅ configurado", e o build gerava **zero** utilitários: nem
+ * `.flex`, nem `.w-10`. Os componentes saíam com as classes certas no DOM e
+ * sem uma regra de CSS por trás — um `br-success-check` virava texto solto
+ * numa caixa sem forma.
+ *
+ * O consumidor que já montou o Tailwind tem as diretivas e nada muda aqui.
+ * Quem não tem recebia uma aplicação sem estilo e uma mensagem de sucesso.
+ */
+function garantirDiretivas(conteudo: string, versao: 3 | 4 | null): string {
+  if (versao === 4) {
+    // No v4 a entrada é um import único; o `@import "tailwindcss"` precisa
+    // vir ANTES do tema, senão o `@theme` não encontra o que estender.
+    if (/@import\s+["']tailwindcss["']/.test(conteudo)) return conteudo;
+    return `@import "tailwindcss";\n${conteudo}`;
+  }
+
+  // v3: as três diretivas, depois dos `@import` (que a spec CSS exige no topo)
+  if (/@tailwind\s+utilities/.test(conteudo)) return conteudo;
+  return `${conteudo.replace(/\s*$/, '')}\n\n@tailwind base;\n@tailwind components;\n@tailwind utilities;\n`;
 }
 
 /** O trecho que identifica a linha, para não duplicá-la a cada `ng add`. */
