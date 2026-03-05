@@ -44,7 +44,7 @@ const meta: Meta<BrModalComponent> = {
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrModalComponent] })],
   render: (args) => ({ props: args, template: `<br-modal [isOpen]="isOpen" [title]="title" [size]="size" [variant]="variant" [primaryText]="primaryText"><p class="text-govbr-sm text-govbr-gray-60">{{ corpo }}</p></br-modal>` }),
-  args: { isOpen: true, corpo: 'Esta ação não pode ser desfeita.' } as never,
+  args: { isOpen: true, corpo: 'Esta ação não pode ser desfeita.', variant: 'default', size: 'medium', primaryText: 'Confirmar' } as never,
 };
 export default meta;
 type Story = StoryObj<BrModalComponent>;

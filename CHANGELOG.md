@@ -2,6 +2,62 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
+## [1.5.2] - 2026-03-05
+
+> **Esta afeta o pacote.** Diferente da 1.5.1, há correção de componente aqui.
+
+### Corrigido — `br-success-check` não mostrava o ✓
+
+O componente renderizava um círculo colorido **vazio**. São dois defeitos
+somados:
+
+**1. O traço nascia escondido.** O CSS do componente definia
+`stroke-dashoffset: 24` — o caminho inteiro oculto — e só a animação
+`br-check-draw` o revelava. Mas a animação desta biblioteca é **opt-in**:
+`BR_ANIMATION_DEFAULT_CONFIG.enabled` é `false`. Ou seja, para **todo**
+consumidor que não habilitou animação explicitamente — e para quem tem
+**movimento reduzido** ligado no sistema, que é preferência de
+acessibilidade — o ✓ nunca aparecia.
+
+Agora o repouso é visível (`stroke-dashoffset: 0`) e só quem vai animar
+começa escondido. A animação termina em 0 com `forwards`, então o estado
+final também é visível nos dois caminhos.
+
+⚠️ O `<path>` já trazia `stroke-dashoffset="0"` como atributo — e perdia:
+regra de folha de estilo vence atributo de apresentação. O template dizia uma
+coisa e a tela mostrava outra.
+
+**2. Mapa de classes indexado por valor indefinido.** A story ligava
+`[variant]="variant"` sem o valor em `meta.args`; `variantStyles[undefined]`
+é `undefined`, e o template literal interpola isso como **texto**:
+`class="… rounded-full h-10 undefined w-10"`. O círculo ficava sem fundo e o
+traço sem cor.
+
+`br-success-check` e `br-modal` ganharam guarda (`?? padrão`); valor
+desconhecido agora cai no default em vez de virar a string `"undefined"`.
+
+### Testes
+
+182 unitários (eram 177) e 45 E2E (eram 44).
+
+- `success-check.component.spec.ts` — o componente **não tinha teste nenhum**.
+  ⚠️ A primeira versão verificava a presença de uma CLASSE e sobreviveu à
+  mutação: tirando a classe e devolvendo `stroke-dashoffset: 24` ao CSS, a
+  asserção continuava verdadeira. Passou a medir o `stroke-dashoffset`
+  computado — o resultado, não o mecanismo.
+- `docs.spec.ts` — nenhum elemento pode renderizar com a classe literal
+  `undefined`. Mede o sintoma, então pega qualquer uma das **56** consultas a
+  mapa por `@Input` que existem na lib, sem depender de análise estática.
+
+### Guarda do build
+
+`verificar-templates.mjs` passou a cobrir blocos `styles:`, não só
+`template:`. Backtick num comentário ali encerra o literal do mesmo jeito, e
+o erro que sai — `Failed to resolve styles at position 1` — não diz nada
+sobre backtick. Foi a quinta vez nesta biblioteca.
+
+---
+
 ## [1.5.1] - 2026-02-27
 
 > **Não publicada no npm.** As correções desta versão são do Storybook — as

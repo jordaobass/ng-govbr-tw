@@ -24,10 +24,13 @@ function* arquivos(dir) {
 const problemas = [];
 for (const arq of arquivos(raiz)) {
   const texto = readFileSync(arq, 'utf-8');
-  // conteúdo entre `template: \`` e o próximo backtick
-  const i = texto.indexOf('template: `');
+  // ⚠️ `styles:` também: um comentário com backtick ali encerra o literal do
+  // mesmo jeito, e o erro que sai é "Failed to resolve styles at position 1",
+  // que não diz nada sobre backtick. Foi a quinta vez nesta biblioteca.
+  for (const abertura of ['template: `', 'styles: [`']) {
+  const i = texto.indexOf(abertura);
   if (i < 0) continue;
-  const inicio = i + 'template: `'.length;
+  const inicio = i + abertura.length;
   const fim = texto.indexOf('`', inicio);
   if (fim < 0) continue;
   const depois = texto.slice(fim + 1, fim + 400);
@@ -38,7 +41,10 @@ for (const arq of arquivos(raiz)) {
   // do HTML. (A primeira versão não aceitava `}` e acusou as 42 stories.)
   if (!/^\s*[,)\]}]/.test(depois)) {
     const linha = texto.slice(0, fim).split('\n').length;
-    problemas.push(`${arq.replace(raiz, 'projects')}:${linha} — backtick dentro do template`);
+    problemas.push(
+      `${arq.replace(raiz, 'projects')}:${linha} — backtick dentro de ${abertura.trim()}`
+    );
+  }
   }
 }
 

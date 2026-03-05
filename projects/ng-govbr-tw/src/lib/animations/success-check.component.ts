@@ -30,6 +30,7 @@ import { BrAnimationService } from './animation.service';
       >
         <path
           class="br-success-check-path"
+          [class.br-success-check-path--animar]="isAnimationEnabled"
           [style.animation]="pathAnimation"
           d="M5 13l4 4L19 7"
           stroke="currentColor"
@@ -43,8 +44,27 @@ import { BrAnimationService } from './animation.service';
     </div>
   `,
   styles: [`
+    /*
+     * ⚠️ O estado de REPOUSO tem de ser visível.
+     *
+     * Isto era stroke-dashoffset: 24 — o traço completamente escondido —, e
+     * só a animação br-check-draw o revelava. Quando a animação não roda, o
+     * ✓ sumia PARA SEMPRE e sobrava um círculo colorido vazio. Acontecia com
+     * animate="false" e, pior, para quem tem **movimento reduzido** ligado
+     * no sistema: a preferência de acessibilidade apagava o conteúdo.
+     *
+     * Note também que o CSS vence o atributo stroke-dashoffset="0" do SVG —
+     * atributo de apresentação perde para regra de folha de estilo, e foi o
+     * que escondeu o que o template dizia estar visível.
+     */
     .br-success-check-path {
       stroke-dasharray: 24;
+      stroke-dashoffset: 0;
+    }
+
+    /* Só quem vai animar começa escondido; a animação termina em 0 com
+       forwards, então o repouso final também é visível. */
+    .br-success-check-path--animar {
       stroke-dashoffset: 24;
     }
 
@@ -106,7 +126,17 @@ export class BrSuccessCheckComponent implements OnInit {
       white: 'bg-govbr-bg text-govbr-success border-2 border-govbr-success',
     } as const;
 
-    return `${sizeStyles[this.size]} ${variantStyles[this.variant]}`;
+    /*
+     * ⚠️ Valor desconhecido não pode virar a string "undefined" na classe.
+     *
+     * `variantStyles[undefined]` é `undefined`, e o template literal o
+     * interpola como texto: `class="… rounded-full h-10 undefined w-10"`. O
+     * componente perdia fundo E cor do traço, e sumia na tela branca — foi o
+     * que aconteceu na story `Padrao`, que não declarava `variant`.
+     */
+    const tamanho = sizeStyles[this.size] ?? sizeStyles.medium;
+    const variante = variantStyles[this.variant] ?? variantStyles.success;
+    return `${tamanho} ${variante}`;
   }
 
   get svgClasses(): string {
@@ -116,7 +146,7 @@ export class BrSuccessCheckComponent implements OnInit {
       large: 'w-8 h-8',
     } as const;
 
-    return sizeStyles[this.size];
+    return sizeStyles[this.size] ?? sizeStyles.medium;
   }
 
   get containerAnimation(): string {

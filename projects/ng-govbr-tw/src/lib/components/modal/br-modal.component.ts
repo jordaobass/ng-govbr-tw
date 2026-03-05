@@ -229,7 +229,9 @@ export class BrModalComponent implements OnChanges {
       warning: 'border-govbr-warning/30',
       success: 'border-govbr-success/20',
     } as const;
-    return `${base} ${borderColors[this.variant]}`;
+    // Mesma armadilha do success-check: mapa indexado por valor indefinido
+    // interpola a string "undefined" na classe.
+    return `${base} ${borderColors[this.variant] ?? borderColors.default}`;
   }
 
   get primaryButtonClasses(): string {
@@ -240,7 +242,7 @@ export class BrModalComponent implements OnChanges {
       warning: 'text-govbr-on-warning bg-govbr-warning hover:bg-govbr-warning-hover',
       success: 'text-govbr-on-primary bg-govbr-success hover:bg-govbr-success-hover',
     } as const;
-    return `${base} ${variantStyles[this.variant]}`;
+    return `${base} ${variantStyles[this.variant] ?? variantStyles.default}`;
   }
 
   get modalClasses(): string {

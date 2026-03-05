@@ -134,6 +134,12 @@ test.describe('Página de documentação', () => {
  *
  * Eram 20 stories com o mesmo padrão. É checagem estática de propósito: vale
  * para todo componente, inclusive os que ainda não têm story.
+ *
+ * ⚠️ LIMITE CONHECIDO: os args são coletados do ARQUIVO inteiro, não por
+ * story. Um `variant` declarado só na story `Grande` faz a `Padrao` parecer
+ * coberta — foi assim que o `br-success-check` passou por aqui e chegou
+ * quebrado ao site. Quem fecha essa brecha é o teste de runtime abaixo, que
+ * mede o sintoma em vez da causa.
  */
 test('nenhuma story apaga o default de um @Input', () => {
   const LIB = join(RAIZ, 'projects/ng-govbr-tw/src/lib');
@@ -233,5 +239,55 @@ test('componentes com densidade renderizam com espaçamento', async ({ page }) =
   expect(
     achatados,
     `componentes achatados (classes de densidade perdidas?):\n  ${achatados.join('\n  ')}`
+  ).toEqual([]);
+});
+
+/**
+ * Nenhum elemento pode ter a classe literal `undefined`.
+ *
+ * É o sintoma de um mapa de classes indexado por valor indefinido:
+ * `variantStyles[undefined]` é `undefined`, e o template literal interpola
+ * isso como TEXTO. O `br-success-check` saía com
+ * `class="… rounded-full h-10 undefined w-10"` — sem fundo e sem cor de
+ * traço, invisível na página branca. Reportado olhando a tela.
+ *
+ * Este teste mede o RESULTADO, não a causa: pega qualquer origem, em qualquer
+ * story, sem depender de a análise estática estar certa. Há 56 mapas
+ * indexados por `@Input` na biblioteca — guardar todos seria um diff enorme;
+ * um portão que acusa o sintoma protege os 56.
+ */
+test('nenhum elemento renderiza com a classe "undefined"', async ({ page }) => {
+  test.setTimeout(240_000);
+
+  const indice = JSON.parse(readFileSync(join(RAIZ, 'dist/storybook/index.json'), 'utf-8'));
+  const ids = Object.values(indice.entries as Record<string, { id: string; type: string }>)
+    .filter((e) => e.type === 'story')
+    .map((e) => e.id);
+
+  const achados: string[] = [];
+  for (const id of ids) {
+    await page.goto(
+      `${BASE_STORYBOOK}/iframe.html?id=${encodeURIComponent(id)}&viewMode=story`,
+      { waitUntil: 'domcontentloaded' }
+    );
+    await page.waitForTimeout(130);
+
+    for (const r of await page.evaluate(() => {
+      const out: string[] = [];
+      document.querySelectorAll('#storybook-root *').forEach((e) => {
+        const c = e.getAttribute('class') || '';
+        if (/(^|\s)undefined(\s|$)/.test(c)) {
+          out.push(`${e.tagName.toLowerCase()}: ${c.slice(0, 60)}`);
+        }
+      });
+      return out;
+    })) {
+      achados.push(`${id} · ${r}`);
+    }
+  }
+
+  expect(
+    achados,
+    `elementos com classe "undefined" (mapa indexado por valor indefinido):\n  ${achados.join('\n  ')}`
   ).toEqual([]);
 });
