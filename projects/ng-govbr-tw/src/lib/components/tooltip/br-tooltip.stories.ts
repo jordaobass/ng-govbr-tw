@@ -7,6 +7,7 @@ const meta: Meta<BrTooltipComponent> = {
   component: BrTooltipComponent,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrTooltipComponent] })],
+  args: { variant: 'info' } as never,
   render: (args) => ({ props: args, template: `<div class="p-16 flex justify-center"><br-tooltip [text]="text" [place]="place" [variant]="variant"><button class="px-4 py-2 rounded-govbr-pill bg-govbr-primary text-govbr-on-primary">Passe o cursor</button></br-tooltip></div>` }),
 };
 export default meta;

@@ -8,6 +8,7 @@ const meta: Meta<BrInputTelefoneComponent> = {
   component: BrInputTelefoneComponent,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrInputTelefoneComponent] })],
+  args: { required: false } as never,
   render: (args) => ({ props: args, template: `<br-input-telefone [label]="label" [placeholder]="placeholder" [required]="required" [hint]="hint"></br-input-telefone>` }),
 };
 export default meta;

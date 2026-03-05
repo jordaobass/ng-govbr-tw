@@ -8,7 +8,7 @@ const meta: Meta<BrChipComponent> = {
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrChipComponent] })],
   render: (a) => ({ props: a, template: `<br-chip [label]="label" [icon]="icon" [variant]="variant" [selectable]="selectable" [selected]="selected" [removable]="removable"></br-chip>` }),
-  args: { label: 'Filtro ativo' } as never,
+  args: { variant: 'default', label: 'Filtro ativo' } as never,
 };
 export default meta;
 type Story = StoryObj<BrChipComponent>;

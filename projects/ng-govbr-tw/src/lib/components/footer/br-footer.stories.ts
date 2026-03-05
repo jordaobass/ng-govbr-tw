@@ -10,6 +10,7 @@ const meta: Meta<BrFooterComponent> = {
   // o encaixota no limite de leitura e ele parece quebrado, não contido.
   parameters: { palco: 'cheio' },
   decorators: [moduleMetadata({ imports: [BrFooterComponent] })],
+  args: { logoSrc: '' } as never,
   render: (a) => ({ props: a, template: `<br-footer [logoSrc]="logoSrc"><div class="text-center text-sm">Conteúdo projetado no rodapé</div></br-footer>` }),
 };
 export default meta;

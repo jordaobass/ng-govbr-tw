@@ -1206,4 +1206,4 @@ export class AppComponent {
 
 ## Licença
 
-MIT
+MIT © [jordaobass](https://github.com/jordaobass)

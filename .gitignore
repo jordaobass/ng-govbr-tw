@@ -45,3 +45,7 @@ Thumbs.db
 /dist/storybook
 storybook-static
 .npmrc
+
+# Notas de trabalho locais — não versionadas
+.specs/
+.impeccable/

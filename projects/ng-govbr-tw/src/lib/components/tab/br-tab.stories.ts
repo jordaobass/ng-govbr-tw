@@ -23,7 +23,7 @@ const meta: Meta<BrTabComponent> = {
   render: (a) => ({ props: a, template: `<br-tab [tabs]="tabs" [activeIndex]="activeIndex" [density]="density">
       <br-tab-panel><div class="p-4 text-govbr-sm">Conteúdo do painel ativo.</div></br-tab-panel>
     </br-tab>` }),
-  args: {
+  args: { density: 'medium',
     activeIndex: 0,
     tabs: [
       { label: 'Dados pessoais', icon: 'user' },

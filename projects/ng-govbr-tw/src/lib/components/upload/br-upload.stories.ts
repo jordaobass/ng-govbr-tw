@@ -8,6 +8,7 @@ const meta: Meta<BrUploadComponent> = {
   component: BrUploadComponent,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrUploadComponent] })],
+  args: { required: false } as never,
   render: (args) => ({ props: args, template: `<br-upload [label]="label" [accept]="accept" [multiple]="multiple" [maxSizeMB]="maxSizeMB" [required]="required" [helperText]="helperText" [error]="error"></br-upload>` }),
 };
 export default meta;

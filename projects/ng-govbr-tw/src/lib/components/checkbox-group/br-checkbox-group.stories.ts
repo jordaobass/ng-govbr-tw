@@ -11,7 +11,7 @@ const meta: Meta<BrCheckboxGroupComponent> = {
     props: args,
     template: `<br-checkbox-group [legend]="legend" [name]="name" [options]="options" [inline]="inline" [required]="required" [hint]="hint" [error]="error"></br-checkbox-group>`,
   }),
-  args: {
+  args: { required: false,
     legend: 'Documentos que você possui',
     name: 'documentos',
     options: [

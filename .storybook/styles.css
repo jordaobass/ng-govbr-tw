@@ -33,6 +33,84 @@
 }
 
 /*
+ * Modo DOCS — a outra metade do Storybook, que esta folha ignorava.
+ *
+ * As regras acima miram `#storybook-root`, que so existe no canvas de story.
+ * Na pagina de documentacao (`?path=/docs/...`) cada exemplo renderiza dentro
+ * de um `.docs-story`, e o padrao do Storybook para ele e
+ * `padding: 0` + `overflow: hidden`. Resultado medido:
+ *
+ *  - campos encostados nas bordas, um colado no outro;
+ *  - painel do mega-menu com 102px recortado por um bloco de 44px — o
+ *    componente parecia nao funcionar, quando so estava sendo cortado;
+ *  - calendario do datepicker exigindo rolagem para aparecer.
+ *
+ * `overflow: visible` e o que deixa painel suspenso escapar do bloco;
+ * `min-height` da o espaco vertical para ele caber sem empurrar o proximo
+ * exemplo por cima.
+ */
+.docs-story {
+  padding: 2rem;
+  min-height: 11rem;
+  box-sizing: border-box;
+}
+
+/*
+ * ⚠️ São DOIS elementos, e o `overflow` precisa de DOIS seletores para vencer.
+ *
+ * O mesmo elemento carrega uma classe gerada pelo emotion — `.css-kdwx3d` no
+ * build de hoje — com `overflow: hidden`. O nome dela muda a cada build, então
+ * não dá para mirá-la; `.sbdocs .docs-story` tem duas classes de
+ * especificidade contra uma e ganha sem precisar de `!important`.
+ *
+ * São TRÊS níveis que recortam, e cada um foi encontrado só depois de
+ * destravar o anterior:
+ *
+ *  1. `.sbdocs-preview` — `overflow-y: hidden`, o corte mais externo;
+ *  2. `.docs-story` — `overflow: hidden` por classe gerada do emotion;
+ *  3. o filho direto do `.docs-story` — outro `div` de classe gerada
+ *     (`.css-jspizm` hoje) com `overflow: auto` e a altura do conteúdo
+ *     FECHADO, 64px. Era ele que trocava o calendário por uma BARRA DE
+ *     ROLAGEM.
+ *
+ * Como as classes do emotion mudam de nome a cada build, a vitória vem de
+ * especificidade estrutural, não do nome delas.
+ *
+ * Isto é o que faz o painel do mega-menu e o calendário do datepicker
+ * aparecerem na página de documentação.
+ */
+.sbdocs-wrapper .sbdocs-preview,
+.sbdocs .docs-story,
+.sbdocs .docs-story > div {
+  overflow: visible;
+}
+
+/*
+ * O bloco que está com um painel ABERTO sobe na pilha.
+ *
+ * `overflow: visible` deixa o painel escapar do bloco, mas não basta: o
+ * wrapper de zoom do Storybook usa `transform`, que cria contexto de
+ * empilhamento e prende o `z-index` do painel lá dentro. Sem isto o exemplo
+ * SEGUINTE pinta por cima, e o calendário some — medido: o date-time-picker
+ * transbordava 657px, o time-picker 629px e o date-picker 279px.
+ *
+ * A alternativa seria fixar altura grande em toda story desses componentes,
+ * o que encheria a página de vazio para o estado FECHADO, que é o padrão.
+ * Aqui o espaço só é tomado enquanto algo está aberto.
+ */
+.sbdocs .docs-story:has([role='listbox']),
+.sbdocs .docs-story:has([role='dialog']),
+.sbdocs .docs-story:has([role='grid']),
+.sbdocs .docs-story:has([aria-expanded='true']) {
+  z-index: 10;
+}
+
+/* Entre um exemplo e outro, para painel aberto nao encostar no de baixo. */
+.docs-story + * {
+  margin-top: 0.5rem;
+}
+
+/*
  * Cromo de página (rodapé, barra de menu, sidebar, skiplink) ocupa a largura
  * inteira num site real — encaixotá-lo no limite de leitura faz parecer
  * defeito do componente. A classe é posta no `<html>` pelo decorator a partir

@@ -8,6 +8,7 @@ const meta: Meta<BrSwitchComponent> = {
   component: BrSwitchComponent,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrSwitchComponent] })],
+  args: { size: 'medium' } as never,
   render: (args) => ({ props: args, template: `<br-switch [label]="label" [disabled]="disabled" [size]="size"></br-switch>` }),
 };
 export default meta;

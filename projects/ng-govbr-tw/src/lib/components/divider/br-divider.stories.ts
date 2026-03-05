@@ -7,6 +7,7 @@ const meta: Meta<BrDividerComponent> = {
   component: BrDividerComponent,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrDividerComponent] })],
+  args: { spacing: 'medium' } as never,
   render: (a) => ({ props: a, template: `<div class="max-w-md"><p class="text-govbr-sm text-govbr-gray-60">Conteúdo acima</p><br-divider [text]="text" [spacing]="spacing"></br-divider><p class="text-govbr-sm text-govbr-gray-60">Conteúdo abaixo</p></div>` }),
 };
 export default meta;

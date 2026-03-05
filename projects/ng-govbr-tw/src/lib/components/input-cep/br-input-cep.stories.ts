@@ -8,6 +8,7 @@ const meta: Meta<BrInputCepComponent> = {
   component: BrInputCepComponent,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrInputCepComponent] })],
+  args: { required: false } as never,
   render: (args) => ({ props: args, template: `<br-input-cep [label]="label" [placeholder]="placeholder" [required]="required" [hint]="hint"></br-input-cep>` }),
 };
 export default meta;

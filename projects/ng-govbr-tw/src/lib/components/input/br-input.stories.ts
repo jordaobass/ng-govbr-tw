@@ -8,6 +8,7 @@ const meta: Meta<BrInputComponent> = {
   component: BrInputComponent,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrInputComponent] })],
+  args: { required: false } as never,
   render: (args) => ({ props: args, template: `<br-input [label]="label" [type]="type" [placeholder]="placeholder" [required]="required" [error]="error" [helperText]="helperText" [successMessage]="successMessage" [icon]="icon"></br-input>` }),
 };
 export default meta;

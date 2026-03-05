@@ -8,7 +8,7 @@ const meta: Meta<BrDatepickerComponent> = {
   component: BrDatepickerComponent,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrDatepickerComponent] })],
-  args: { placeholder: 'dd/mm/aaaa' } as never,
+  args: { required: false, placeholder: 'dd/mm/aaaa' } as never,
   render: (args) => ({ props: args, template: `<br-datepicker [label]="label" [placeholder]="placeholder" [hint]="hint" [error]="error" [required]="required"></br-datepicker>` }),
 };
 export default meta;

@@ -7,6 +7,7 @@ const meta: Meta<BrSuccessCheckComponent> = {
   component: BrSuccessCheckComponent,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrSuccessCheckComponent] })],
+  args: { animate: true } as never,
   render: (args) => ({ props: args, template: `<br-success-check [size]="size" [variant]="variant" [animate]="animate"></br-success-check>` }),
 };
 export default meta;

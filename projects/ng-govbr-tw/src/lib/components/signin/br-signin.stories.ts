@@ -8,7 +8,7 @@ const meta: Meta<BrSigninComponent> = {
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrSigninComponent] })],
   render: (a) => ({ props: a, template: `<br-signin [variant]="variant" [size]="size" [text]="text" [loading]="loading"></br-signin>` }),
-  args: { variant: 'primary' } as never,
+  args: { size: 'medium', text: 'Entrar com', variant: 'primary' } as never,
 };
 export default meta;
 type Story = StoryObj<BrSigninComponent>;

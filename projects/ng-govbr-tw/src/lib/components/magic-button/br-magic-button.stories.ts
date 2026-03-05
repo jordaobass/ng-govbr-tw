@@ -8,7 +8,7 @@ const meta: Meta<BrMagicButtonComponent> = {
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrMagicButtonComponent] })],
   render: (args) => ({ props: args, template: `<div class="relative h-64"><br-magic-button [icon]="icon" [actions]="actions" [position]="position" [showLabels]="showLabels"></br-magic-button></div>` }),
-  args: {
+  args: { position: 'bottom-right',
     icon: 'plus',
     actions: [
       { icon: 'file', label: 'Novo documento' },

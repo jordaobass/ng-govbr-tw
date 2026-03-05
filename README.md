@@ -927,7 +927,7 @@ Abra uma issue em [github.com/jordaobass/ng-govbr-tw/issues](https://github.com/
 
 ## Licença
 
-MIT © [Jordan Bass](https://github.com/jordaobass)
+MIT © [jordaobass](https://github.com/jordaobass)
 
 ---
 

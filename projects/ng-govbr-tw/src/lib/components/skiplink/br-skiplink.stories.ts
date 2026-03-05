@@ -15,7 +15,7 @@ const meta: Meta<BrSkiplinkComponent> = {
       <br-skiplink [itens]="itens" [ariaLabel]="ariaLabel"></br-skiplink>
       <main id="conteudo" class="mt-4 p-4 border border-dashed border-govbr-gray-20 rounded text-govbr-sm">Conteúdo principal</main>
     </div>` }),
-  args: { itens: [{ href: '#conteudo', label: 'Ir para o conteúdo' }] } as never,
+  args: { ariaLabel: 'Atalhos de navegação', itens: [{ href: '#conteudo', label: 'Ir para o conteúdo' }] } as never,
 };
 export default meta;
 type Story = StoryObj<BrSkiplinkComponent>;

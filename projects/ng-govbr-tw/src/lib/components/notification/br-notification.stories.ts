@@ -7,6 +7,7 @@ const meta: Meta<BrNotificationComponent> = {
   component: BrNotificationComponent,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrNotificationComponent] })],
+  args: { variant: 'danger' } as never,
   render: (args) => ({ props: args, template: `<br-notification [count]="count" [max]="max" [showDot]="showDot" [variant]="variant"><i class="fa-solid fa-bell text-2xl text-govbr-gray-60"></i></br-notification>` }),
 };
 export default meta;

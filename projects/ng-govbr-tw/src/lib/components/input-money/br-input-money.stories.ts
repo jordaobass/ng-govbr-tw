@@ -8,6 +8,7 @@ const meta: Meta<BrInputMoneyComponent> = {
   component: BrInputMoneyComponent,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [BrInputMoneyComponent] })],
+  args: { required: false } as never,
   render: (args) => ({ props: args, template: `<br-input-money [label]="label" [placeholder]="placeholder" [required]="required" [hint]="hint"></br-input-money>` }),
 };
 export default meta;

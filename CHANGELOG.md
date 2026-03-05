@@ -2,6 +2,68 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
+## [1.5.1] - 2026-02-27
+
+### Corrigido — botão sem forma de botão
+
+O `br-button` renderizava como texto azul colado, sem padding nem altura. A
+causa não estava no componente: a story ligava `[size]="size"` com `size`
+**fora de `args`**.
+
+Em Angular, `undefined` num `@Input` **não cai no default da classe — ele
+sobrescreve**. `density` virava `undefined`, `densityMap[undefined]` também, e
+as classes `px-5 py-2` nunca eram emitidas. Pior: `variant` e `size` são
+aliases depreciados cujos setters escrevem em `emphasis` e `density`, então
+ligar os dois pares com um lado indefinido apagava o valor do outro.
+
+Eram **20 stories** com o mesmo padrão. Todas receberam os defaults reais do
+componente em `meta.args`, e o botão parou de ligar os aliases depreciados.
+
+### Corrigido — a página de documentação (`?path=/docs/…`)
+
+Metade do Storybook não tinha verificação nenhuma: todas as suítes abriam
+`viewMode=story`. A página de docs, que é o link que se compartilha, estava
+assim:
+
+- **campos colados na borda** — `.docs-story` vem do Storybook com
+  `padding: 0`;
+- **painel do mega-menu invisível** — 102px de conteúdo recortado por um bloco
+  de 44px. O componente parecia não funcionar;
+- **calendário trocado por barra de rolagem** — exatamente o sintoma
+  reportado. Medido: date-time-picker transbordava 657px, time-picker 629px,
+  date-picker 279px.
+
+⚠️ Eram **três** níveis de recorte, e cada um só apareceu depois de destravar
+o anterior: `.sbdocs-preview` (`overflow-y: hidden`), `.docs-story` (classe
+gerada do emotion) e o filho direto dele (`overflow: auto` com a altura do
+conteúdo FECHADO — 64px). Como as classes do emotion mudam de nome a cada
+build, a correção vem de especificidade estrutural.
+
+Junto, o bloco com painel aberto sobe na pilha (`z-index`), porque o wrapper
+de zoom usa `transform` e prende o `z-index` do painel lá dentro.
+
+### Corrigido — atribuição no README
+
+Dizia "Jordan Bass"; o usuário do GitHub é `jordaobass`.
+
+### Removido
+
+`.specs/` e `.impeccable/` saíram do repositório (seguem ignorados). As nove
+referências do `DECISOES.md` viraram texto, sem link morto.
+
+### Testes
+
+De 40 para 44 E2E. O novo `docs.spec.ts` cobre a página de documentação:
+respiro em cada exemplo, painel aberto não coberto, e uma checagem **estática**
+que reprova qualquer story que passe `undefined` a um `@Input` com default.
+
+⚠️ Dois furos do próprio teste apareceram por mutação: sondar o TOPO do painel
+nunca acusa cobertura (o transbordo é embaixo), e tratar ANCESTRAL como "por
+cima" reprovava sempre. E o limiar de altura reprovava o `br-switch` com 24px
+— que é o tamanho CORRETO do interruptor médio.
+
+---
+
 ## [1.5.0] - 2026-02-26
 
 ### Adicionado — suporte a Tailwind CSS 4, ao lado do 3
