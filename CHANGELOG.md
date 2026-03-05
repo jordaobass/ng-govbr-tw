@@ -4,6 +4,12 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
 ## [1.5.1] - 2026-02-27
 
+> **Não publicada no npm.** As correções desta versão são do Storybook — as
+> stories e o `.storybook/` não vão para o pacote. Medido: zero alteração em
+> `.component.ts`, e o único efeito visível no pacote seria a linha de
+> atribuição do README. Quem instala do npm continua na **1.5.0**, que é
+> idêntica em código.
+
 ### Corrigido — botão sem forma de botão
 
 O `br-button` renderizava como texto azul colado, sem padding nem altura. A
